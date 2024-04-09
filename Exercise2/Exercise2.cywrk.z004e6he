@@ -13,7 +13,7 @@
 <v>Output</v>
 </TreeKeys>
 <TreeStates>
-<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="Exercise2\Design2\Generated_Source\PSoC5\rx_isr\rx_isr.c">
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="Exercise2\Design2\TopDesign">
 <ExpandedNodeIds>
 <v>Exercise2</v>
 <v>Exercise2\Design2</v>
@@ -38,6 +38,18 @@
 <v>Exercise2\Design2\Generated_Source\PSoC5\rx_isr</v>
 </ExpandedNodeIds>
 <VisibleNodeIds>
+<v>Exercise2</v>
+<v>Exercise2\Design2</v>
+<v>Exercise2\Design2\TopDesign</v>
+<v>Exercise2\Design2\Design2.cydwr</v>
+<v>Exercise2\Design2\Design2.cydwr\Pins</v>
+<v>Exercise2\Design2\Design2.cydwr\Analog</v>
+<v>Exercise2\Design2\Design2.cydwr\Clocks</v>
+<v>Exercise2\Design2\Design2.cydwr\Interrupts</v>
+<v>Exercise2\Design2\Design2.cydwr\DMA</v>
+<v>Exercise2\Design2\Design2.cydwr\System</v>
+<v>Exercise2\Design2\Design2.cydwr\Directives</v>
+<v>Exercise2\Design2\Design2.cydwr\Flash Security</v>
 <v>Exercise2\Design2\Design2.cydwr\EEPROM</v>
 <v>Exercise2\Design2\Header Files</v>
 <v>Exercise2\Design2\Header Files\cyapicallbacks.h</v>
@@ -54,18 +66,6 @@
 <v>Exercise2\Design2\Generated_Source\PSoC5\pwm_isr</v>
 <v>Exercise2\Design2\Generated_Source\PSoC5\pwm_isr\pwm_isr.c</v>
 <v>Exercise2\Design2\Generated_Source\PSoC5\pwm_isr\pwm_isr.h</v>
-<v>Exercise2\Design2\Generated_Source\PSoC5\rx_isr</v>
-<v>Exercise2\Design2\Generated_Source\PSoC5\rx_isr\rx_isr.c</v>
-<v>Exercise2\Design2\Generated_Source\PSoC5\rx_isr\rx_isr.h</v>
-<v>Exercise2\Design2\Generated_Source\PSoC5\servo_pin</v>
-<v>Exercise2\Design2\Generated_Source\PSoC5\UART_1</v>
-<v>Exercise2\Design2\Generated_Source\PSoC5\UART_1_IntClock</v>
-<v>Exercise2\Design2\Generated_Source\PSoC5\cycodeshareexport.ld</v>
-<v>Exercise2\Design2\Generated_Source\PSoC5\cycodeshareimport.ld</v>
-<v>Exercise2\Design2\Generated_Source\PSoC5\cycodeshareimport.scat</v>
-<v>Exercise2\Design2\Generated_Source\PSoC5\cydevice.h</v>
-<v>Exercise2\Design2\Generated_Source\PSoC5\cydevice_trm.h</v>
-<v>Exercise2\Design2\Generated_Source\PSoC5\cydevicegnu.inc</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 <CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">

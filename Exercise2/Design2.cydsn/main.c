@@ -11,7 +11,6 @@
 */
 #include "project.h"
 #include <stdbool.h>
-#include "rx_isr.h"
 
 #define STEP_SIZE 1 //How large the change in pulse_width is per loop in microseconds
 #define STEP_LENGTH 1 //How long the time between steps is, in milliseconds
