@@ -27,9 +27,7 @@
 *  Place your includes, defines and code here 
 ********************************************************************************/
 /* `#START rx_isr_intc` */
-    extern int gPulse_Width[6]; //six positions, in nanoseconds
-    extern uint8 gPosition; //Track current position
-    extern bool gRX_ISR;
+    extern bool gRX_ISR; //Track UART Receive Interrupt as external flag
 /* `#END` */
 
 #ifndef CYINT_IRQ_BASE
@@ -167,12 +165,7 @@ CY_ISR(rx_isr_Interrupt)
 
     /*  Place your Interrupt code here. */
     /* `#START rx_isr_Interrupt` */
-    /*if(gPosition > 4){
-        gPosition = 0;
-    }else{
-        gPosition++;
-    }*/
-    gRX_ISR = 1;
+    gRX_ISR = true; //set interrupt flag
     
     /* `#END` */
 }
