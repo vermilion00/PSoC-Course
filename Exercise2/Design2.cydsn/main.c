@@ -15,7 +15,7 @@
 #define STEP_SIZE 1 //How large the change in pulse_width is per loop in microseconds
 #define STEP_LENGTH 1 //How long the time between steps is, in milliseconds
 
-int pulse_width[6] = {1000, 1200, 1400, 1600, 1800, 2000}; //pulse width steps in microseconds
+uint16 pulse_width[6] = {1000, 1200, 1400, 1600, 1800, 2000}; //pulse width steps in microseconds
 uint8 position = 0; //Track current position
 bool gRX_ISR = false; //RX Interrupt Flag
 
@@ -25,7 +25,7 @@ int main(void){
     rx_isr_Start(); //Start RX Interrupt
     rx_isr_ClearPending();
     PWM_1_Start(); //Initialize PWM 
-    int current_pulse_width = pulse_width[0]; //Set the inital pulse width
+    uint16 current_pulse_width = pulse_width[0]; //Set the inital pulse width
 
     for(;;){
         if(gRX_ISR){    //Check if the interrupt has been triggered

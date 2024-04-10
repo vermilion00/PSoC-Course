@@ -199,6 +199,8 @@
 <OpenDocs>
 <name v=".\Design2.cydsn\main.c" />
 <name v=".\Design2.cydsn\Generated_Source\PSoC5\rx_isr.c" />
+<name v=".\Design2.cydsn\Design2.cydwr" />
+<name v=".\Design2.cydsn\TopDesign\TopDesign.cysch" />
 </OpenDocs>
 <OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
 
@@ -206,7 +208,7 @@
   Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
   http://www.actiprosoftware.com
 
---><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="932, 555" SelectedTabbedMdiWindow="aa7904e9-9c15-48db-92b6-6cfcc42bccc1"><ToolWindow Key="Output Window Plugin:7305390e-eabe-4963-b21f-3a0f11b4b1d5:Output Window" Guid="6ba38faf-6fa6-468f-8a35-4183038ef374" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Exercise2\Design2.cydsn\main.c" Guid="a3f61edf-1efc-48ff-a030-72d615b37726" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Exercise2\Design2.cydsn\Generated_Source\PSoC5\rx_isr.c" Guid="aa7904e9-9c15-48db-92b6-6cfcc42bccc1" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="932, 555" SelectedTabbedMdiWindow="a3f61edf-1efc-48ff-a030-72d615b37726"><ToolWindow Key="Output Window Plugin:7305390e-eabe-4963-b21f-3a0f11b4b1d5:Output Window" Guid="6ba38faf-6fa6-468f-8a35-4183038ef374" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Exercise2\Design2.cydsn\main.c" Guid="a3f61edf-1efc-48ff-a030-72d615b37726" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Exercise2\Design2.cydsn\Generated_Source\PSoC5\rx_isr.c" Guid="aa7904e9-9c15-48db-92b6-6cfcc42bccc1" /><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="8151a403-66dc-4421-9837-51b976458c0b" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Exercise2\Design2.cydsn\Design2.cydwr" Guid="d09bec2b-4127-41e4-951d-fc3231f31568" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Exercise2\Design2.cydsn\TopDesign\TopDesign.cysch" Guid="fe39b42b-8948-4b47-8bca-9ba170601c51" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
 <config v="" />
 <AutoUpdate v="true" />
 </CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>
