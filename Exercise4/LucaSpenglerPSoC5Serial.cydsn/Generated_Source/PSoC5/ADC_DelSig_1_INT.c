@@ -29,7 +29,6 @@
 #define FALSE 0
 
 volatile extern uint8 gADC_ISR;
-
 /* `#END`  */
 
 #if(ADC_DelSig_1_IRQ_REMOVE == 0u)
