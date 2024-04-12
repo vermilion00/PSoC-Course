@@ -1,5 +1,5 @@
 -- Project:   LucaSpenglerPSoC5OneWire
--- Generated: 04/12/2024 09:51:34
+-- Generated: 04/12/2024 11:02:52
 -- PSoC Creator  4.4
 
 ENTITY LucaSpenglerPSoC5OneWire IS
@@ -1020,10 +1020,10 @@ BEGIN
 
     onewire_pin:logicalport
         GENERIC MAP(
-            drive_mode => "100",
+            drive_mode => "010",
             ibuf_enabled => "1",
             id => "264be2d3-9481-494b-8d9c-c1905a45e9cc",
-            init_dr_st => "0",
+            init_dr_st => "1",
             input_buffer_sel => "00",
             input_clk_en => 0,
             input_sync => "0",

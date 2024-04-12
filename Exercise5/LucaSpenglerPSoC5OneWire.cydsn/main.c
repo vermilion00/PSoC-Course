@@ -3,11 +3,11 @@
 *
 * Names: Luca Spengler (1399655), Fabian Fritz (1394906)
 * Emails: luca.spengler2@stud.fra-uas.de, fabian.fritz@stud.fra-uas.de
-* Date: 10.04.2024
+* Date: 12.04.2024
 * Course ID: TX00DB04
-* Description: This program reads the analog output of a temperature sensor and
-*              outputs the average of the results over a period of 1 second
-*              in mV and °C over UART in the JSON format.
+* Description: This program reads the analog value of a temperature sensor
+*              connected over OneWire and sends the output over UART using
+*              the JSON format.
 *
 * ===============================================================================
 *
@@ -47,6 +47,7 @@
 #include <project.h>
 #include "stdio.h"
 #include <stdlib.h>
+#include "OneWire.h"
 
 /* Project Defines */
 #define FALSE  0
@@ -114,6 +115,8 @@ int main()
     
     CyGlobalIntEnable;
     
+    uint8 SampleTracker = 0;
+    int scratch[2] = {0, 0};
     uint16 sample_count = 0; //Counts the amount of samples
     uint32 sample_sum = 0; //Stores the sum of the sample values
     uint16 average_value = 0; //Stores the average value of the sample value sum
@@ -153,16 +156,45 @@ int main()
         /*Counting and conversion logic*/
         if(gADC_ISR){   //Check if the ADC ISR flag is set
             gADC_ISR = FALSE;   //Reset the ISR flag
-            sample_count++;     //Increment the sample counter
             sample_sum += ADC_DelSig_1_CountsTo_mVolts(ADC_DelSig_1_GetResult16());   //Add the sample values together
+            
+            if(sample_count == 0){      //Only initiate communication at the start of every second
+                int returnValue = ResetBus();   //Reset the onewire slave device
+                WriteByte(SKIP_ROM);    //Skip the address as  only one device is connected
+                if(SampleTracker > 0){  //Conversion only happens every second iteration
+                    onewire_pin_SetDriveMode(onewire_pin_DM_STRONG);    //Change the pin drive mode for the conversion
+                    WriteByte(TEMP_CONVERSION); //Initiate the conversion
+                    //CyDelay(WAIT_K);
+                }else{    
+                    WriteByte(READ_SCRATCH);    //Tell the Slave that you want the read the scratchboard to initiate data transfer
+                    for(uint8 i = 0; i < 2; i++){   //Read two bytes
+                        scratch[i] = ReadByte();    //Save the return value in an array
+                    }
+                }
+            }
+            
+            sample_count++; //Increment the sample counter
+                    
             if(sample_count >= SAMPLE_RATE){ //Check if the sample threshhold has been reached
                 average_value = sample_sum / SAMPLE_RATE; //Calculate the average sampled value
                 sprintf(TransmitBuffer, "{\r\n\t\"Avg ADC Value\": \"%1u mV\",\r\n", average_value);    //Convert the sampled value to a string
                 UART_1_PutString(TransmitBuffer);   //Send the output string via UART
-                sprintf(TransmitBuffer, "\t\"Temperature (Int)\": \"%i.%i C\"\r\n}\r\n", average_value / TEN_CONSTANT, average_value % TEN_CONSTANT);   //Convert the value to a string
+                sprintf(TransmitBuffer, "\t\"Temperature (Int)\": \"%i.%i C\",\r\n", average_value / TEN_CONSTANT, average_value % TEN_CONSTANT);   //Convert the value to a string
                 UART_1_PutString(TransmitBuffer);   //Send the output string via UART
                 sample_count = 0;   //Reset the sample count
                 sample_sum = 0;   //Reset the sample sum value
+                
+                /* Calculate the OneWire temperature */
+                SampleTracker = ~SampleTracker; //Invert the sample tracker, since it only gets polled every second time
+                if(SampleTracker > 0){  //Check if a conversion has happened should be polled
+                    onewire_pin_SetDriveMode(onewire_pin_DM_RES_UP);    //reset the drive mode
+                }
+                int msg = (scratch[1] << 8) | scratch[0];   //Convert two bytes to one int
+                /* Inaccurate way of obtaining the fractional part, but the accuracy of the sensor is +- 2 C anyway */
+                int msg_frac = ((msg & 15) * 10) / 16;  //Only the first four bits are needed, divide by 16 for the correct fraction
+                int msg_int = msg >> 4; //The first 4 bits are the fractional part
+                sprintf(TransmitBuffer, "\t\"Temperature (OneWire)\": = \"%i.%i C\"\r\n}\r\n", msg_int, msg_frac); //Convert the onewire temperature to a string
+                UART_1_PutString(TransmitBuffer);   //Send the output string
             }
         }
         

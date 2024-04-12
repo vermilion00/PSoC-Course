@@ -37,7 +37,9 @@
       <Folder BuildType="STRICT" Path="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Exercise5\LucaSpenglerPSoC5OneWire.cydsn">
         <Files Root="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Exercise5\LucaSpenglerPSoC5OneWire.cydsn">
           <File BuildType="BUILD" Toolchain="">cyapicallbacks.h</File>
+          <File BuildType="BUILD" Toolchain="">OneWire.h</File>
           <File BuildType="BUILD" Toolchain="">main.c</File>
+          <File BuildType="BUILD" Toolchain="">OneWire.c</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Exercise5\LucaSpenglerPSoC5OneWire.cydsn\Generated_Source\PSoC5">

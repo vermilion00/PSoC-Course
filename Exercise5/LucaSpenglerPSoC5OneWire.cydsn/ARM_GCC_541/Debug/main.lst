@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 1
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 1
 
 
    1              		.syntax unified
@@ -42,38 +42,45 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 1
   32 0030 00       		.ascii	"\000"
   33 0031 000000   		.align	2
   34              	.LC2:
-  35 0034 09225465 		.ascii	"\011\"Temperature (Int)\": \"%i.%i C\"\015\012}\015"
+  35 0034 09225465 		.ascii	"\011\"Temperature (Int)\": \"%i.%i C\",\015\012\000"
   35      6D706572 
   35      61747572 
   35      65202849 
   35      6E742922 
-  36 0057 0A00     		.ascii	"\012\000"
-  37 0059 000000   		.align	2
-  38              	.LC3:
-  39 005c 53616D70 		.ascii	"Sample: %lu mV\015\012\000"
-  39      6C653A20 
-  39      256C7520 
-  39      6D560D0A 
-  39      00
-  40 006d 000000   		.align	2
+  36 0057 00       		.align	2
+  37              	.LC3:
+  38 0058 09225465 		.ascii	"\011\"Temperature (OneWire)\": = \"%i.%i C\"\015\012"
+  38      6D706572 
+  38      61747572 
+  38      6520284F 
+  38      6E655769 
+  39 007f 7D0D0A00 		.ascii	"}\015\012\000"
+  40 0083 00       		.align	2
   41              	.LC4:
-  42 0070 456D756C 		.ascii	"Emulated Data: %x \015\012\000"
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 2
+  42 0084 53616D70 		.ascii	"Sample: %lu mV\015\012\000"
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 2
 
 
-  42      61746564 
-  42      20446174 
-  42      613A2025 
-  42      78200D0A 
-  43              		.section	.text.main,"ax",%progbits
-  44              		.align	2
-  45              		.global	main
-  46              		.thumb
-  47              		.thumb_func
-  48              		.type	main, %function
-  49              	main:
-  50              	.LFB64:
-  51              		.file 1 "main.c"
+  42      6C653A20 
+  42      256C7520 
+  42      6D560D0A 
+  42      00
+  43 0095 000000   		.align	2
+  44              	.LC5:
+  45 0098 456D756C 		.ascii	"Emulated Data: %x \015\012\000"
+  45      61746564 
+  45      20446174 
+  45      613A2025 
+  45      78200D0A 
+  46              		.section	.text.main,"ax",%progbits
+  47              		.align	2
+  48              		.global	main
+  49              		.thumb
+  50              		.thumb_func
+  51              		.type	main, %function
+  52              	main:
+  53              	.LFB64:
+  54              		.file 1 "main.c"
    1:main.c        **** /*
    2:main.c        **** * ===============================================================================
    3:main.c        **** *
@@ -111,6 +118,9 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 1
   35:main.c        **** * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. Cypress 
   36:main.c        **** * reserves the right to make changes to the Software without notice. Cypress 
   37:main.c        **** * does not assume any liability arising out of the application or use of the 
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 3
+
+
   38:main.c        **** * Software or any product or circuit described in the Software. Cypress does 
   39:main.c        **** * not authorize its products for use in any products where a malfunction or 
   40:main.c        **** * failure of the Cypress product may reasonably be expected to result in 
@@ -118,1104 +128,1417 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 1
   42:main.c        **** * including Cypress’s product in a High Risk Product, the manufacturer of such 
   43:main.c        **** * system or application assumes all risk of such use and in doing so agrees to 
   44:main.c        **** * indemnify Cypress against all liability.
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 3
-
-
   45:main.c        **** *******************************************************************************/
   46:main.c        **** 
   47:main.c        **** #include <project.h>
   48:main.c        **** #include "stdio.h"
   49:main.c        **** #include <stdlib.h>
-  50:main.c        **** 
-  51:main.c        **** /* Project Defines */
-  52:main.c        **** #define FALSE  0
-  53:main.c        **** #define TRUE   1
-  54:main.c        **** #define TRANSMIT_BUFFER_SIZE  64
-  55:main.c        **** #define SAMPLE_RATE 10000   //10000 Samples per second
-  56:main.c        **** #define CONVERSION_RATE 10 //10 mV per 1°C
-  57:main.c        **** #define TEN_CONSTANT 10 //Constant for modulo operation
-  58:main.c        **** 
-  59:main.c        **** volatile uint8 gADC_ISR = FALSE;    //ADC ISR flag
-  60:main.c        **** 
+  50:main.c        **** #include "OneWire.h"
+  51:main.c        **** 
+  52:main.c        **** /* Project Defines */
+  53:main.c        **** #define FALSE  0
+  54:main.c        **** #define TRUE   1
+  55:main.c        **** #define TRANSMIT_BUFFER_SIZE  64
+  56:main.c        **** #define SAMPLE_RATE 10000   //10000 Samples per second
+  57:main.c        **** #define CONVERSION_RATE 10 //10 mV per 1°C
+  58:main.c        **** #define TEN_CONSTANT 10 //Constant for modulo operation
+  59:main.c        **** 
+  60:main.c        **** volatile uint8 gADC_ISR = FALSE;    //ADC ISR flag
   61:main.c        **** 
-  62:main.c        **** /*******************************************************************************
-  63:main.c        **** * Function Name: main
-  64:main.c        **** ********************************************************************************
-  65:main.c        **** *
-  66:main.c        **** * Summary:
-  67:main.c        **** *  main() performs following functions:
-  68:main.c        **** *  1: Starts the ADC and UART components.
-  69:main.c        **** *  2: Checks for ADC end of conversion.  Stores latest result in output
-  70:main.c        **** *     if conversion complete.
-  71:main.c        **** *  3: Checks for UART input.
-  72:main.c        **** *     On 'C' or 'c' received: transmits the last sample via the UART.
-  73:main.c        **** *     On 'S' or 's' received: continuously transmits samples as they are completed.
-  74:main.c        **** *     On 'X' or 'x' received: stops continuously transmitting samples.
-  75:main.c        **** *     On 'E' or 'e' received: transmits a dummy byte of data.
-  76:main.c        **** *
-  77:main.c        **** * Parameters:
-  78:main.c        **** *  None.
-  79:main.c        **** *
-  80:main.c        **** * Return:
-  81:main.c        **** *  None.
-  82:main.c        **** *
-  83:main.c        **** *******************************************************************************/
-  84:main.c        **** int main()
-  85:main.c        **** {
-  52              		.loc 1 85 0
-  53              		.cfi_startproc
-  54              		@ args = 0, pretend = 0, frame = 88
-  55              		@ frame_needed = 1, uses_anonymous_args = 0
-  56 0000 90B5     		push	{r4, r7, lr}
-  57              		.cfi_def_cfa_offset 12
-  58              		.cfi_offset 4, -12
-  59              		.cfi_offset 7, -8
-  60              		.cfi_offset 14, -4
-  61 0002 97B0     		sub	sp, sp, #92
-  62              		.cfi_def_cfa_offset 104
-  63 0004 00AF     		add	r7, sp, #0
-  64              		.cfi_def_cfa_register 7
-  86:main.c        ****     /* Variable to store ADC result */
-  87:main.c        ****     uint32 Output;
-  88:main.c        ****     /* Variable to store UART received character */
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 4
+  62:main.c        **** 
+  63:main.c        **** /*******************************************************************************
+  64:main.c        **** * Function Name: main
+  65:main.c        **** ********************************************************************************
+  66:main.c        **** *
+  67:main.c        **** * Summary:
+  68:main.c        **** *  main() performs following functions:
+  69:main.c        **** *  1: Starts the ADC and UART components.
+  70:main.c        **** *  2: Checks for ADC end of conversion.  Stores latest result in output
+  71:main.c        **** *     if conversion complete.
+  72:main.c        **** *  3: Checks for UART input.
+  73:main.c        **** *     On 'C' or 'c' received: transmits the last sample via the UART.
+  74:main.c        **** *     On 'S' or 's' received: continuously transmits samples as they are completed.
+  75:main.c        **** *     On 'X' or 'x' received: stops continuously transmitting samples.
+  76:main.c        **** *     On 'E' or 'e' received: transmits a dummy byte of data.
+  77:main.c        **** *
+  78:main.c        **** * Parameters:
+  79:main.c        **** *  None.
+  80:main.c        **** *
+  81:main.c        **** * Return:
+  82:main.c        **** *  None.
+  83:main.c        **** *
+  84:main.c        **** *******************************************************************************/
+  85:main.c        **** int main()
+  86:main.c        **** {
+  55              		.loc 1 86 0
+  56              		.cfi_startproc
+  57              		@ args = 0, pretend = 0, frame = 120
+  58              		@ frame_needed = 1, uses_anonymous_args = 0
+  59 0000 90B5     		push	{r4, r7, lr}
+  60              		.cfi_def_cfa_offset 12
+  61              		.cfi_offset 4, -12
+  62              		.cfi_offset 7, -8
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 4
 
 
-  89:main.c        ****     uint8 Ch;
-  90:main.c        ****     /* Variable used to send emulated data */
-  91:main.c        ****     uint8 EmulatedData;
-  92:main.c        ****     /* Flags used to store transmit data commands */
-  93:main.c        ****     uint8 ContinuouslySendData;
-  94:main.c        ****     uint8 SendSingleByte;
-  95:main.c        ****     uint8 SendEmulatedData;
-  96:main.c        ****     /* Transmit Buffer */
-  97:main.c        ****     char TransmitBuffer[TRANSMIT_BUFFER_SIZE];
-  98:main.c        ****     
-  99:main.c        ****     /* Start the components */
- 100:main.c        ****     ADC_DelSig_1_Start();
-  65              		.loc 1 100 0
-  66 0006 FFF7FEFF 		bl	ADC_DelSig_1_Start
- 101:main.c        ****     UART_1_Start();
-  67              		.loc 1 101 0
-  68 000a FFF7FEFF 		bl	UART_1_Start
- 102:main.c        ****     
- 103:main.c        ****     /* Initialize Variables */
- 104:main.c        ****     ContinuouslySendData = FALSE;
-  69              		.loc 1 104 0
-  70 000e 0023     		movs	r3, #0
-  71 0010 87F85630 		strb	r3, [r7, #86]
- 105:main.c        ****     SendSingleByte = FALSE;
+  63              		.cfi_offset 14, -4
+  64 0002 9FB0     		sub	sp, sp, #124
+  65              		.cfi_def_cfa_offset 136
+  66 0004 00AF     		add	r7, sp, #0
+  67              		.cfi_def_cfa_register 7
+  87:main.c        ****     /* Variable to store ADC result */
+  88:main.c        ****     uint32 Output;
+  89:main.c        ****     /* Variable to store UART received character */
+  90:main.c        ****     uint8 Ch;
+  91:main.c        ****     /* Variable used to send emulated data */
+  92:main.c        ****     uint8 EmulatedData;
+  93:main.c        ****     /* Flags used to store transmit data commands */
+  94:main.c        ****     uint8 ContinuouslySendData;
+  95:main.c        ****     uint8 SendSingleByte;
+  96:main.c        ****     uint8 SendEmulatedData;
+  97:main.c        ****     /* Transmit Buffer */
+  98:main.c        ****     char TransmitBuffer[TRANSMIT_BUFFER_SIZE];
+  99:main.c        ****     
+ 100:main.c        ****     /* Start the components */
+ 101:main.c        ****     ADC_DelSig_1_Start();
+  68              		.loc 1 101 0
+  69 0006 FFF7FEFF 		bl	ADC_DelSig_1_Start
+ 102:main.c        ****     UART_1_Start();
+  70              		.loc 1 102 0
+  71 000a FFF7FEFF 		bl	UART_1_Start
+ 103:main.c        ****     
+ 104:main.c        ****     /* Initialize Variables */
+ 105:main.c        ****     ContinuouslySendData = FALSE;
   72              		.loc 1 105 0
-  73 0014 0023     		movs	r3, #0
-  74 0016 87F85530 		strb	r3, [r7, #85]
- 106:main.c        ****     SendEmulatedData = FALSE;
+  73 000e 0023     		movs	r3, #0
+  74 0010 87F87630 		strb	r3, [r7, #118]
+ 106:main.c        ****     SendSingleByte = FALSE;
   75              		.loc 1 106 0
-  76 001a 0023     		movs	r3, #0
-  77 001c 87F85430 		strb	r3, [r7, #84]
- 107:main.c        ****     EmulatedData = 0;
+  76 0014 0023     		movs	r3, #0
+  77 0016 87F87530 		strb	r3, [r7, #117]
+ 107:main.c        ****     SendEmulatedData = FALSE;
   78              		.loc 1 107 0
-  79 0020 0023     		movs	r3, #0
-  80 0022 87F85730 		strb	r3, [r7, #87]
- 108:main.c        ****     
- 109:main.c        ****     /* Start the ADC conversion */
- 110:main.c        ****     ADC_DelSig_1_StartConvert();
-  81              		.loc 1 110 0
-  82 0026 FFF7FEFF 		bl	ADC_DelSig_1_StartConvert
- 111:main.c        ****     
- 112:main.c        ****     /* Send message to verify COM port is connected properly */
- 113:main.c        ****     UART_1_PutString("COM Port Open\r\n");
-  83              		.loc 1 113 0
-  84 002a 6848     		ldr	r0, .L18
-  85 002c FFF7FEFF 		bl	UART_1_PutString
- 114:main.c        ****     
- 115:main.c        ****     CyGlobalIntEnable;
-  86              		.loc 1 115 0
-  87              		.syntax unified
-  88              	@ 115 "main.c" 1
-  89 0030 62B6     		CPSIE   i
-  90              	@ 0 "" 2
- 116:main.c        ****     
- 117:main.c        ****     uint16 sample_count = 0; //Counts the amount of samples
-  91              		.loc 1 117 0
-  92              		.thumb
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 5
+  79 001a 0023     		movs	r3, #0
+  80 001c 87F87430 		strb	r3, [r7, #116]
+ 108:main.c        ****     EmulatedData = 0;
+  81              		.loc 1 108 0
+  82 0020 0023     		movs	r3, #0
+  83 0022 87F87730 		strb	r3, [r7, #119]
+ 109:main.c        ****     
+ 110:main.c        ****     /* Start the ADC conversion */
+ 111:main.c        ****     ADC_DelSig_1_StartConvert();
+  84              		.loc 1 111 0
+  85 0026 FFF7FEFF 		bl	ADC_DelSig_1_StartConvert
+ 112:main.c        ****     
+ 113:main.c        ****     /* Send message to verify COM port is connected properly */
+ 114:main.c        ****     UART_1_PutString("COM Port Open\r\n");
+  86              		.loc 1 114 0
+  87 002a A148     		ldr	r0, .L24
+  88 002c FFF7FEFF 		bl	UART_1_PutString
+ 115:main.c        ****     
+ 116:main.c        ****     CyGlobalIntEnable;
+  89              		.loc 1 116 0
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 5
 
 
-  93              		.syntax unified
-  94 0032 0023     		movs	r3, #0
-  95 0034 A7F85230 		strh	r3, [r7, #82]	@ movhi
- 118:main.c        ****     uint32 sample_sum = 0; //Stores the sum of the sample values
-  96              		.loc 1 118 0
-  97 0038 0023     		movs	r3, #0
-  98 003a FB64     		str	r3, [r7, #76]
- 119:main.c        ****     uint16 average_value = 0; //Stores the average value of the sample value sum
+  90              		.syntax unified
+  91              	@ 116 "main.c" 1
+  92 0030 62B6     		CPSIE   i
+  93              	@ 0 "" 2
+ 117:main.c        ****     
+ 118:main.c        ****     uint8 SampleTracker = 0;
+  94              		.loc 1 118 0
+  95              		.thumb
+  96              		.syntax unified
+  97 0032 0023     		movs	r3, #0
+  98 0034 87F87330 		strb	r3, [r7, #115]
+ 119:main.c        ****     int scratch[2] = {0, 0};
   99              		.loc 1 119 0
- 100 003c 0023     		movs	r3, #0
- 101 003e A7F84A30 		strh	r3, [r7, #74]	@ movhi
- 102              	.L16:
- 120:main.c        ****     
- 121:main.c        ****     for(;;)
- 122:main.c        ****     {        
- 123:main.c        ****         /* Non-blocking call to get the latest data recieved  */
- 124:main.c        ****         Ch = UART_1_GetChar();
- 103              		.loc 1 124 0
- 104 0042 FFF7FEFF 		bl	UART_1_GetChar
- 105 0046 0346     		mov	r3, r0
- 106 0048 87F84930 		strb	r3, [r7, #73]
- 125:main.c        ****         
- 126:main.c        ****         /* Set flags based on UART command */
- 127:main.c        ****         switch(Ch)
- 107              		.loc 1 127 0
- 108 004c 97F84930 		ldrb	r3, [r7, #73]	@ zero_extendqisi2
- 109 0050 582B     		cmp	r3, #88
- 110 0052 21D0     		beq	.L3
- 111 0054 582B     		cmp	r3, #88
- 112 0056 0BDC     		bgt	.L4
- 113 0058 432B     		cmp	r3, #67
- 114 005a 15D0     		beq	.L5
- 115 005c 432B     		cmp	r3, #67
- 116 005e 02DC     		bgt	.L6
- 117 0060 002B     		cmp	r3, #0
- 118 0062 21D0     		beq	.L17
- 128:main.c        ****         {
- 129:main.c        ****             case 0:
- 130:main.c        ****                 /* No new data was recieved */
- 131:main.c        ****                 break;
- 132:main.c        ****             case 'C':
- 133:main.c        ****             case 'c':
- 134:main.c        ****                 SendSingleByte = TRUE;
- 135:main.c        ****                 break;
- 136:main.c        ****             case 'S':
- 137:main.c        ****             case 's':
- 138:main.c        ****                 ContinuouslySendData = TRUE;
- 139:main.c        ****                 break;
- 140:main.c        ****             case 'X':
- 141:main.c        ****             case 'x':
- 142:main.c        ****                 ContinuouslySendData = FALSE;
- 143:main.c        ****                 break;
- 144:main.c        ****             case 'E':
- 145:main.c        ****             case 'e':
- 146:main.c        ****                 SendEmulatedData = TRUE;
- 147:main.c        ****                 break;
- 148:main.c        ****             default:
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 6
+ 100 0038 0023     		movs	r3, #0
+ 101 003a 7B60     		str	r3, [r7, #4]
+ 102 003c 0023     		movs	r3, #0
+ 103 003e BB60     		str	r3, [r7, #8]
+ 120:main.c        ****     uint16 sample_count = 0; //Counts the amount of samples
+ 104              		.loc 1 120 0
+ 105 0040 0023     		movs	r3, #0
+ 106 0042 A7F87030 		strh	r3, [r7, #112]	@ movhi
+ 121:main.c        ****     uint32 sample_sum = 0; //Stores the sum of the sample values
+ 107              		.loc 1 121 0
+ 108 0046 0023     		movs	r3, #0
+ 109 0048 FB66     		str	r3, [r7, #108]
+ 122:main.c        ****     uint16 average_value = 0; //Stores the average value of the sample value sum
+ 110              		.loc 1 122 0
+ 111 004a 0023     		movs	r3, #0
+ 112 004c A7F86830 		strh	r3, [r7, #104]	@ movhi
+ 113              	.L22:
+ 123:main.c        ****     
+ 124:main.c        ****     for(;;)
+ 125:main.c        ****     {        
+ 126:main.c        ****         /* Non-blocking call to get the latest data recieved  */
+ 127:main.c        ****         Ch = UART_1_GetChar();
+ 114              		.loc 1 127 0
+ 115 0050 FFF7FEFF 		bl	UART_1_GetChar
+ 116 0054 0346     		mov	r3, r0
+ 117 0056 87F86730 		strb	r3, [r7, #103]
+ 128:main.c        ****         
+ 129:main.c        ****         /* Set flags based on UART command */
+ 130:main.c        ****         switch(Ch)
+ 118              		.loc 1 130 0
+ 119 005a 97F86730 		ldrb	r3, [r7, #103]	@ zero_extendqisi2
+ 120 005e 582B     		cmp	r3, #88
+ 121 0060 21D0     		beq	.L3
+ 122 0062 582B     		cmp	r3, #88
+ 123 0064 0BDC     		bgt	.L4
+ 124 0066 432B     		cmp	r3, #67
+ 125 0068 15D0     		beq	.L5
+ 126 006a 432B     		cmp	r3, #67
+ 127 006c 02DC     		bgt	.L6
+ 128 006e 002B     		cmp	r3, #0
+ 129 0070 21D0     		beq	.L23
+ 131:main.c        ****         {
+ 132:main.c        ****             case 0:
+ 133:main.c        ****                 /* No new data was recieved */
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 6
 
 
- 149:main.c        ****                 /* Place error handling code here */
- 150:main.c        ****                 break;    
- 119              		.loc 1 150 0
- 120 0064 21E0     		b	.L11
- 121              	.L6:
- 127:main.c        ****         {
- 122              		.loc 1 127 0
- 123 0066 452B     		cmp	r3, #69
- 124 0068 1AD0     		beq	.L8
- 125 006a 532B     		cmp	r3, #83
- 126 006c 10D0     		beq	.L9
- 127              		.loc 1 150 0
- 128 006e 1CE0     		b	.L11
- 129              	.L4:
- 127:main.c        ****         {
- 130              		.loc 1 127 0
- 131 0070 652B     		cmp	r3, #101
- 132 0072 15D0     		beq	.L8
- 133 0074 652B     		cmp	r3, #101
- 134 0076 02DC     		bgt	.L10
- 135 0078 632B     		cmp	r3, #99
- 136 007a 05D0     		beq	.L5
- 137              		.loc 1 150 0
- 138 007c 15E0     		b	.L11
- 139              	.L10:
- 127:main.c        ****         {
- 140              		.loc 1 127 0
- 141 007e 732B     		cmp	r3, #115
- 142 0080 06D0     		beq	.L9
- 143 0082 782B     		cmp	r3, #120
- 144 0084 08D0     		beq	.L3
- 145              		.loc 1 150 0
- 146 0086 10E0     		b	.L11
- 147              	.L5:
  134:main.c        ****                 break;
- 148              		.loc 1 134 0
- 149 0088 0123     		movs	r3, #1
- 150 008a 87F85530 		strb	r3, [r7, #85]
- 135:main.c        ****             case 'S':
- 151              		.loc 1 135 0
- 152 008e 0CE0     		b	.L11
- 153              	.L9:
+ 135:main.c        ****             case 'C':
+ 136:main.c        ****             case 'c':
+ 137:main.c        ****                 SendSingleByte = TRUE;
  138:main.c        ****                 break;
- 154              		.loc 1 138 0
- 155 0090 0123     		movs	r3, #1
- 156 0092 87F85630 		strb	r3, [r7, #86]
- 139:main.c        ****             case 'X':
- 157              		.loc 1 139 0
- 158 0096 08E0     		b	.L11
- 159              	.L3:
+ 139:main.c        ****             case 'S':
+ 140:main.c        ****             case 's':
+ 141:main.c        ****                 ContinuouslySendData = TRUE;
  142:main.c        ****                 break;
- 160              		.loc 1 142 0
- 161 0098 0023     		movs	r3, #0
- 162 009a 87F85630 		strb	r3, [r7, #86]
- 143:main.c        ****             case 'E':
- 163              		.loc 1 143 0
- 164 009e 04E0     		b	.L11
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 7
-
-
- 165              	.L8:
+ 143:main.c        ****             case 'X':
+ 144:main.c        ****             case 'x':
+ 145:main.c        ****                 ContinuouslySendData = FALSE;
  146:main.c        ****                 break;
- 166              		.loc 1 146 0
- 167 00a0 0123     		movs	r3, #1
- 168 00a2 87F85430 		strb	r3, [r7, #84]
- 147:main.c        ****             default:
- 169              		.loc 1 147 0
- 170 00a6 00E0     		b	.L11
- 171              	.L17:
- 131:main.c        ****             case 'C':
- 172              		.loc 1 131 0
- 173 00a8 00BF     		nop
- 174              	.L11:
- 151:main.c        ****         }
- 152:main.c        ****         
- 153:main.c        ****         /*Counting and conversion logic*/
- 154:main.c        ****         if(gADC_ISR){   //Check if the ADC ISR flag is set
- 175              		.loc 1 154 0
- 176 00aa 494B     		ldr	r3, .L18+4
- 177 00ac 1B78     		ldrb	r3, [r3]
- 178 00ae DBB2     		uxtb	r3, r3
- 179 00b0 002B     		cmp	r3, #0
- 180 00b2 4CD0     		beq	.L12
- 155:main.c        ****             gADC_ISR = FALSE;   //Reset the ISR flag
- 181              		.loc 1 155 0
- 182 00b4 464B     		ldr	r3, .L18+4
- 183 00b6 0022     		movs	r2, #0
- 184 00b8 1A70     		strb	r2, [r3]
- 156:main.c        ****             sample_count++;     //Increment the sample counter
- 185              		.loc 1 156 0
- 186 00ba B7F85230 		ldrh	r3, [r7, #82]
- 187 00be 0133     		adds	r3, r3, #1
- 188 00c0 A7F85230 		strh	r3, [r7, #82]	@ movhi
- 157:main.c        ****             sample_sum += ADC_DelSig_1_CountsTo_mVolts(ADC_DelSig_1_GetResult16());   //Add the sam
- 189              		.loc 1 157 0
- 190 00c4 FFF7FEFF 		bl	ADC_DelSig_1_GetResult16
- 191 00c8 0346     		mov	r3, r0
- 192 00ca 1846     		mov	r0, r3
- 193 00cc FFF7FEFF 		bl	ADC_DelSig_1_CountsTo_mVolts
- 194 00d0 0346     		mov	r3, r0
- 195 00d2 1A46     		mov	r2, r3
- 196 00d4 FB6C     		ldr	r3, [r7, #76]
- 197 00d6 1344     		add	r3, r3, r2
- 198 00d8 FB64     		str	r3, [r7, #76]
- 158:main.c        ****             if(sample_count >= SAMPLE_RATE){ //Check if the sample threshhold has been reached
- 199              		.loc 1 158 0
- 200 00da B7F85230 		ldrh	r3, [r7, #82]
- 201 00de 42F20F72 		movw	r2, #9999
- 202 00e2 9342     		cmp	r3, r2
- 203 00e4 33D9     		bls	.L12
- 159:main.c        ****                 average_value = sample_sum / SAMPLE_RATE; //Calculate the average sampled value
- 204              		.loc 1 159 0
- 205 00e6 FB6C     		ldr	r3, [r7, #76]
- 206 00e8 3A4A     		ldr	r2, .L18+8
- 207 00ea A2FB0323 		umull	r2, r3, r2, r3
- 208 00ee 5B0B     		lsrs	r3, r3, #13
- 209 00f0 A7F84A30 		strh	r3, [r7, #74]	@ movhi
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 8
+ 147:main.c        ****             case 'E':
+ 148:main.c        ****             case 'e':
+ 149:main.c        ****                 SendEmulatedData = TRUE;
+ 150:main.c        ****                 break;
+ 151:main.c        ****             default:
+ 152:main.c        ****                 /* Place error handling code here */
+ 153:main.c        ****                 break;    
+ 130              		.loc 1 153 0
+ 131 0072 21E0     		b	.L11
+ 132              	.L6:
+ 130:main.c        ****         {
+ 133              		.loc 1 130 0
+ 134 0074 452B     		cmp	r3, #69
+ 135 0076 1AD0     		beq	.L8
+ 136 0078 532B     		cmp	r3, #83
+ 137 007a 10D0     		beq	.L9
+ 138              		.loc 1 153 0
+ 139 007c 1CE0     		b	.L11
+ 140              	.L4:
+ 130:main.c        ****         {
+ 141              		.loc 1 130 0
+ 142 007e 652B     		cmp	r3, #101
+ 143 0080 15D0     		beq	.L8
+ 144 0082 652B     		cmp	r3, #101
+ 145 0084 02DC     		bgt	.L10
+ 146 0086 632B     		cmp	r3, #99
+ 147 0088 05D0     		beq	.L5
+ 148              		.loc 1 153 0
+ 149 008a 15E0     		b	.L11
+ 150              	.L10:
+ 130:main.c        ****         {
+ 151              		.loc 1 130 0
+ 152 008c 732B     		cmp	r3, #115
+ 153 008e 06D0     		beq	.L9
+ 154 0090 782B     		cmp	r3, #120
+ 155 0092 08D0     		beq	.L3
+ 156              		.loc 1 153 0
+ 157 0094 10E0     		b	.L11
+ 158              	.L5:
+ 137:main.c        ****                 break;
+ 159              		.loc 1 137 0
+ 160 0096 0123     		movs	r3, #1
+ 161 0098 87F87530 		strb	r3, [r7, #117]
+ 138:main.c        ****             case 'S':
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 7
 
 
- 160:main.c        ****                 sprintf(TransmitBuffer, "{\r\n\t\"Avg ADC Value\": \"%1u mV\",\r\n", average_value)
- 210              		.loc 1 160 0
- 211 00f4 B7F84A20 		ldrh	r2, [r7, #74]
- 212 00f8 3B1D     		adds	r3, r7, #4
- 213 00fa 3749     		ldr	r1, .L18+12
- 214 00fc 1846     		mov	r0, r3
- 215 00fe FFF7FEFF 		bl	sprintf
- 161:main.c        ****                 UART_1_PutString(TransmitBuffer);   //Send the output string via UART
- 216              		.loc 1 161 0
- 217 0102 3B1D     		adds	r3, r7, #4
- 218 0104 1846     		mov	r0, r3
- 219 0106 FFF7FEFF 		bl	UART_1_PutString
- 162:main.c        ****                 sprintf(TransmitBuffer, "\t\"Temperature (Int)\": \"%i.%i C\"\r\n}\r\n", average_va
- 220              		.loc 1 162 0
- 221 010a B7F84A30 		ldrh	r3, [r7, #74]
- 222 010e 334A     		ldr	r2, .L18+16
- 223 0110 A2FB0323 		umull	r2, r3, r2, r3
- 224 0114 DB08     		lsrs	r3, r3, #3
- 225 0116 9BB2     		uxth	r3, r3
- 226 0118 1C46     		mov	r4, r3
- 227 011a B7F84A20 		ldrh	r2, [r7, #74]
- 228 011e 2F4B     		ldr	r3, .L18+16
- 229 0120 A3FB0213 		umull	r1, r3, r3, r2
- 230 0124 D908     		lsrs	r1, r3, #3
- 231 0126 0B46     		mov	r3, r1
- 232 0128 9B00     		lsls	r3, r3, #2
- 233 012a 0B44     		add	r3, r3, r1
- 234 012c 5B00     		lsls	r3, r3, #1
- 235 012e D31A     		subs	r3, r2, r3
- 236 0130 9BB2     		uxth	r3, r3
- 237 0132 381D     		adds	r0, r7, #4
- 238 0134 2246     		mov	r2, r4
- 239 0136 2A49     		ldr	r1, .L18+20
- 240 0138 FFF7FEFF 		bl	sprintf
- 163:main.c        ****                 UART_1_PutString(TransmitBuffer);   //Send the output string via UART
- 241              		.loc 1 163 0
- 242 013c 3B1D     		adds	r3, r7, #4
- 243 013e 1846     		mov	r0, r3
- 244 0140 FFF7FEFF 		bl	UART_1_PutString
- 164:main.c        ****                 sample_count = 0;   //Reset the sample count
- 245              		.loc 1 164 0
- 246 0144 0023     		movs	r3, #0
- 247 0146 A7F85230 		strh	r3, [r7, #82]	@ movhi
- 165:main.c        ****                 sample_sum = 0;   //Reset the sample sum value
- 248              		.loc 1 165 0
- 249 014a 0023     		movs	r3, #0
- 250 014c FB64     		str	r3, [r7, #76]
- 251              	.L12:
- 166:main.c        ****             }
- 167:main.c        ****         }
- 168:main.c        ****         
- 169:main.c        ****         
- 170:main.c        ****         /* Check to see if an ADC conversion has completed */
- 171:main.c        ****         if(ADC_DelSig_1_IsEndConversion(ADC_DelSig_1_RETURN_STATUS))
- 252              		.loc 1 171 0
- 253 014e 0120     		movs	r0, #1
- 254 0150 FFF7FEFF 		bl	ADC_DelSig_1_IsEndConversion
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 9
+ 162              		.loc 1 138 0
+ 163 009c 0CE0     		b	.L11
+ 164              	.L9:
+ 141:main.c        ****                 break;
+ 165              		.loc 1 141 0
+ 166 009e 0123     		movs	r3, #1
+ 167 00a0 87F87630 		strb	r3, [r7, #118]
+ 142:main.c        ****             case 'X':
+ 168              		.loc 1 142 0
+ 169 00a4 08E0     		b	.L11
+ 170              	.L3:
+ 145:main.c        ****                 break;
+ 171              		.loc 1 145 0
+ 172 00a6 0023     		movs	r3, #0
+ 173 00a8 87F87630 		strb	r3, [r7, #118]
+ 146:main.c        ****             case 'E':
+ 174              		.loc 1 146 0
+ 175 00ac 04E0     		b	.L11
+ 176              	.L8:
+ 149:main.c        ****                 break;
+ 177              		.loc 1 149 0
+ 178 00ae 0123     		movs	r3, #1
+ 179 00b0 87F87430 		strb	r3, [r7, #116]
+ 150:main.c        ****             default:
+ 180              		.loc 1 150 0
+ 181 00b4 00E0     		b	.L11
+ 182              	.L23:
+ 134:main.c        ****             case 'C':
+ 183              		.loc 1 134 0
+ 184 00b6 00BF     		nop
+ 185              	.L11:
+ 154:main.c        ****         }
+ 155:main.c        ****         
+ 156:main.c        ****         /*Counting and conversion logic*/
+ 157:main.c        ****         if(gADC_ISR){   //Check if the ADC ISR flag is set
+ 186              		.loc 1 157 0
+ 187 00b8 7E4B     		ldr	r3, .L24+4
+ 188 00ba 1B78     		ldrb	r3, [r3]
+ 189 00bc DBB2     		uxtb	r3, r3
+ 190 00be 002B     		cmp	r3, #0
+ 191 00c0 00F0B380 		beq	.L12
+ 158:main.c        ****             gADC_ISR = FALSE;   //Reset the ISR flag
+ 192              		.loc 1 158 0
+ 193 00c4 7B4B     		ldr	r3, .L24+4
+ 194 00c6 0022     		movs	r2, #0
+ 195 00c8 1A70     		strb	r2, [r3]
+ 159:main.c        ****             sample_sum += ADC_DelSig_1_CountsTo_mVolts(ADC_DelSig_1_GetResult16());   //Add the sam
+ 196              		.loc 1 159 0
+ 197 00ca FFF7FEFF 		bl	ADC_DelSig_1_GetResult16
+ 198 00ce 0346     		mov	r3, r0
+ 199 00d0 1846     		mov	r0, r3
+ 200 00d2 FFF7FEFF 		bl	ADC_DelSig_1_CountsTo_mVolts
+ 201 00d6 0346     		mov	r3, r0
+ 202 00d8 1A46     		mov	r2, r3
+ 203 00da FB6E     		ldr	r3, [r7, #108]
+ 204 00dc 1344     		add	r3, r3, r2
+ 205 00de FB66     		str	r3, [r7, #108]
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 8
 
 
- 255 0154 0346     		mov	r3, r0
- 256 0156 002B     		cmp	r3, #0
- 257 0158 3FF473AF 		beq	.L16
- 172:main.c        ****         {
- 173:main.c        ****             /* Use the GetResult16 API to get an 8 bit unsigned result in
- 174:main.c        ****              * single ended mode.  The API CountsTo_mVolts is then used
- 175:main.c        ****              * to convert the ADC counts into mV before transmitting via
- 176:main.c        ****              * the UART.  See the datasheet API description for more
- 177:main.c        ****              * details */
- 178:main.c        ****             Output = ADC_DelSig_1_CountsTo_mVolts(ADC_DelSig_1_GetResult16());
- 258              		.loc 1 178 0
- 259 015c FFF7FEFF 		bl	ADC_DelSig_1_GetResult16
- 260 0160 0346     		mov	r3, r0
- 261 0162 1846     		mov	r0, r3
- 262 0164 FFF7FEFF 		bl	ADC_DelSig_1_CountsTo_mVolts
- 263 0168 0346     		mov	r3, r0
- 264 016a 7B64     		str	r3, [r7, #68]
- 179:main.c        ****             
- 180:main.c        ****             /* Send data based on last UART command */
- 181:main.c        ****             if(SendSingleByte || ContinuouslySendData)
- 265              		.loc 1 181 0
- 266 016c 97F85530 		ldrb	r3, [r7, #85]	@ zero_extendqisi2
- 267 0170 002B     		cmp	r3, #0
- 268 0172 03D1     		bne	.L14
- 269              		.loc 1 181 0 is_stmt 0 discriminator 1
- 270 0174 97F85630 		ldrb	r3, [r7, #86]	@ zero_extendqisi2
- 271 0178 002B     		cmp	r3, #0
- 272 017a 0DD0     		beq	.L15
- 273              	.L14:
- 182:main.c        ****             {
- 183:main.c        ****                 /* Format ADC result for transmition */
- 184:main.c        ****                 sprintf(TransmitBuffer, "Sample: %lu mV\r\n", Output);
- 274              		.loc 1 184 0 is_stmt 1
- 275 017c 3B1D     		adds	r3, r7, #4
- 276 017e 7A6C     		ldr	r2, [r7, #68]
- 277 0180 1849     		ldr	r1, .L18+24
- 278 0182 1846     		mov	r0, r3
- 279 0184 FFF7FEFF 		bl	sprintf
- 185:main.c        ****                 /* Send out the data */
- 186:main.c        ****                 UART_1_PutString(TransmitBuffer);
- 280              		.loc 1 186 0
- 281 0188 3B1D     		adds	r3, r7, #4
- 282 018a 1846     		mov	r0, r3
- 283 018c FFF7FEFF 		bl	UART_1_PutString
- 187:main.c        ****                 /* Reset the send once flag */
- 188:main.c        ****                 SendSingleByte = FALSE;
- 284              		.loc 1 188 0
- 285 0190 0023     		movs	r3, #0
- 286 0192 87F85530 		strb	r3, [r7, #85]
- 287 0196 17E0     		b	.L13
- 288              	.L15:
- 189:main.c        ****             }
- 190:main.c        ****             else if(SendEmulatedData)
- 289              		.loc 1 190 0
- 290 0198 97F85430 		ldrb	r3, [r7, #84]	@ zero_extendqisi2
- 291 019c 002B     		cmp	r3, #0
- 292 019e 3FF450AF 		beq	.L16
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 10
+ 160:main.c        ****             
+ 161:main.c        ****             if(sample_count == 0){
+ 206              		.loc 1 161 0
+ 207 00e0 B7F87030 		ldrh	r3, [r7, #112]
+ 208 00e4 002B     		cmp	r3, #0
+ 209 00e6 31D1     		bne	.L13
+ 162:main.c        ****                 if(SampleTracker > 0){
+ 210              		.loc 1 162 0
+ 211 00e8 97F87330 		ldrb	r3, [r7, #115]	@ zero_extendqisi2
+ 212 00ec 002B     		cmp	r3, #0
+ 213 00ee 0CD0     		beq	.L14
+ 214              	.LBB2:
+ 163:main.c        ****                     int returnValue = ResetBus();
+ 215              		.loc 1 163 0
+ 216 00f0 FFF7FEFF 		bl	ResetBus
+ 217 00f4 3866     		str	r0, [r7, #96]
+ 164:main.c        ****                     WriteByte(SKIP_ROM);
+ 218              		.loc 1 164 0
+ 219 00f6 CC20     		movs	r0, #204
+ 220 00f8 FFF7FEFF 		bl	WriteByte
+ 165:main.c        ****                     onewire_pin_SetDriveMode(onewire_pin_DM_STRONG);
+ 221              		.loc 1 165 0
+ 222 00fc 0C20     		movs	r0, #12
+ 223 00fe FFF7FEFF 		bl	onewire_pin_SetDriveMode
+ 166:main.c        ****                     WriteByte(TEMP_CONVERSION);
+ 224              		.loc 1 166 0
+ 225 0102 4420     		movs	r0, #68
+ 226 0104 FFF7FEFF 		bl	WriteByte
+ 227              	.LBE2:
+ 228 0108 20E0     		b	.L13
+ 229              	.L14:
+ 230              	.LBB3:
+ 167:main.c        ****                     //CyDelay(WAIT_K);
+ 168:main.c        ****                 }else{
+ 169:main.c        ****                     int returnValue = ResetBus();
+ 231              		.loc 1 169 0
+ 232 010a FFF7FEFF 		bl	ResetBus
+ 233 010e F865     		str	r0, [r7, #92]
+ 170:main.c        ****                     WriteByte(SKIP_ROM);
+ 234              		.loc 1 170 0
+ 235 0110 CC20     		movs	r0, #204
+ 236 0112 FFF7FEFF 		bl	WriteByte
+ 171:main.c        ****                     WriteByte(READ_SCRATCH);
+ 237              		.loc 1 171 0
+ 238 0116 BE20     		movs	r0, #190
+ 239 0118 FFF7FEFF 		bl	WriteByte
+ 240              	.LBB4:
+ 172:main.c        ****                     for(uint8 i = 0; i < 2; i++){
+ 241              		.loc 1 172 0
+ 242 011c 0023     		movs	r3, #0
+ 243 011e 87F86B30 		strb	r3, [r7, #107]
+ 244 0122 0FE0     		b	.L15
+ 245              	.L16:
+ 173:main.c        ****                         scratch[i] = ReadByte();
+ 246              		.loc 1 173 0 discriminator 3
+ 247 0124 97F86B40 		ldrb	r4, [r7, #107]	@ zero_extendqisi2
+ 248 0128 FFF7FEFF 		bl	ReadByte
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 9
 
 
- 191:main.c        ****             {
- 192:main.c        ****                 /* Format ADC result for transmition */
- 193:main.c        ****                 sprintf(TransmitBuffer, "Emulated Data: %x \r\n", EmulatedData);
- 293              		.loc 1 193 0
- 294 01a2 97F85720 		ldrb	r2, [r7, #87]	@ zero_extendqisi2
- 295 01a6 3B1D     		adds	r3, r7, #4
- 296 01a8 0F49     		ldr	r1, .L18+28
- 297 01aa 1846     		mov	r0, r3
- 298 01ac FFF7FEFF 		bl	sprintf
- 194:main.c        ****                 /* Send out the data */
- 195:main.c        ****                 UART_1_PutString(TransmitBuffer);
- 299              		.loc 1 195 0
- 300 01b0 3B1D     		adds	r3, r7, #4
- 301 01b2 1846     		mov	r0, r3
- 302 01b4 FFF7FEFF 		bl	UART_1_PutString
- 196:main.c        ****                 EmulatedData++;
- 303              		.loc 1 196 0
- 304 01b8 97F85730 		ldrb	r3, [r7, #87]	@ zero_extendqisi2
- 305 01bc 0133     		adds	r3, r3, #1
- 306 01be 87F85730 		strb	r3, [r7, #87]
- 197:main.c        ****                 /* Reset the send once flag */
- 198:main.c        ****                 SendEmulatedData = FALSE;   
- 307              		.loc 1 198 0
- 308 01c2 0023     		movs	r3, #0
- 309 01c4 87F85430 		strb	r3, [r7, #84]
- 310              	.L13:
- 199:main.c        ****             }
- 200:main.c        ****         }
- 201:main.c        ****     }
- 311              		.loc 1 201 0
- 312 01c8 3BE7     		b	.L16
- 313              	.L19:
- 314 01ca 00BF     		.align	2
- 315              	.L18:
- 316 01cc 00000000 		.word	.LC0
- 317 01d0 00000000 		.word	gADC_ISR
- 318 01d4 5917B7D1 		.word	-776530087
- 319 01d8 10000000 		.word	.LC1
- 320 01dc CDCCCCCC 		.word	-858993459
- 321 01e0 34000000 		.word	.LC2
- 322 01e4 5C000000 		.word	.LC3
- 323 01e8 70000000 		.word	.LC4
- 324              		.cfi_endproc
- 325              	.LFE64:
- 326              		.size	main, .-main
- 327              		.text
- 328              	.Letext0:
- 329              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
- 330              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
- 331              		.file 4 "Generated_Source\\PSoC5/cytypes.h"
- 332              		.file 5 "Generated_Source\\PSoC5/core_cm3.h"
- 333              		.section	.debug_info,"",%progbits
- 334              	.Ldebug_info0:
- 335 0000 A2010000 		.4byte	0x1a2
- 336 0004 0400     		.2byte	0x4
- 337 0006 00000000 		.4byte	.Ldebug_abbrev0
- 338 000a 04       		.byte	0x4
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 11
+ 249 012c 0246     		mov	r2, r0
+ 250 012e A300     		lsls	r3, r4, #2
+ 251 0130 07F17801 		add	r1, r7, #120
+ 252 0134 0B44     		add	r3, r3, r1
+ 253 0136 43F8742C 		str	r2, [r3, #-116]
+ 172:main.c        ****                     for(uint8 i = 0; i < 2; i++){
+ 254              		.loc 1 172 0 discriminator 3
+ 255 013a 97F86B30 		ldrb	r3, [r7, #107]	@ zero_extendqisi2
+ 256 013e 0133     		adds	r3, r3, #1
+ 257 0140 87F86B30 		strb	r3, [r7, #107]
+ 258              	.L15:
+ 172:main.c        ****                     for(uint8 i = 0; i < 2; i++){
+ 259              		.loc 1 172 0 is_stmt 0 discriminator 1
+ 260 0144 97F86B30 		ldrb	r3, [r7, #107]	@ zero_extendqisi2
+ 261 0148 012B     		cmp	r3, #1
+ 262 014a EBD9     		bls	.L16
+ 263              	.L13:
+ 264              	.LBE4:
+ 265              	.LBE3:
+ 174:main.c        ****                     }
+ 175:main.c        ****                 }
+ 176:main.c        ****             }
+ 177:main.c        ****             
+ 178:main.c        ****             sample_count++; //Increment the sample counter
+ 266              		.loc 1 178 0 is_stmt 1
+ 267 014c B7F87030 		ldrh	r3, [r7, #112]
+ 268 0150 0133     		adds	r3, r3, #1
+ 269 0152 A7F87030 		strh	r3, [r7, #112]	@ movhi
+ 179:main.c        ****                     
+ 180:main.c        ****             if(sample_count >= SAMPLE_RATE){ //Check if the sample threshhold has been reached
+ 270              		.loc 1 180 0
+ 271 0156 B7F87030 		ldrh	r3, [r7, #112]
+ 272 015a 42F20F72 		movw	r2, #9999
+ 273 015e 9342     		cmp	r3, r2
+ 274 0160 63D9     		bls	.L12
+ 275              	.LBB5:
+ 181:main.c        ****                 average_value = sample_sum / SAMPLE_RATE; //Calculate the average sampled value
+ 276              		.loc 1 181 0
+ 277 0162 FB6E     		ldr	r3, [r7, #108]
+ 278 0164 544A     		ldr	r2, .L24+8
+ 279 0166 A2FB0323 		umull	r2, r3, r2, r3
+ 280 016a 5B0B     		lsrs	r3, r3, #13
+ 281 016c A7F86830 		strh	r3, [r7, #104]	@ movhi
+ 182:main.c        ****                 sprintf(TransmitBuffer, "{\r\n\t\"Avg ADC Value\": \"%1u mV\",\r\n", average_value)
+ 282              		.loc 1 182 0
+ 283 0170 B7F86820 		ldrh	r2, [r7, #104]
+ 284 0174 07F10C03 		add	r3, r7, #12
+ 285 0178 5049     		ldr	r1, .L24+12
+ 286 017a 1846     		mov	r0, r3
+ 287 017c FFF7FEFF 		bl	sprintf
+ 183:main.c        ****                 UART_1_PutString(TransmitBuffer);   //Send the output string via UART
+ 288              		.loc 1 183 0
+ 289 0180 07F10C03 		add	r3, r7, #12
+ 290 0184 1846     		mov	r0, r3
+ 291 0186 FFF7FEFF 		bl	UART_1_PutString
+ 184:main.c        ****                 sprintf(TransmitBuffer, "\t\"Temperature (Int)\": \"%i.%i C\",\r\n", average_value 
+ 292              		.loc 1 184 0
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 10
 
 
- 339 000b 01       		.uleb128 0x1
- 340 000c 0D000000 		.4byte	.LASF30
- 341 0010 0C       		.byte	0xc
- 342 0011 18020000 		.4byte	.LASF31
- 343 0015 46010000 		.4byte	.LASF32
- 344 0019 00000000 		.4byte	.Ldebug_ranges0+0
- 345 001d 00000000 		.4byte	0
- 346 0021 00000000 		.4byte	.Ldebug_line0
- 347 0025 02       		.uleb128 0x2
- 348 0026 01       		.byte	0x1
- 349 0027 06       		.byte	0x6
- 350 0028 54020000 		.4byte	.LASF0
- 351 002c 02       		.uleb128 0x2
- 352 002d 01       		.byte	0x1
- 353 002e 08       		.byte	0x8
- 354 002f 14010000 		.4byte	.LASF1
- 355 0033 02       		.uleb128 0x2
- 356 0034 02       		.byte	0x2
- 357 0035 05       		.byte	0x5
- 358 0036 2F020000 		.4byte	.LASF2
- 359 003a 02       		.uleb128 0x2
- 360 003b 02       		.byte	0x2
- 361 003c 07       		.byte	0x7
- 362 003d F4000000 		.4byte	.LASF3
- 363 0041 03       		.uleb128 0x3
- 364 0042 A9000000 		.4byte	.LASF9
- 365 0046 02       		.byte	0x2
- 366 0047 3F       		.byte	0x3f
- 367 0048 4C000000 		.4byte	0x4c
- 368 004c 02       		.uleb128 0x2
- 369 004d 04       		.byte	0x4
- 370 004e 05       		.byte	0x5
- 371 004f 3F020000 		.4byte	.LASF4
- 372 0053 02       		.uleb128 0x2
- 373 0054 04       		.byte	0x4
- 374 0055 07       		.byte	0x7
- 375 0056 E2000000 		.4byte	.LASF5
- 376 005a 02       		.uleb128 0x2
- 377 005b 08       		.byte	0x8
- 378 005c 05       		.byte	0x5
- 379 005d 0A020000 		.4byte	.LASF6
- 380 0061 02       		.uleb128 0x2
- 381 0062 08       		.byte	0x8
- 382 0063 07       		.byte	0x7
- 383 0064 CA010000 		.4byte	.LASF7
- 384 0068 04       		.uleb128 0x4
- 385 0069 04       		.byte	0x4
- 386 006a 05       		.byte	0x5
- 387 006b 696E7400 		.ascii	"int\000"
- 388 006f 02       		.uleb128 0x2
- 389 0070 04       		.byte	0x4
- 390 0071 07       		.byte	0x7
- 391 0072 BD010000 		.4byte	.LASF8
- 392 0076 03       		.uleb128 0x3
- 393 0077 EA010000 		.4byte	.LASF10
- 394 007b 03       		.byte	0x3
- 395 007c 2C       		.byte	0x2c
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 12
+ 293 018a B7F86830 		ldrh	r3, [r7, #104]
+ 294 018e 4C4A     		ldr	r2, .L24+16
+ 295 0190 A2FB0323 		umull	r2, r3, r2, r3
+ 296 0194 DB08     		lsrs	r3, r3, #3
+ 297 0196 9BB2     		uxth	r3, r3
+ 298 0198 1C46     		mov	r4, r3
+ 299 019a B7F86820 		ldrh	r2, [r7, #104]
+ 300 019e 484B     		ldr	r3, .L24+16
+ 301 01a0 A3FB0213 		umull	r1, r3, r3, r2
+ 302 01a4 D908     		lsrs	r1, r3, #3
+ 303 01a6 0B46     		mov	r3, r1
+ 304 01a8 9B00     		lsls	r3, r3, #2
+ 305 01aa 0B44     		add	r3, r3, r1
+ 306 01ac 5B00     		lsls	r3, r3, #1
+ 307 01ae D31A     		subs	r3, r2, r3
+ 308 01b0 9BB2     		uxth	r3, r3
+ 309 01b2 07F10C00 		add	r0, r7, #12
+ 310 01b6 2246     		mov	r2, r4
+ 311 01b8 4249     		ldr	r1, .L24+20
+ 312 01ba FFF7FEFF 		bl	sprintf
+ 185:main.c        ****                 UART_1_PutString(TransmitBuffer);   //Send the output string via UART
+ 313              		.loc 1 185 0
+ 314 01be 07F10C03 		add	r3, r7, #12
+ 315 01c2 1846     		mov	r0, r3
+ 316 01c4 FFF7FEFF 		bl	UART_1_PutString
+ 186:main.c        ****                 sample_count = 0;   //Reset the sample count
+ 317              		.loc 1 186 0
+ 318 01c8 0023     		movs	r3, #0
+ 319 01ca A7F87030 		strh	r3, [r7, #112]	@ movhi
+ 187:main.c        ****                 sample_sum = 0;   //Reset the sample sum value
+ 320              		.loc 1 187 0
+ 321 01ce 0023     		movs	r3, #0
+ 322 01d0 FB66     		str	r3, [r7, #108]
+ 188:main.c        ****                 SampleTracker = ~SampleTracker;
+ 323              		.loc 1 188 0
+ 324 01d2 97F87330 		ldrb	r3, [r7, #115]
+ 325 01d6 DB43     		mvns	r3, r3
+ 326 01d8 87F87330 		strb	r3, [r7, #115]
+ 189:main.c        ****                 
+ 190:main.c        ****                 if(SampleTracker > 0){
+ 327              		.loc 1 190 0
+ 328 01dc 97F87330 		ldrb	r3, [r7, #115]	@ zero_extendqisi2
+ 329 01e0 002B     		cmp	r3, #0
+ 330 01e2 02D0     		beq	.L17
+ 191:main.c        ****                     onewire_pin_SetDriveMode(onewire_pin_DM_RES_UP);
+ 331              		.loc 1 191 0
+ 332 01e4 0420     		movs	r0, #4
+ 333 01e6 FFF7FEFF 		bl	onewire_pin_SetDriveMode
+ 334              	.L17:
+ 192:main.c        ****                 }
+ 193:main.c        ****                 int msg = (scratch[1] << 8) | scratch[0];
+ 335              		.loc 1 193 0
+ 336 01ea BB68     		ldr	r3, [r7, #8]
+ 337 01ec 1A02     		lsls	r2, r3, #8
+ 338 01ee 7B68     		ldr	r3, [r7, #4]
+ 339 01f0 1343     		orrs	r3, r3, r2
+ 340 01f2 BB65     		str	r3, [r7, #88]
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 11
 
 
- 396 007d 41000000 		.4byte	0x41
- 397 0081 05       		.uleb128 0x5
- 398 0082 39020000 		.4byte	.LASF11
- 399 0086 04       		.byte	0x4
- 400 0087 E801     		.2byte	0x1e8
- 401 0089 2C000000 		.4byte	0x2c
- 402 008d 05       		.uleb128 0x5
- 403 008e 3F010000 		.4byte	.LASF12
- 404 0092 04       		.byte	0x4
- 405 0093 E901     		.2byte	0x1e9
- 406 0095 3A000000 		.4byte	0x3a
- 407 0099 05       		.uleb128 0x5
- 408 009a B6010000 		.4byte	.LASF13
- 409 009e 04       		.byte	0x4
- 410 009f EA01     		.2byte	0x1ea
- 411 00a1 53000000 		.4byte	0x53
- 412 00a5 02       		.uleb128 0x2
- 413 00a6 04       		.byte	0x4
- 414 00a7 04       		.byte	0x4
- 415 00a8 CF000000 		.4byte	.LASF14
- 416 00ac 02       		.uleb128 0x2
- 417 00ad 08       		.byte	0x8
- 418 00ae 04       		.byte	0x4
- 419 00af 33010000 		.4byte	.LASF15
- 420 00b3 02       		.uleb128 0x2
- 421 00b4 01       		.byte	0x1
- 422 00b5 08       		.byte	0x8
- 423 00b6 1F020000 		.4byte	.LASF16
- 424 00ba 06       		.uleb128 0x6
- 425 00bb 81000000 		.4byte	0x81
- 426 00bf 02       		.uleb128 0x2
- 427 00c0 08       		.byte	0x8
- 428 00c1 04       		.byte	0x4
- 429 00c2 48020000 		.4byte	.LASF17
- 430 00c6 02       		.uleb128 0x2
- 431 00c7 04       		.byte	0x4
- 432 00c8 07       		.byte	0x7
- 433 00c9 01020000 		.4byte	.LASF18
- 434 00cd 07       		.uleb128 0x7
- 435 00ce 3A010000 		.4byte	.LASF33
- 436 00d2 01       		.byte	0x1
- 437 00d3 54       		.byte	0x54
- 438 00d4 68000000 		.4byte	0x68
- 439 00d8 00000000 		.4byte	.LFB64
- 440 00dc EC010000 		.4byte	.LFE64-.LFB64
- 441 00e0 01       		.uleb128 0x1
- 442 00e1 9C       		.byte	0x9c
- 443 00e2 73010000 		.4byte	0x173
- 444 00e6 08       		.uleb128 0x8
- 445 00e7 B3000000 		.4byte	.LASF19
- 446 00eb 01       		.byte	0x1
- 447 00ec 57       		.byte	0x57
- 448 00ed 99000000 		.4byte	0x99
- 449 00f1 02       		.uleb128 0x2
- 450 00f2 91       		.byte	0x91
- 451 00f3 5C       		.sleb128 -36
- 452 00f4 09       		.uleb128 0x9
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 13
+ 194:main.c        ****                 int msg_frac = ((msg & 15) * 10) / 16;  //Inaccurate way of obtaining the fractiona
+ 341              		.loc 1 194 0
+ 342 01f4 BB6D     		ldr	r3, [r7, #88]
+ 343 01f6 03F00F02 		and	r2, r3, #15
+ 344 01fa 1346     		mov	r3, r2
+ 345 01fc 9B00     		lsls	r3, r3, #2
+ 346 01fe 1344     		add	r3, r3, r2
+ 347 0200 5B00     		lsls	r3, r3, #1
+ 348 0202 002B     		cmp	r3, #0
+ 349 0204 00DA     		bge	.L18
+ 350 0206 0F33     		adds	r3, r3, #15
+ 351              	.L18:
+ 352 0208 1B11     		asrs	r3, r3, #4
+ 353 020a 7B65     		str	r3, [r7, #84]
+ 195:main.c        ****                 int msg_int = msg >> 4;
+ 354              		.loc 1 195 0
+ 355 020c BB6D     		ldr	r3, [r7, #88]
+ 356 020e 1B11     		asrs	r3, r3, #4
+ 357 0210 3B65     		str	r3, [r7, #80]
+ 196:main.c        ****                 sprintf(TransmitBuffer, "\t\"Temperature (OneWire)\": = \"%i.%i C\"\r\n}\r\n", msg_
+ 358              		.loc 1 196 0
+ 359 0212 07F10C00 		add	r0, r7, #12
+ 360 0216 7B6D     		ldr	r3, [r7, #84]
+ 361 0218 3A6D     		ldr	r2, [r7, #80]
+ 362 021a 2B49     		ldr	r1, .L24+24
+ 363 021c FFF7FEFF 		bl	sprintf
+ 197:main.c        ****                 UART_1_PutString(TransmitBuffer);
+ 364              		.loc 1 197 0
+ 365 0220 07F10C03 		add	r3, r7, #12
+ 366 0224 1846     		mov	r0, r3
+ 367 0226 FFF7FEFF 		bl	UART_1_PutString
+ 368              	.L12:
+ 369              	.LBE5:
+ 198:main.c        ****                 
+ 199:main.c        ****                 /*SampleTracker = ~SampleTracker;
+ 200:main.c        ****                 if(SampleTracker > 0){
+ 201:main.c        ****                     int returnValue = ResetBus();
+ 202:main.c        ****                     WriteByte(SKIP_ROM);
+ 203:main.c        ****                     onewire_pin_SetDriveMode(onewire_pin_DM_STRONG);
+ 204:main.c        ****                     WriteByte(TEMP_CONVERSION);
+ 205:main.c        ****                     CyDelay(WAIT_K);
+ 206:main.c        ****                     onewire_pin_SetDriveMode(onewire_pin_DM_RES_UP);
+ 207:main.c        ****                 }else{
+ 208:main.c        ****                     int returnValue = ResetBus();
+ 209:main.c        ****                     WriteByte(SKIP_ROM);
+ 210:main.c        ****                     WriteByte(READ_SCRATCH);
+ 211:main.c        ****                     for(uint8 i = 0; i < 2; i++){
+ 212:main.c        ****                         scratch[i] = ReadByte();
+ 213:main.c        ****                     }
+ 214:main.c        ****                     int msg = (scratch[1] << 8) | scratch[0];
+ 215:main.c        ****                     int msg_frac = ((msg & 15) * 10) / 16;  //Inaccurate way of obtaining the fract
+ 216:main.c        ****               
+ 217:main.c        ****                     int msg_int = msg >> 4;
+ 218:main.c        ****                     sprintf(TransmitBuffer, "\t\"Temperature (OneWire)\": = \"%i.%i C\"\r\n}\r\n", 
+ 219:main.c        ****                     UART_1_PutString(TransmitBuffer);
+ 220:main.c        ****                 }*/
+ 221:main.c        ****             }
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 12
 
 
- 453 00f5 436800   		.ascii	"Ch\000"
- 454 00f8 01       		.byte	0x1
- 455 00f9 59       		.byte	0x59
- 456 00fa 81000000 		.4byte	0x81
- 457 00fe 02       		.uleb128 0x2
- 458 00ff 91       		.byte	0x91
- 459 0100 61       		.sleb128 -31
- 460 0101 08       		.uleb128 0x8
- 461 0102 00000000 		.4byte	.LASF20
- 462 0106 01       		.byte	0x1
- 463 0107 5B       		.byte	0x5b
- 464 0108 81000000 		.4byte	0x81
- 465 010c 02       		.uleb128 0x2
- 466 010d 91       		.byte	0x91
- 467 010e 6F       		.sleb128 -17
- 468 010f 08       		.uleb128 0x8
- 469 0110 BA000000 		.4byte	.LASF21
- 470 0114 01       		.byte	0x1
- 471 0115 5D       		.byte	0x5d
- 472 0116 81000000 		.4byte	0x81
- 473 011a 02       		.uleb128 0x2
- 474 011b 91       		.byte	0x91
- 475 011c 6E       		.sleb128 -18
- 476 011d 08       		.uleb128 0x8
- 477 011e 60020000 		.4byte	.LASF22
- 478 0122 01       		.byte	0x1
- 479 0123 5E       		.byte	0x5e
- 480 0124 81000000 		.4byte	0x81
- 481 0128 02       		.uleb128 0x2
- 482 0129 91       		.byte	0x91
- 483 012a 6D       		.sleb128 -19
- 484 012b 08       		.uleb128 0x8
- 485 012c 22010000 		.4byte	.LASF23
- 486 0130 01       		.byte	0x1
- 487 0131 5F       		.byte	0x5f
- 488 0132 81000000 		.4byte	0x81
- 489 0136 02       		.uleb128 0x2
- 490 0137 91       		.byte	0x91
- 491 0138 6C       		.sleb128 -20
- 492 0139 08       		.uleb128 0x8
- 493 013a F2010000 		.4byte	.LASF24
- 494 013e 01       		.byte	0x1
- 495 013f 61       		.byte	0x61
- 496 0140 73010000 		.4byte	0x173
- 497 0144 03       		.uleb128 0x3
- 498 0145 91       		.byte	0x91
- 499 0146 9C7F     		.sleb128 -100
- 500 0148 08       		.uleb128 0x8
- 501 0149 D5000000 		.4byte	.LASF25
- 502 014d 01       		.byte	0x1
- 503 014e 75       		.byte	0x75
- 504 014f 8D000000 		.4byte	0x8d
- 505 0153 02       		.uleb128 0x2
- 506 0154 91       		.byte	0x91
- 507 0155 6A       		.sleb128 -22
- 508 0156 08       		.uleb128 0x8
- 509 0157 24020000 		.4byte	.LASF26
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 14
+ 222:main.c        ****         }
+ 223:main.c        ****         
+ 224:main.c        ****         
+ 225:main.c        ****         /* Check to see if an ADC conversion has completed */
+ 226:main.c        ****         if(ADC_DelSig_1_IsEndConversion(ADC_DelSig_1_RETURN_STATUS))
+ 370              		.loc 1 226 0
+ 371 022a 0120     		movs	r0, #1
+ 372 022c FFF7FEFF 		bl	ADC_DelSig_1_IsEndConversion
+ 373 0230 0346     		mov	r3, r0
+ 374 0232 002B     		cmp	r3, #0
+ 375 0234 3FF40CAF 		beq	.L22
+ 227:main.c        ****         {
+ 228:main.c        ****             /* Use the GetResult16 API to get an 8 bit unsigned result in
+ 229:main.c        ****              * single ended mode.  The API CountsTo_mVolts is then used
+ 230:main.c        ****              * to convert the ADC counts into mV before transmitting via
+ 231:main.c        ****              * the UART.  See the datasheet API description for more
+ 232:main.c        ****              * details */
+ 233:main.c        ****             Output = ADC_DelSig_1_CountsTo_mVolts(ADC_DelSig_1_GetResult16());
+ 376              		.loc 1 233 0
+ 377 0238 FFF7FEFF 		bl	ADC_DelSig_1_GetResult16
+ 378 023c 0346     		mov	r3, r0
+ 379 023e 1846     		mov	r0, r3
+ 380 0240 FFF7FEFF 		bl	ADC_DelSig_1_CountsTo_mVolts
+ 381 0244 0346     		mov	r3, r0
+ 382 0246 FB64     		str	r3, [r7, #76]
+ 234:main.c        ****             
+ 235:main.c        ****             /* Send data based on last UART command */
+ 236:main.c        ****             if(SendSingleByte || ContinuouslySendData)
+ 383              		.loc 1 236 0
+ 384 0248 97F87530 		ldrb	r3, [r7, #117]	@ zero_extendqisi2
+ 385 024c 002B     		cmp	r3, #0
+ 386 024e 03D1     		bne	.L20
+ 387              		.loc 1 236 0 is_stmt 0 discriminator 1
+ 388 0250 97F87630 		ldrb	r3, [r7, #118]	@ zero_extendqisi2
+ 389 0254 002B     		cmp	r3, #0
+ 390 0256 0FD0     		beq	.L21
+ 391              	.L20:
+ 237:main.c        ****             {
+ 238:main.c        ****                 /* Format ADC result for transmition */
+ 239:main.c        ****                 sprintf(TransmitBuffer, "Sample: %lu mV\r\n", Output);
+ 392              		.loc 1 239 0 is_stmt 1
+ 393 0258 07F10C03 		add	r3, r7, #12
+ 394 025c FA6C     		ldr	r2, [r7, #76]
+ 395 025e 1B49     		ldr	r1, .L24+28
+ 396 0260 1846     		mov	r0, r3
+ 397 0262 FFF7FEFF 		bl	sprintf
+ 240:main.c        ****                 /* Send out the data */
+ 241:main.c        ****                 UART_1_PutString(TransmitBuffer);
+ 398              		.loc 1 241 0
+ 399 0266 07F10C03 		add	r3, r7, #12
+ 400 026a 1846     		mov	r0, r3
+ 401 026c FFF7FEFF 		bl	UART_1_PutString
+ 242:main.c        ****                 /* Reset the send once flag */
+ 243:main.c        ****                 SendSingleByte = FALSE;
+ 402              		.loc 1 243 0
+ 403 0270 0023     		movs	r3, #0
+ 404 0272 87F87530 		strb	r3, [r7, #117]
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 13
 
 
- 510 015b 01       		.byte	0x1
- 511 015c 76       		.byte	0x76
- 512 015d 99000000 		.4byte	0x99
- 513 0161 02       		.uleb128 0x2
- 514 0162 91       		.byte	0x91
- 515 0163 64       		.sleb128 -28
- 516 0164 08       		.uleb128 0x8
- 517 0165 9B000000 		.4byte	.LASF27
- 518 0169 01       		.byte	0x1
- 519 016a 77       		.byte	0x77
- 520 016b 8D000000 		.4byte	0x8d
- 521 016f 02       		.uleb128 0x2
- 522 0170 91       		.byte	0x91
- 523 0171 62       		.sleb128 -30
- 524 0172 00       		.byte	0
- 525 0173 0A       		.uleb128 0xa
- 526 0174 B3000000 		.4byte	0xb3
- 527 0178 83010000 		.4byte	0x183
- 528 017c 0B       		.uleb128 0xb
- 529 017d C6000000 		.4byte	0xc6
- 530 0181 3F       		.byte	0x3f
- 531 0182 00       		.byte	0
- 532 0183 0C       		.uleb128 0xc
- 533 0184 07010000 		.4byte	.LASF28
- 534 0188 05       		.byte	0x5
- 535 0189 1207     		.2byte	0x712
- 536 018b 8F010000 		.4byte	0x18f
- 537 018f 06       		.uleb128 0x6
- 538 0190 76000000 		.4byte	0x76
- 539 0194 0D       		.uleb128 0xd
- 540 0195 E1010000 		.4byte	.LASF29
- 541 0199 01       		.byte	0x1
- 542 019a 3B       		.byte	0x3b
- 543 019b BA000000 		.4byte	0xba
- 544 019f 05       		.uleb128 0x5
- 545 01a0 03       		.byte	0x3
- 546 01a1 00000000 		.4byte	gADC_ISR
- 547 01a5 00       		.byte	0
- 548              		.section	.debug_abbrev,"",%progbits
- 549              	.Ldebug_abbrev0:
- 550 0000 01       		.uleb128 0x1
- 551 0001 11       		.uleb128 0x11
- 552 0002 01       		.byte	0x1
- 553 0003 25       		.uleb128 0x25
- 554 0004 0E       		.uleb128 0xe
- 555 0005 13       		.uleb128 0x13
- 556 0006 0B       		.uleb128 0xb
- 557 0007 03       		.uleb128 0x3
- 558 0008 0E       		.uleb128 0xe
- 559 0009 1B       		.uleb128 0x1b
- 560 000a 0E       		.uleb128 0xe
- 561 000b 55       		.uleb128 0x55
- 562 000c 17       		.uleb128 0x17
- 563 000d 11       		.uleb128 0x11
- 564 000e 01       		.uleb128 0x1
- 565 000f 10       		.uleb128 0x10
- 566 0010 17       		.uleb128 0x17
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 15
+ 405 0276 19E0     		b	.L19
+ 406              	.L21:
+ 244:main.c        ****             }
+ 245:main.c        ****             else if(SendEmulatedData)
+ 407              		.loc 1 245 0
+ 408 0278 97F87430 		ldrb	r3, [r7, #116]	@ zero_extendqisi2
+ 409 027c 002B     		cmp	r3, #0
+ 410 027e 3FF4E7AE 		beq	.L22
+ 246:main.c        ****             {
+ 247:main.c        ****                 /* Format ADC result for transmition */
+ 248:main.c        ****                 sprintf(TransmitBuffer, "Emulated Data: %x \r\n", EmulatedData);
+ 411              		.loc 1 248 0
+ 412 0282 97F87720 		ldrb	r2, [r7, #119]	@ zero_extendqisi2
+ 413 0286 07F10C03 		add	r3, r7, #12
+ 414 028a 1149     		ldr	r1, .L24+32
+ 415 028c 1846     		mov	r0, r3
+ 416 028e FFF7FEFF 		bl	sprintf
+ 249:main.c        ****                 /* Send out the data */
+ 250:main.c        ****                 UART_1_PutString(TransmitBuffer);
+ 417              		.loc 1 250 0
+ 418 0292 07F10C03 		add	r3, r7, #12
+ 419 0296 1846     		mov	r0, r3
+ 420 0298 FFF7FEFF 		bl	UART_1_PutString
+ 251:main.c        ****                 EmulatedData++;
+ 421              		.loc 1 251 0
+ 422 029c 97F87730 		ldrb	r3, [r7, #119]	@ zero_extendqisi2
+ 423 02a0 0133     		adds	r3, r3, #1
+ 424 02a2 87F87730 		strb	r3, [r7, #119]
+ 252:main.c        ****                 /* Reset the send once flag */
+ 253:main.c        ****                 SendEmulatedData = FALSE;   
+ 425              		.loc 1 253 0
+ 426 02a6 0023     		movs	r3, #0
+ 427 02a8 87F87430 		strb	r3, [r7, #116]
+ 428              	.L19:
+ 254:main.c        ****             }
+ 255:main.c        ****         }
+ 256:main.c        ****     }
+ 429              		.loc 1 256 0
+ 430 02ac D0E6     		b	.L22
+ 431              	.L25:
+ 432 02ae 00BF     		.align	2
+ 433              	.L24:
+ 434 02b0 00000000 		.word	.LC0
+ 435 02b4 00000000 		.word	gADC_ISR
+ 436 02b8 5917B7D1 		.word	-776530087
+ 437 02bc 10000000 		.word	.LC1
+ 438 02c0 CDCCCCCC 		.word	-858993459
+ 439 02c4 34000000 		.word	.LC2
+ 440 02c8 58000000 		.word	.LC3
+ 441 02cc 84000000 		.word	.LC4
+ 442 02d0 98000000 		.word	.LC5
+ 443              		.cfi_endproc
+ 444              	.LFE64:
+ 445              		.size	main, .-main
+ 446              		.text
+ 447              	.Letext0:
+ 448              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 14
 
 
- 567 0011 00       		.byte	0
- 568 0012 00       		.byte	0
- 569 0013 02       		.uleb128 0x2
- 570 0014 24       		.uleb128 0x24
- 571 0015 00       		.byte	0
- 572 0016 0B       		.uleb128 0xb
- 573 0017 0B       		.uleb128 0xb
- 574 0018 3E       		.uleb128 0x3e
- 575 0019 0B       		.uleb128 0xb
- 576 001a 03       		.uleb128 0x3
- 577 001b 0E       		.uleb128 0xe
- 578 001c 00       		.byte	0
- 579 001d 00       		.byte	0
- 580 001e 03       		.uleb128 0x3
- 581 001f 16       		.uleb128 0x16
- 582 0020 00       		.byte	0
- 583 0021 03       		.uleb128 0x3
- 584 0022 0E       		.uleb128 0xe
- 585 0023 3A       		.uleb128 0x3a
- 586 0024 0B       		.uleb128 0xb
- 587 0025 3B       		.uleb128 0x3b
- 588 0026 0B       		.uleb128 0xb
- 589 0027 49       		.uleb128 0x49
- 590 0028 13       		.uleb128 0x13
- 591 0029 00       		.byte	0
- 592 002a 00       		.byte	0
- 593 002b 04       		.uleb128 0x4
- 594 002c 24       		.uleb128 0x24
- 595 002d 00       		.byte	0
- 596 002e 0B       		.uleb128 0xb
- 597 002f 0B       		.uleb128 0xb
- 598 0030 3E       		.uleb128 0x3e
- 599 0031 0B       		.uleb128 0xb
- 600 0032 03       		.uleb128 0x3
- 601 0033 08       		.uleb128 0x8
- 602 0034 00       		.byte	0
- 603 0035 00       		.byte	0
- 604 0036 05       		.uleb128 0x5
- 605 0037 16       		.uleb128 0x16
- 606 0038 00       		.byte	0
- 607 0039 03       		.uleb128 0x3
- 608 003a 0E       		.uleb128 0xe
- 609 003b 3A       		.uleb128 0x3a
- 610 003c 0B       		.uleb128 0xb
- 611 003d 3B       		.uleb128 0x3b
- 612 003e 05       		.uleb128 0x5
- 613 003f 49       		.uleb128 0x49
- 614 0040 13       		.uleb128 0x13
- 615 0041 00       		.byte	0
- 616 0042 00       		.byte	0
- 617 0043 06       		.uleb128 0x6
- 618 0044 35       		.uleb128 0x35
- 619 0045 00       		.byte	0
- 620 0046 49       		.uleb128 0x49
- 621 0047 13       		.uleb128 0x13
- 622 0048 00       		.byte	0
- 623 0049 00       		.byte	0
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 16
+ 449              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
+ 450              		.file 4 "Generated_Source\\PSoC5/cytypes.h"
+ 451              		.file 5 "Generated_Source\\PSoC5/core_cm3.h"
+ 452              		.section	.debug_info,"",%progbits
+ 453              	.Ldebug_info0:
+ 454 0000 51020000 		.4byte	0x251
+ 455 0004 0400     		.2byte	0x4
+ 456 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 457 000a 04       		.byte	0x4
+ 458 000b 01       		.uleb128 0x1
+ 459 000c 0D000000 		.4byte	.LASF35
+ 460 0010 0C       		.byte	0xc
+ 461 0011 3E020000 		.4byte	.LASF36
+ 462 0015 67010000 		.4byte	.LASF37
+ 463 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 464 001d 00000000 		.4byte	0
+ 465 0021 00000000 		.4byte	.Ldebug_line0
+ 466 0025 02       		.uleb128 0x2
+ 467 0026 01       		.byte	0x1
+ 468 0027 06       		.byte	0x6
+ 469 0028 87020000 		.4byte	.LASF0
+ 470 002c 02       		.uleb128 0x2
+ 471 002d 01       		.byte	0x1
+ 472 002e 08       		.byte	0x8
+ 473 002f 30010000 		.4byte	.LASF1
+ 474 0033 02       		.uleb128 0x2
+ 475 0034 02       		.byte	0x2
+ 476 0035 05       		.byte	0x5
+ 477 0036 56010000 		.4byte	.LASF2
+ 478 003a 02       		.uleb128 0x2
+ 479 003b 02       		.byte	0x2
+ 480 003c 07       		.byte	0x7
+ 481 003d 10010000 		.4byte	.LASF3
+ 482 0041 03       		.uleb128 0x3
+ 483 0042 A9000000 		.4byte	.LASF9
+ 484 0046 02       		.byte	0x2
+ 485 0047 3F       		.byte	0x3f
+ 486 0048 4C000000 		.4byte	0x4c
+ 487 004c 02       		.uleb128 0x2
+ 488 004d 04       		.byte	0x4
+ 489 004e 05       		.byte	0x5
+ 490 004f 69020000 		.4byte	.LASF4
+ 491 0053 02       		.uleb128 0x2
+ 492 0054 04       		.byte	0x4
+ 493 0055 07       		.byte	0x7
+ 494 0056 FE000000 		.4byte	.LASF5
+ 495 005a 02       		.uleb128 0x2
+ 496 005b 08       		.byte	0x8
+ 497 005c 05       		.byte	0x5
+ 498 005d 30020000 		.4byte	.LASF6
+ 499 0061 02       		.uleb128 0x2
+ 500 0062 08       		.byte	0x8
+ 501 0063 07       		.byte	0x7
+ 502 0064 F0010000 		.4byte	.LASF7
+ 503 0068 04       		.uleb128 0x4
+ 504 0069 04       		.byte	0x4
+ 505 006a 05       		.byte	0x5
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 15
 
 
- 624 004a 07       		.uleb128 0x7
- 625 004b 2E       		.uleb128 0x2e
- 626 004c 01       		.byte	0x1
- 627 004d 3F       		.uleb128 0x3f
- 628 004e 19       		.uleb128 0x19
- 629 004f 03       		.uleb128 0x3
- 630 0050 0E       		.uleb128 0xe
- 631 0051 3A       		.uleb128 0x3a
- 632 0052 0B       		.uleb128 0xb
- 633 0053 3B       		.uleb128 0x3b
- 634 0054 0B       		.uleb128 0xb
- 635 0055 49       		.uleb128 0x49
- 636 0056 13       		.uleb128 0x13
- 637 0057 11       		.uleb128 0x11
- 638 0058 01       		.uleb128 0x1
- 639 0059 12       		.uleb128 0x12
- 640 005a 06       		.uleb128 0x6
- 641 005b 40       		.uleb128 0x40
- 642 005c 18       		.uleb128 0x18
- 643 005d 9642     		.uleb128 0x2116
- 644 005f 19       		.uleb128 0x19
- 645 0060 01       		.uleb128 0x1
- 646 0061 13       		.uleb128 0x13
- 647 0062 00       		.byte	0
- 648 0063 00       		.byte	0
- 649 0064 08       		.uleb128 0x8
- 650 0065 34       		.uleb128 0x34
- 651 0066 00       		.byte	0
- 652 0067 03       		.uleb128 0x3
- 653 0068 0E       		.uleb128 0xe
- 654 0069 3A       		.uleb128 0x3a
- 655 006a 0B       		.uleb128 0xb
- 656 006b 3B       		.uleb128 0x3b
- 657 006c 0B       		.uleb128 0xb
- 658 006d 49       		.uleb128 0x49
- 659 006e 13       		.uleb128 0x13
- 660 006f 02       		.uleb128 0x2
- 661 0070 18       		.uleb128 0x18
- 662 0071 00       		.byte	0
- 663 0072 00       		.byte	0
- 664 0073 09       		.uleb128 0x9
- 665 0074 34       		.uleb128 0x34
- 666 0075 00       		.byte	0
- 667 0076 03       		.uleb128 0x3
- 668 0077 08       		.uleb128 0x8
- 669 0078 3A       		.uleb128 0x3a
- 670 0079 0B       		.uleb128 0xb
- 671 007a 3B       		.uleb128 0x3b
- 672 007b 0B       		.uleb128 0xb
- 673 007c 49       		.uleb128 0x49
- 674 007d 13       		.uleb128 0x13
- 675 007e 02       		.uleb128 0x2
- 676 007f 18       		.uleb128 0x18
- 677 0080 00       		.byte	0
- 678 0081 00       		.byte	0
- 679 0082 0A       		.uleb128 0xa
- 680 0083 01       		.uleb128 0x1
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 17
+ 506 006b 696E7400 		.ascii	"int\000"
+ 507 006f 02       		.uleb128 0x2
+ 508 0070 04       		.byte	0x4
+ 509 0071 07       		.byte	0x7
+ 510 0072 E3010000 		.4byte	.LASF8
+ 511 0076 03       		.uleb128 0x3
+ 512 0077 10020000 		.4byte	.LASF10
+ 513 007b 03       		.byte	0x3
+ 514 007c 2C       		.byte	0x2c
+ 515 007d 41000000 		.4byte	0x41
+ 516 0081 05       		.uleb128 0x5
+ 517 0082 63020000 		.4byte	.LASF11
+ 518 0086 04       		.byte	0x4
+ 519 0087 E801     		.2byte	0x1e8
+ 520 0089 2C000000 		.4byte	0x2c
+ 521 008d 05       		.uleb128 0x5
+ 522 008e 60010000 		.4byte	.LASF12
+ 523 0092 04       		.byte	0x4
+ 524 0093 E901     		.2byte	0x1e9
+ 525 0095 3A000000 		.4byte	0x3a
+ 526 0099 05       		.uleb128 0x5
+ 527 009a D7010000 		.4byte	.LASF13
+ 528 009e 04       		.byte	0x4
+ 529 009f EA01     		.2byte	0x1ea
+ 530 00a1 53000000 		.4byte	0x53
+ 531 00a5 02       		.uleb128 0x2
+ 532 00a6 04       		.byte	0x4
+ 533 00a7 04       		.byte	0x4
+ 534 00a8 CF000000 		.4byte	.LASF14
+ 535 00ac 02       		.uleb128 0x2
+ 536 00ad 08       		.byte	0x8
+ 537 00ae 04       		.byte	0x4
+ 538 00af 4F010000 		.4byte	.LASF15
+ 539 00b3 02       		.uleb128 0x2
+ 540 00b4 01       		.byte	0x1
+ 541 00b5 08       		.byte	0x8
+ 542 00b6 45020000 		.4byte	.LASF16
+ 543 00ba 06       		.uleb128 0x6
+ 544 00bb 81000000 		.4byte	0x81
+ 545 00bf 02       		.uleb128 0x2
+ 546 00c0 08       		.byte	0x8
+ 547 00c1 04       		.byte	0x4
+ 548 00c2 72020000 		.4byte	.LASF17
+ 549 00c6 02       		.uleb128 0x2
+ 550 00c7 04       		.byte	0x4
+ 551 00c8 07       		.byte	0x7
+ 552 00c9 27020000 		.4byte	.LASF18
+ 553 00cd 07       		.uleb128 0x7
+ 554 00ce DE010000 		.4byte	.LASF38
+ 555 00d2 01       		.byte	0x1
+ 556 00d3 55       		.byte	0x55
+ 557 00d4 68000000 		.4byte	0x68
+ 558 00d8 00000000 		.4byte	.LFB64
+ 559 00dc D4020000 		.4byte	.LFE64-.LFB64
+ 560 00e0 01       		.uleb128 0x1
+ 561 00e1 9C       		.byte	0x9c
+ 562 00e2 12020000 		.4byte	0x212
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 16
 
 
- 681 0084 01       		.byte	0x1
- 682 0085 49       		.uleb128 0x49
- 683 0086 13       		.uleb128 0x13
- 684 0087 01       		.uleb128 0x1
- 685 0088 13       		.uleb128 0x13
- 686 0089 00       		.byte	0
- 687 008a 00       		.byte	0
- 688 008b 0B       		.uleb128 0xb
- 689 008c 21       		.uleb128 0x21
- 690 008d 00       		.byte	0
- 691 008e 49       		.uleb128 0x49
- 692 008f 13       		.uleb128 0x13
- 693 0090 2F       		.uleb128 0x2f
- 694 0091 0B       		.uleb128 0xb
- 695 0092 00       		.byte	0
- 696 0093 00       		.byte	0
- 697 0094 0C       		.uleb128 0xc
- 698 0095 34       		.uleb128 0x34
- 699 0096 00       		.byte	0
- 700 0097 03       		.uleb128 0x3
- 701 0098 0E       		.uleb128 0xe
- 702 0099 3A       		.uleb128 0x3a
- 703 009a 0B       		.uleb128 0xb
- 704 009b 3B       		.uleb128 0x3b
- 705 009c 05       		.uleb128 0x5
- 706 009d 49       		.uleb128 0x49
- 707 009e 13       		.uleb128 0x13
- 708 009f 3F       		.uleb128 0x3f
- 709 00a0 19       		.uleb128 0x19
- 710 00a1 3C       		.uleb128 0x3c
- 711 00a2 19       		.uleb128 0x19
- 712 00a3 00       		.byte	0
- 713 00a4 00       		.byte	0
- 714 00a5 0D       		.uleb128 0xd
- 715 00a6 34       		.uleb128 0x34
- 716 00a7 00       		.byte	0
- 717 00a8 03       		.uleb128 0x3
- 718 00a9 0E       		.uleb128 0xe
- 719 00aa 3A       		.uleb128 0x3a
- 720 00ab 0B       		.uleb128 0xb
- 721 00ac 3B       		.uleb128 0x3b
- 722 00ad 0B       		.uleb128 0xb
- 723 00ae 49       		.uleb128 0x49
- 724 00af 13       		.uleb128 0x13
- 725 00b0 3F       		.uleb128 0x3f
- 726 00b1 19       		.uleb128 0x19
- 727 00b2 02       		.uleb128 0x2
- 728 00b3 18       		.uleb128 0x18
- 729 00b4 00       		.byte	0
- 730 00b5 00       		.byte	0
- 731 00b6 00       		.byte	0
- 732              		.section	.debug_aranges,"",%progbits
- 733 0000 1C000000 		.4byte	0x1c
- 734 0004 0200     		.2byte	0x2
- 735 0006 00000000 		.4byte	.Ldebug_info0
- 736 000a 04       		.byte	0x4
- 737 000b 00       		.byte	0
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 18
+ 563 00e6 08       		.uleb128 0x8
+ 564 00e7 B3000000 		.4byte	.LASF19
+ 565 00eb 01       		.byte	0x1
+ 566 00ec 58       		.byte	0x58
+ 567 00ed 99000000 		.4byte	0x99
+ 568 00f1 02       		.uleb128 0x2
+ 569 00f2 91       		.byte	0x91
+ 570 00f3 44       		.sleb128 -60
+ 571 00f4 09       		.uleb128 0x9
+ 572 00f5 436800   		.ascii	"Ch\000"
+ 573 00f8 01       		.byte	0x1
+ 574 00f9 5A       		.byte	0x5a
+ 575 00fa 81000000 		.4byte	0x81
+ 576 00fe 02       		.uleb128 0x2
+ 577 00ff 91       		.byte	0x91
+ 578 0100 5F       		.sleb128 -33
+ 579 0101 08       		.uleb128 0x8
+ 580 0102 00000000 		.4byte	.LASF20
+ 581 0106 01       		.byte	0x1
+ 582 0107 5C       		.byte	0x5c
+ 583 0108 81000000 		.4byte	0x81
+ 584 010c 02       		.uleb128 0x2
+ 585 010d 91       		.byte	0x91
+ 586 010e 6F       		.sleb128 -17
+ 587 010f 08       		.uleb128 0x8
+ 588 0110 BA000000 		.4byte	.LASF21
+ 589 0114 01       		.byte	0x1
+ 590 0115 5E       		.byte	0x5e
+ 591 0116 81000000 		.4byte	0x81
+ 592 011a 02       		.uleb128 0x2
+ 593 011b 91       		.byte	0x91
+ 594 011c 6E       		.sleb128 -18
+ 595 011d 08       		.uleb128 0x8
+ 596 011e 93020000 		.4byte	.LASF22
+ 597 0122 01       		.byte	0x1
+ 598 0123 5F       		.byte	0x5f
+ 599 0124 81000000 		.4byte	0x81
+ 600 0128 02       		.uleb128 0x2
+ 601 0129 91       		.byte	0x91
+ 602 012a 6D       		.sleb128 -19
+ 603 012b 08       		.uleb128 0x8
+ 604 012c 3E010000 		.4byte	.LASF23
+ 605 0130 01       		.byte	0x1
+ 606 0131 60       		.byte	0x60
+ 607 0132 81000000 		.4byte	0x81
+ 608 0136 02       		.uleb128 0x2
+ 609 0137 91       		.byte	0x91
+ 610 0138 6C       		.sleb128 -20
+ 611 0139 08       		.uleb128 0x8
+ 612 013a 18020000 		.4byte	.LASF24
+ 613 013e 01       		.byte	0x1
+ 614 013f 62       		.byte	0x62
+ 615 0140 12020000 		.4byte	0x212
+ 616 0144 03       		.uleb128 0x3
+ 617 0145 91       		.byte	0x91
+ 618 0146 847F     		.sleb128 -124
+ 619 0148 08       		.uleb128 0x8
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 17
 
 
- 738 000c 0000     		.2byte	0
- 739 000e 0000     		.2byte	0
- 740 0010 00000000 		.4byte	.LFB64
- 741 0014 EC010000 		.4byte	.LFE64-.LFB64
- 742 0018 00000000 		.4byte	0
- 743 001c 00000000 		.4byte	0
- 744              		.section	.debug_ranges,"",%progbits
- 745              	.Ldebug_ranges0:
- 746 0000 00000000 		.4byte	.LFB64
- 747 0004 EC010000 		.4byte	.LFE64
- 748 0008 00000000 		.4byte	0
- 749 000c 00000000 		.4byte	0
- 750              		.section	.debug_line,"",%progbits
- 751              	.Ldebug_line0:
- 752 0000 B6010000 		.section	.debug_str,"MS",%progbits,1
- 752      02004C01 
- 752      00000201 
- 752      FB0E0D00 
- 752      01010101 
- 753              	.LASF20:
- 754 0000 456D756C 		.ascii	"EmulatedData\000"
- 754      61746564 
- 754      44617461 
- 754      00
- 755              	.LASF30:
- 756 000d 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
- 756      43313120 
- 756      352E342E 
- 756      31203230 
- 756      31363036 
- 757 0040 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
- 757      20726576 
- 757      6973696F 
- 757      6E203233 
- 757      37373135 
- 758 0073 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
- 758      66756E63 
- 758      74696F6E 
- 758      2D736563 
- 758      74696F6E 
- 759              	.LASF27:
- 760 009b 61766572 		.ascii	"average_value\000"
- 760      6167655F 
- 760      76616C75 
- 760      6500
- 761              	.LASF9:
- 762 00a9 5F5F696E 		.ascii	"__int32_t\000"
- 762      7433325F 
- 762      7400
- 763              	.LASF19:
- 764 00b3 4F757470 		.ascii	"Output\000"
- 764      757400
- 765              	.LASF21:
- 766 00ba 436F6E74 		.ascii	"ContinuouslySendData\000"
- 766      696E756F 
- 766      75736C79 
- 766      53656E64 
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 19
+ 620 0149 55020000 		.4byte	.LASF25
+ 621 014d 01       		.byte	0x1
+ 622 014e 76       		.byte	0x76
+ 623 014f 81000000 		.4byte	0x81
+ 624 0153 02       		.uleb128 0x2
+ 625 0154 91       		.byte	0x91
+ 626 0155 6B       		.sleb128 -21
+ 627 0156 08       		.uleb128 0x8
+ 628 0157 D5000000 		.4byte	.LASF26
+ 629 015b 01       		.byte	0x1
+ 630 015c 77       		.byte	0x77
+ 631 015d 22020000 		.4byte	0x222
+ 632 0161 03       		.uleb128 0x3
+ 633 0162 91       		.byte	0x91
+ 634 0163 FC7E     		.sleb128 -132
+ 635 0165 08       		.uleb128 0x8
+ 636 0166 E5000000 		.4byte	.LASF27
+ 637 016a 01       		.byte	0x1
+ 638 016b 78       		.byte	0x78
+ 639 016c 8D000000 		.4byte	0x8d
+ 640 0170 02       		.uleb128 0x2
+ 641 0171 91       		.byte	0x91
+ 642 0172 68       		.sleb128 -24
+ 643 0173 08       		.uleb128 0x8
+ 644 0174 4A020000 		.4byte	.LASF28
+ 645 0178 01       		.byte	0x1
+ 646 0179 79       		.byte	0x79
+ 647 017a 99000000 		.4byte	0x99
+ 648 017e 02       		.uleb128 0x2
+ 649 017f 91       		.byte	0x91
+ 650 0180 64       		.sleb128 -28
+ 651 0181 08       		.uleb128 0x8
+ 652 0182 9B000000 		.4byte	.LASF29
+ 653 0186 01       		.byte	0x1
+ 654 0187 7A       		.byte	0x7a
+ 655 0188 8D000000 		.4byte	0x8d
+ 656 018c 02       		.uleb128 0x2
+ 657 018d 91       		.byte	0x91
+ 658 018e 60       		.sleb128 -32
+ 659 018f 0A       		.uleb128 0xa
+ 660 0190 F0000000 		.4byte	.LBB2
+ 661 0194 18000000 		.4byte	.LBE2-.LBB2
+ 662 0198 AB010000 		.4byte	0x1ab
+ 663 019c 08       		.uleb128 0x8
+ 664 019d F2000000 		.4byte	.LASF30
+ 665 01a1 01       		.byte	0x1
+ 666 01a2 A3       		.byte	0xa3
+ 667 01a3 68000000 		.4byte	0x68
+ 668 01a7 02       		.uleb128 0x2
+ 669 01a8 91       		.byte	0x91
+ 670 01a9 58       		.sleb128 -40
+ 671 01aa 00       		.byte	0
+ 672 01ab 0A       		.uleb128 0xa
+ 673 01ac 0A010000 		.4byte	.LBB3
+ 674 01b0 42000000 		.4byte	.LBE3-.LBB3
+ 675 01b4 DD010000 		.4byte	0x1dd
+ 676 01b8 08       		.uleb128 0x8
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 18
 
 
- 766      44617461 
- 767              	.LASF14:
- 768 00cf 666C6F61 		.ascii	"float\000"
- 768      7400
- 769              	.LASF25:
- 770 00d5 73616D70 		.ascii	"sample_count\000"
- 770      6C655F63 
- 770      6F756E74 
- 770      00
- 771              	.LASF5:
- 772 00e2 6C6F6E67 		.ascii	"long unsigned int\000"
- 772      20756E73 
- 772      69676E65 
- 772      6420696E 
- 772      7400
- 773              	.LASF3:
- 774 00f4 73686F72 		.ascii	"short unsigned int\000"
- 774      7420756E 
- 774      7369676E 
- 774      65642069 
- 774      6E7400
- 775              	.LASF28:
- 776 0107 49544D5F 		.ascii	"ITM_RxBuffer\000"
- 776      52784275 
- 776      66666572 
- 776      00
- 777              	.LASF1:
- 778 0114 756E7369 		.ascii	"unsigned char\000"
- 778      676E6564 
- 778      20636861 
- 778      7200
- 779              	.LASF23:
- 780 0122 53656E64 		.ascii	"SendEmulatedData\000"
- 780      456D756C 
- 780      61746564 
- 780      44617461 
- 780      00
- 781              	.LASF15:
- 782 0133 646F7562 		.ascii	"double\000"
- 782      6C6500
- 783              	.LASF33:
- 784 013a 6D61696E 		.ascii	"main\000"
- 784      00
- 785              	.LASF12:
- 786 013f 75696E74 		.ascii	"uint16\000"
- 786      313600
- 787              	.LASF32:
- 788 0146 433A5C55 		.ascii	"C:\\UserData\\z004e6he\\OneDrive - Siemens AG\\Docu"
- 788      73657244 
- 788      6174615C 
- 788      7A303034 
- 788      65366865 
- 789 0175 6D656E74 		.ascii	"ments\\PSoC Creator\\PSoC\\Exercise5\\LucaSpenglerP"
- 789      735C5053 
- 789      6F432043 
- 789      72656174 
- 789      6F725C50 
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 20
+ 677 01b9 F2000000 		.4byte	.LASF30
+ 678 01bd 01       		.byte	0x1
+ 679 01be A9       		.byte	0xa9
+ 680 01bf 68000000 		.4byte	0x68
+ 681 01c3 02       		.uleb128 0x2
+ 682 01c4 91       		.byte	0x91
+ 683 01c5 54       		.sleb128 -44
+ 684 01c6 0B       		.uleb128 0xb
+ 685 01c7 1C010000 		.4byte	.LBB4
+ 686 01cb 30000000 		.4byte	.LBE4-.LBB4
+ 687 01cf 09       		.uleb128 0x9
+ 688 01d0 6900     		.ascii	"i\000"
+ 689 01d2 01       		.byte	0x1
+ 690 01d3 AC       		.byte	0xac
+ 691 01d4 81000000 		.4byte	0x81
+ 692 01d8 02       		.uleb128 0x2
+ 693 01d9 91       		.byte	0x91
+ 694 01da 63       		.sleb128 -29
+ 695 01db 00       		.byte	0
+ 696 01dc 00       		.byte	0
+ 697 01dd 0B       		.uleb128 0xb
+ 698 01de 62010000 		.4byte	.LBB5
+ 699 01e2 C8000000 		.4byte	.LBE5-.LBB5
+ 700 01e6 09       		.uleb128 0x9
+ 701 01e7 6D736700 		.ascii	"msg\000"
+ 702 01eb 01       		.byte	0x1
+ 703 01ec C1       		.byte	0xc1
+ 704 01ed 68000000 		.4byte	0x68
+ 705 01f1 02       		.uleb128 0x2
+ 706 01f2 91       		.byte	0x91
+ 707 01f3 50       		.sleb128 -48
+ 708 01f4 08       		.uleb128 0x8
+ 709 01f5 7E020000 		.4byte	.LASF31
+ 710 01f9 01       		.byte	0x1
+ 711 01fa C2       		.byte	0xc2
+ 712 01fb 68000000 		.4byte	0x68
+ 713 01ff 02       		.uleb128 0x2
+ 714 0200 91       		.byte	0x91
+ 715 0201 4C       		.sleb128 -52
+ 716 0202 08       		.uleb128 0x8
+ 717 0203 DD000000 		.4byte	.LASF32
+ 718 0207 01       		.byte	0x1
+ 719 0208 C3       		.byte	0xc3
+ 720 0209 68000000 		.4byte	0x68
+ 721 020d 02       		.uleb128 0x2
+ 722 020e 91       		.byte	0x91
+ 723 020f 48       		.sleb128 -56
+ 724 0210 00       		.byte	0
+ 725 0211 00       		.byte	0
+ 726 0212 0C       		.uleb128 0xc
+ 727 0213 B3000000 		.4byte	0xb3
+ 728 0217 22020000 		.4byte	0x222
+ 729 021b 0D       		.uleb128 0xd
+ 730 021c C6000000 		.4byte	0xc6
+ 731 0220 3F       		.byte	0x3f
+ 732 0221 00       		.byte	0
+ 733 0222 0C       		.uleb128 0xc
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 19
 
 
- 790 01a4 536F4335 		.ascii	"SoC5OneWire.cydsn\000"
- 790      4F6E6557 
- 790      6972652E 
- 790      63796473 
- 790      6E00
- 791              	.LASF13:
- 792 01b6 75696E74 		.ascii	"uint32\000"
- 792      333200
- 793              	.LASF8:
- 794 01bd 756E7369 		.ascii	"unsigned int\000"
- 794      676E6564 
- 794      20696E74 
- 794      00
- 795              	.LASF7:
- 796 01ca 6C6F6E67 		.ascii	"long long unsigned int\000"
- 796      206C6F6E 
- 796      6720756E 
- 796      7369676E 
- 796      65642069 
- 797              	.LASF29:
- 798 01e1 67414443 		.ascii	"gADC_ISR\000"
- 798      5F495352 
- 798      00
- 799              	.LASF10:
- 800 01ea 696E7433 		.ascii	"int32_t\000"
- 800      325F7400 
- 801              	.LASF24:
- 802 01f2 5472616E 		.ascii	"TransmitBuffer\000"
- 802      736D6974 
- 802      42756666 
- 802      657200
- 803              	.LASF18:
- 804 0201 73697A65 		.ascii	"sizetype\000"
- 804      74797065 
- 804      00
- 805              	.LASF6:
- 806 020a 6C6F6E67 		.ascii	"long long int\000"
- 806      206C6F6E 
- 806      6720696E 
- 806      7400
- 807              	.LASF31:
- 808 0218 6D61696E 		.ascii	"main.c\000"
- 808      2E6300
- 809              	.LASF16:
- 810 021f 63686172 		.ascii	"char\000"
- 810      00
- 811              	.LASF26:
- 812 0224 73616D70 		.ascii	"sample_sum\000"
- 812      6C655F73 
- 812      756D00
- 813              	.LASF2:
- 814 022f 73686F72 		.ascii	"short int\000"
- 814      7420696E 
- 814      7400
- 815              	.LASF11:
- 816 0239 75696E74 		.ascii	"uint8\000"
- 816      3800
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccc7qWF9.s 			page 21
+ 734 0223 68000000 		.4byte	0x68
+ 735 0227 32020000 		.4byte	0x232
+ 736 022b 0D       		.uleb128 0xd
+ 737 022c C6000000 		.4byte	0xc6
+ 738 0230 01       		.byte	0x1
+ 739 0231 00       		.byte	0
+ 740 0232 0E       		.uleb128 0xe
+ 741 0233 23010000 		.4byte	.LASF33
+ 742 0237 05       		.byte	0x5
+ 743 0238 1207     		.2byte	0x712
+ 744 023a 3E020000 		.4byte	0x23e
+ 745 023e 06       		.uleb128 0x6
+ 746 023f 76000000 		.4byte	0x76
+ 747 0243 0F       		.uleb128 0xf
+ 748 0244 07020000 		.4byte	.LASF34
+ 749 0248 01       		.byte	0x1
+ 750 0249 3C       		.byte	0x3c
+ 751 024a BA000000 		.4byte	0xba
+ 752 024e 05       		.uleb128 0x5
+ 753 024f 03       		.byte	0x3
+ 754 0250 00000000 		.4byte	gADC_ISR
+ 755 0254 00       		.byte	0
+ 756              		.section	.debug_abbrev,"",%progbits
+ 757              	.Ldebug_abbrev0:
+ 758 0000 01       		.uleb128 0x1
+ 759 0001 11       		.uleb128 0x11
+ 760 0002 01       		.byte	0x1
+ 761 0003 25       		.uleb128 0x25
+ 762 0004 0E       		.uleb128 0xe
+ 763 0005 13       		.uleb128 0x13
+ 764 0006 0B       		.uleb128 0xb
+ 765 0007 03       		.uleb128 0x3
+ 766 0008 0E       		.uleb128 0xe
+ 767 0009 1B       		.uleb128 0x1b
+ 768 000a 0E       		.uleb128 0xe
+ 769 000b 55       		.uleb128 0x55
+ 770 000c 17       		.uleb128 0x17
+ 771 000d 11       		.uleb128 0x11
+ 772 000e 01       		.uleb128 0x1
+ 773 000f 10       		.uleb128 0x10
+ 774 0010 17       		.uleb128 0x17
+ 775 0011 00       		.byte	0
+ 776 0012 00       		.byte	0
+ 777 0013 02       		.uleb128 0x2
+ 778 0014 24       		.uleb128 0x24
+ 779 0015 00       		.byte	0
+ 780 0016 0B       		.uleb128 0xb
+ 781 0017 0B       		.uleb128 0xb
+ 782 0018 3E       		.uleb128 0x3e
+ 783 0019 0B       		.uleb128 0xb
+ 784 001a 03       		.uleb128 0x3
+ 785 001b 0E       		.uleb128 0xe
+ 786 001c 00       		.byte	0
+ 787 001d 00       		.byte	0
+ 788 001e 03       		.uleb128 0x3
+ 789 001f 16       		.uleb128 0x16
+ 790 0020 00       		.byte	0
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 20
 
 
- 817              	.LASF4:
- 818 023f 6C6F6E67 		.ascii	"long int\000"
- 818      20696E74 
- 818      00
- 819              	.LASF17:
- 820 0248 6C6F6E67 		.ascii	"long double\000"
- 820      20646F75 
- 820      626C6500 
- 821              	.LASF0:
- 822 0254 7369676E 		.ascii	"signed char\000"
- 822      65642063 
- 822      68617200 
- 823              	.LASF22:
- 824 0260 53656E64 		.ascii	"SendSingleByte\000"
- 824      53696E67 
- 824      6C654279 
- 824      746500
- 825              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
+ 791 0021 03       		.uleb128 0x3
+ 792 0022 0E       		.uleb128 0xe
+ 793 0023 3A       		.uleb128 0x3a
+ 794 0024 0B       		.uleb128 0xb
+ 795 0025 3B       		.uleb128 0x3b
+ 796 0026 0B       		.uleb128 0xb
+ 797 0027 49       		.uleb128 0x49
+ 798 0028 13       		.uleb128 0x13
+ 799 0029 00       		.byte	0
+ 800 002a 00       		.byte	0
+ 801 002b 04       		.uleb128 0x4
+ 802 002c 24       		.uleb128 0x24
+ 803 002d 00       		.byte	0
+ 804 002e 0B       		.uleb128 0xb
+ 805 002f 0B       		.uleb128 0xb
+ 806 0030 3E       		.uleb128 0x3e
+ 807 0031 0B       		.uleb128 0xb
+ 808 0032 03       		.uleb128 0x3
+ 809 0033 08       		.uleb128 0x8
+ 810 0034 00       		.byte	0
+ 811 0035 00       		.byte	0
+ 812 0036 05       		.uleb128 0x5
+ 813 0037 16       		.uleb128 0x16
+ 814 0038 00       		.byte	0
+ 815 0039 03       		.uleb128 0x3
+ 816 003a 0E       		.uleb128 0xe
+ 817 003b 3A       		.uleb128 0x3a
+ 818 003c 0B       		.uleb128 0xb
+ 819 003d 3B       		.uleb128 0x3b
+ 820 003e 05       		.uleb128 0x5
+ 821 003f 49       		.uleb128 0x49
+ 822 0040 13       		.uleb128 0x13
+ 823 0041 00       		.byte	0
+ 824 0042 00       		.byte	0
+ 825 0043 06       		.uleb128 0x6
+ 826 0044 35       		.uleb128 0x35
+ 827 0045 00       		.byte	0
+ 828 0046 49       		.uleb128 0x49
+ 829 0047 13       		.uleb128 0x13
+ 830 0048 00       		.byte	0
+ 831 0049 00       		.byte	0
+ 832 004a 07       		.uleb128 0x7
+ 833 004b 2E       		.uleb128 0x2e
+ 834 004c 01       		.byte	0x1
+ 835 004d 3F       		.uleb128 0x3f
+ 836 004e 19       		.uleb128 0x19
+ 837 004f 03       		.uleb128 0x3
+ 838 0050 0E       		.uleb128 0xe
+ 839 0051 3A       		.uleb128 0x3a
+ 840 0052 0B       		.uleb128 0xb
+ 841 0053 3B       		.uleb128 0x3b
+ 842 0054 0B       		.uleb128 0xb
+ 843 0055 49       		.uleb128 0x49
+ 844 0056 13       		.uleb128 0x13
+ 845 0057 11       		.uleb128 0x11
+ 846 0058 01       		.uleb128 0x1
+ 847 0059 12       		.uleb128 0x12
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 21
+
+
+ 848 005a 06       		.uleb128 0x6
+ 849 005b 40       		.uleb128 0x40
+ 850 005c 18       		.uleb128 0x18
+ 851 005d 9642     		.uleb128 0x2116
+ 852 005f 19       		.uleb128 0x19
+ 853 0060 01       		.uleb128 0x1
+ 854 0061 13       		.uleb128 0x13
+ 855 0062 00       		.byte	0
+ 856 0063 00       		.byte	0
+ 857 0064 08       		.uleb128 0x8
+ 858 0065 34       		.uleb128 0x34
+ 859 0066 00       		.byte	0
+ 860 0067 03       		.uleb128 0x3
+ 861 0068 0E       		.uleb128 0xe
+ 862 0069 3A       		.uleb128 0x3a
+ 863 006a 0B       		.uleb128 0xb
+ 864 006b 3B       		.uleb128 0x3b
+ 865 006c 0B       		.uleb128 0xb
+ 866 006d 49       		.uleb128 0x49
+ 867 006e 13       		.uleb128 0x13
+ 868 006f 02       		.uleb128 0x2
+ 869 0070 18       		.uleb128 0x18
+ 870 0071 00       		.byte	0
+ 871 0072 00       		.byte	0
+ 872 0073 09       		.uleb128 0x9
+ 873 0074 34       		.uleb128 0x34
+ 874 0075 00       		.byte	0
+ 875 0076 03       		.uleb128 0x3
+ 876 0077 08       		.uleb128 0x8
+ 877 0078 3A       		.uleb128 0x3a
+ 878 0079 0B       		.uleb128 0xb
+ 879 007a 3B       		.uleb128 0x3b
+ 880 007b 0B       		.uleb128 0xb
+ 881 007c 49       		.uleb128 0x49
+ 882 007d 13       		.uleb128 0x13
+ 883 007e 02       		.uleb128 0x2
+ 884 007f 18       		.uleb128 0x18
+ 885 0080 00       		.byte	0
+ 886 0081 00       		.byte	0
+ 887 0082 0A       		.uleb128 0xa
+ 888 0083 0B       		.uleb128 0xb
+ 889 0084 01       		.byte	0x1
+ 890 0085 11       		.uleb128 0x11
+ 891 0086 01       		.uleb128 0x1
+ 892 0087 12       		.uleb128 0x12
+ 893 0088 06       		.uleb128 0x6
+ 894 0089 01       		.uleb128 0x1
+ 895 008a 13       		.uleb128 0x13
+ 896 008b 00       		.byte	0
+ 897 008c 00       		.byte	0
+ 898 008d 0B       		.uleb128 0xb
+ 899 008e 0B       		.uleb128 0xb
+ 900 008f 01       		.byte	0x1
+ 901 0090 11       		.uleb128 0x11
+ 902 0091 01       		.uleb128 0x1
+ 903 0092 12       		.uleb128 0x12
+ 904 0093 06       		.uleb128 0x6
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 22
+
+
+ 905 0094 00       		.byte	0
+ 906 0095 00       		.byte	0
+ 907 0096 0C       		.uleb128 0xc
+ 908 0097 01       		.uleb128 0x1
+ 909 0098 01       		.byte	0x1
+ 910 0099 49       		.uleb128 0x49
+ 911 009a 13       		.uleb128 0x13
+ 912 009b 01       		.uleb128 0x1
+ 913 009c 13       		.uleb128 0x13
+ 914 009d 00       		.byte	0
+ 915 009e 00       		.byte	0
+ 916 009f 0D       		.uleb128 0xd
+ 917 00a0 21       		.uleb128 0x21
+ 918 00a1 00       		.byte	0
+ 919 00a2 49       		.uleb128 0x49
+ 920 00a3 13       		.uleb128 0x13
+ 921 00a4 2F       		.uleb128 0x2f
+ 922 00a5 0B       		.uleb128 0xb
+ 923 00a6 00       		.byte	0
+ 924 00a7 00       		.byte	0
+ 925 00a8 0E       		.uleb128 0xe
+ 926 00a9 34       		.uleb128 0x34
+ 927 00aa 00       		.byte	0
+ 928 00ab 03       		.uleb128 0x3
+ 929 00ac 0E       		.uleb128 0xe
+ 930 00ad 3A       		.uleb128 0x3a
+ 931 00ae 0B       		.uleb128 0xb
+ 932 00af 3B       		.uleb128 0x3b
+ 933 00b0 05       		.uleb128 0x5
+ 934 00b1 49       		.uleb128 0x49
+ 935 00b2 13       		.uleb128 0x13
+ 936 00b3 3F       		.uleb128 0x3f
+ 937 00b4 19       		.uleb128 0x19
+ 938 00b5 3C       		.uleb128 0x3c
+ 939 00b6 19       		.uleb128 0x19
+ 940 00b7 00       		.byte	0
+ 941 00b8 00       		.byte	0
+ 942 00b9 0F       		.uleb128 0xf
+ 943 00ba 34       		.uleb128 0x34
+ 944 00bb 00       		.byte	0
+ 945 00bc 03       		.uleb128 0x3
+ 946 00bd 0E       		.uleb128 0xe
+ 947 00be 3A       		.uleb128 0x3a
+ 948 00bf 0B       		.uleb128 0xb
+ 949 00c0 3B       		.uleb128 0x3b
+ 950 00c1 0B       		.uleb128 0xb
+ 951 00c2 49       		.uleb128 0x49
+ 952 00c3 13       		.uleb128 0x13
+ 953 00c4 3F       		.uleb128 0x3f
+ 954 00c5 19       		.uleb128 0x19
+ 955 00c6 02       		.uleb128 0x2
+ 956 00c7 18       		.uleb128 0x18
+ 957 00c8 00       		.byte	0
+ 958 00c9 00       		.byte	0
+ 959 00ca 00       		.byte	0
+ 960              		.section	.debug_aranges,"",%progbits
+ 961 0000 1C000000 		.4byte	0x1c
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 23
+
+
+ 962 0004 0200     		.2byte	0x2
+ 963 0006 00000000 		.4byte	.Ldebug_info0
+ 964 000a 04       		.byte	0x4
+ 965 000b 00       		.byte	0
+ 966 000c 0000     		.2byte	0
+ 967 000e 0000     		.2byte	0
+ 968 0010 00000000 		.4byte	.LFB64
+ 969 0014 D4020000 		.4byte	.LFE64-.LFB64
+ 970 0018 00000000 		.4byte	0
+ 971 001c 00000000 		.4byte	0
+ 972              		.section	.debug_ranges,"",%progbits
+ 973              	.Ldebug_ranges0:
+ 974 0000 00000000 		.4byte	.LFB64
+ 975 0004 D4020000 		.4byte	.LFE64
+ 976 0008 00000000 		.4byte	0
+ 977 000c 00000000 		.4byte	0
+ 978              		.section	.debug_line,"",%progbits
+ 979              	.Ldebug_line0:
+ 980 0000 DD010000 		.section	.debug_str,"MS",%progbits,1
+ 980      02004C01 
+ 980      00000201 
+ 980      FB0E0D00 
+ 980      01010101 
+ 981              	.LASF20:
+ 982 0000 456D756C 		.ascii	"EmulatedData\000"
+ 982      61746564 
+ 982      44617461 
+ 982      00
+ 983              	.LASF35:
+ 984 000d 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 984      43313120 
+ 984      352E342E 
+ 984      31203230 
+ 984      31363036 
+ 985 0040 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 985      20726576 
+ 985      6973696F 
+ 985      6E203233 
+ 985      37373135 
+ 986 0073 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 986      66756E63 
+ 986      74696F6E 
+ 986      2D736563 
+ 986      74696F6E 
+ 987              	.LASF29:
+ 988 009b 61766572 		.ascii	"average_value\000"
+ 988      6167655F 
+ 988      76616C75 
+ 988      6500
+ 989              	.LASF9:
+ 990 00a9 5F5F696E 		.ascii	"__int32_t\000"
+ 990      7433325F 
+ 990      7400
+ 991              	.LASF19:
+ 992 00b3 4F757470 		.ascii	"Output\000"
+ 992      757400
+ 993              	.LASF21:
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 24
+
+
+ 994 00ba 436F6E74 		.ascii	"ContinuouslySendData\000"
+ 994      696E756F 
+ 994      75736C79 
+ 994      53656E64 
+ 994      44617461 
+ 995              	.LASF14:
+ 996 00cf 666C6F61 		.ascii	"float\000"
+ 996      7400
+ 997              	.LASF26:
+ 998 00d5 73637261 		.ascii	"scratch\000"
+ 998      74636800 
+ 999              	.LASF32:
+ 1000 00dd 6D73675F 		.ascii	"msg_int\000"
+ 1000      696E7400 
+ 1001              	.LASF27:
+ 1002 00e5 73616D70 		.ascii	"sample_count\000"
+ 1002      6C655F63 
+ 1002      6F756E74 
+ 1002      00
+ 1003              	.LASF30:
+ 1004 00f2 72657475 		.ascii	"returnValue\000"
+ 1004      726E5661 
+ 1004      6C756500 
+ 1005              	.LASF5:
+ 1006 00fe 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1006      20756E73 
+ 1006      69676E65 
+ 1006      6420696E 
+ 1006      7400
+ 1007              	.LASF3:
+ 1008 0110 73686F72 		.ascii	"short unsigned int\000"
+ 1008      7420756E 
+ 1008      7369676E 
+ 1008      65642069 
+ 1008      6E7400
+ 1009              	.LASF33:
+ 1010 0123 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 1010      52784275 
+ 1010      66666572 
+ 1010      00
+ 1011              	.LASF1:
+ 1012 0130 756E7369 		.ascii	"unsigned char\000"
+ 1012      676E6564 
+ 1012      20636861 
+ 1012      7200
+ 1013              	.LASF23:
+ 1014 013e 53656E64 		.ascii	"SendEmulatedData\000"
+ 1014      456D756C 
+ 1014      61746564 
+ 1014      44617461 
+ 1014      00
+ 1015              	.LASF15:
+ 1016 014f 646F7562 		.ascii	"double\000"
+ 1016      6C6500
+ 1017              	.LASF2:
+ 1018 0156 73686F72 		.ascii	"short int\000"
+ 1018      7420696E 
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 25
+
+
+ 1018      7400
+ 1019              	.LASF12:
+ 1020 0160 75696E74 		.ascii	"uint16\000"
+ 1020      313600
+ 1021              	.LASF37:
+ 1022 0167 433A5C55 		.ascii	"C:\\UserData\\z004e6he\\OneDrive - Siemens AG\\Docu"
+ 1022      73657244 
+ 1022      6174615C 
+ 1022      7A303034 
+ 1022      65366865 
+ 1023 0196 6D656E74 		.ascii	"ments\\PSoC Creator\\PSoC\\Exercise5\\LucaSpenglerP"
+ 1023      735C5053 
+ 1023      6F432043 
+ 1023      72656174 
+ 1023      6F725C50 
+ 1024 01c5 536F4335 		.ascii	"SoC5OneWire.cydsn\000"
+ 1024      4F6E6557 
+ 1024      6972652E 
+ 1024      63796473 
+ 1024      6E00
+ 1025              	.LASF13:
+ 1026 01d7 75696E74 		.ascii	"uint32\000"
+ 1026      333200
+ 1027              	.LASF38:
+ 1028 01de 6D61696E 		.ascii	"main\000"
+ 1028      00
+ 1029              	.LASF8:
+ 1030 01e3 756E7369 		.ascii	"unsigned int\000"
+ 1030      676E6564 
+ 1030      20696E74 
+ 1030      00
+ 1031              	.LASF7:
+ 1032 01f0 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1032      206C6F6E 
+ 1032      6720756E 
+ 1032      7369676E 
+ 1032      65642069 
+ 1033              	.LASF34:
+ 1034 0207 67414443 		.ascii	"gADC_ISR\000"
+ 1034      5F495352 
+ 1034      00
+ 1035              	.LASF10:
+ 1036 0210 696E7433 		.ascii	"int32_t\000"
+ 1036      325F7400 
+ 1037              	.LASF24:
+ 1038 0218 5472616E 		.ascii	"TransmitBuffer\000"
+ 1038      736D6974 
+ 1038      42756666 
+ 1038      657200
+ 1039              	.LASF18:
+ 1040 0227 73697A65 		.ascii	"sizetype\000"
+ 1040      74797065 
+ 1040      00
+ 1041              	.LASF6:
+ 1042 0230 6C6F6E67 		.ascii	"long long int\000"
+ 1042      206C6F6E 
+ 1042      6720696E 
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccLPuQ7i.s 			page 26
+
+
+ 1042      7400
+ 1043              	.LASF36:
+ 1044 023e 6D61696E 		.ascii	"main.c\000"
+ 1044      2E6300
+ 1045              	.LASF16:
+ 1046 0245 63686172 		.ascii	"char\000"
+ 1046      00
+ 1047              	.LASF28:
+ 1048 024a 73616D70 		.ascii	"sample_sum\000"
+ 1048      6C655F73 
+ 1048      756D00
+ 1049              	.LASF25:
+ 1050 0255 53616D70 		.ascii	"SampleTracker\000"
+ 1050      6C655472 
+ 1050      61636B65 
+ 1050      7200
+ 1051              	.LASF11:
+ 1052 0263 75696E74 		.ascii	"uint8\000"
+ 1052      3800
+ 1053              	.LASF4:
+ 1054 0269 6C6F6E67 		.ascii	"long int\000"
+ 1054      20696E74 
+ 1054      00
+ 1055              	.LASF17:
+ 1056 0272 6C6F6E67 		.ascii	"long double\000"
+ 1056      20646F75 
+ 1056      626C6500 
+ 1057              	.LASF31:
+ 1058 027e 6D73675F 		.ascii	"msg_frac\000"
+ 1058      66726163 
+ 1058      00
+ 1059              	.LASF0:
+ 1060 0287 7369676E 		.ascii	"signed char\000"
+ 1060      65642063 
+ 1060      68617200 
+ 1061              	.LASF22:
+ 1062 0293 53656E64 		.ascii	"SendSingleByte\000"
+ 1062      53696E67 
+ 1062      6C654279 
+ 1062      746500
+ 1063              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
