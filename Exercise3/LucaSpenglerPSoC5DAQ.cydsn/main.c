@@ -157,12 +157,8 @@ int main()
                 average_value = sample_sum / SAMPLE_RATE; //Calculate the average sampled value
                 sprintf(TransmitBuffer, "{\r\n\t\"Avg ADC Value\": \"%1u mV\",\r\n", average_value);    //Convert the sampled value to a string
                 UART_1_PutString(TransmitBuffer);   //Send the output string via UART
-                uint8 average_degree_frac = average_value % TEN_CONSTANT;     //Calculate the fractional part of the degree value
-                uint8 average_degree_int = average_value / CONVERSION_RATE;     //Calculate the integer part of the degree value
-                sprintf(TransmitBuffer, "\t\"Temperature\": \"%1u.", average_degree_int);   //Convert the first part of the output to a string
-                UART_1_PutString(TransmitBuffer);   //Send the first output part
-                sprintf(TransmitBuffer, "%1u C\"\r\n}\r\n", average_degree_frac);  //Convert the second part of the output to a string
-                UART_1_PutString(TransmitBuffer);   //Send the second output part
+                sprintf(TransmitBuffer, "\t\"Temperature\": \"%i.%i C\"\r\n}\r\n", average_value / TEN_CONSTANT, average_value % TEN_CONSTANT);   //Convert the output value to a string
+                UART_1_PutString(TransmitBuffer);   //Send the output string via UART
                 sample_count = 0;   //Reset the sample count
                 sample_sum = 0;   //Reset the sample sum value
             }
