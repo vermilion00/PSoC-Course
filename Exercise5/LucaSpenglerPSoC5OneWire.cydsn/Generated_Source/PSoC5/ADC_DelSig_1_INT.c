@@ -29,7 +29,7 @@
 #define FALSE 0
 #define TRUE 1
 
-extern volatile uint8 gADC_ISR;
+extern volatile uint8 gADC_ISR; //global flag for the ADC ISR
 
 /* `#END`  */
 
@@ -65,7 +65,7 @@ extern volatile uint8 gADC_ISR;
         *  - add user ISR code between the following #START and #END tags
         **************************************************************************/
         /* `#START MAIN_ADC_ISR1`  */
-        gADC_ISR = TRUE;
+        gADC_ISR = TRUE;    //Set the ISR flag
 
         /* `#END`  */
         
