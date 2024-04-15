@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 1
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccR2YXeg.s 			page 1
 
 
    1              		.syntax unified
@@ -58,11 +58,11 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 1
   28:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
   29:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** #define FALSE 0
   30:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** #define TRUE 1
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 2
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccR2YXeg.s 			page 2
 
 
   31:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
-  32:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** extern volatile uint8 gADC_ISR;
+  32:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** extern volatile uint8 gADC_ISR; //global flag for the ADC ISR
   33:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
   34:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** /* `#END`  */
   35:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
@@ -108,7 +108,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 1
   65:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  - add user ISR code between the following #START and #END tags
   66:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         **************************************************************************/
   67:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* `#START MAIN_ADC_ISR1`  */
-  68:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         gADC_ISR = TRUE;
+  68:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         gADC_ISR = TRUE;    //Set the ISR flag
   38              		.loc 1 68 0
   39 0004 034B     		ldr	r3, .L2
   40 0006 0122     		movs	r2, #1
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 1
   71:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         
   72:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* Stop the conversion if conversion mode is single sample and resolution
   73:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  is above 16 bits.
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 3
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccR2YXeg.s 			page 3
 
 
   74:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         */
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 1
  104:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  No
  105:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
  106:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *****************************************************************************/
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 4
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccR2YXeg.s 			page 4
 
 
  107:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     CY_ISR( ADC_DelSig_1_ISR2)
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 1
   89              		.align	2
   90              		.global	ADC_DelSig_1_ISR3
   91              		.thumb
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 5
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccR2YXeg.s 			page 5
 
 
   92              		.thumb_func
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 1
  178:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             /* Software flag for checking conversion complete or not. Will be used when
  179:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             *  resolution is above 16 bits and conversion mode is single sample 
  180:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 			*/
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 6
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccR2YXeg.s 			page 6
 
 
  181:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_convDone = ADC_DelSig_1_DEC_CONV_DONE;
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 1
  132              		.cfi_def_cfa_offset 4
  133              		.cfi_offset 7, -4
  134 0002 00AF     		add	r7, sp, #0
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 7
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccR2YXeg.s 			page 7
 
 
  135              		.cfi_def_cfa_register 7
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 1
  160 0011 33000000 		.4byte	.LASF19
  161 0015 5D000000 		.4byte	.LASF20
  162 0019 00000000 		.4byte	.Ldebug_ranges0+0
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 8
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccR2YXeg.s 			page 8
 
 
  163 001d 00000000 		.4byte	0
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 1
  217 0081 DC010000 		.4byte	.LASF10
  218 0085 02       		.uleb128 0x2
  219 0086 01       		.byte	0x1
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 9
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccR2YXeg.s 			page 9
 
 
  220 0087 08       		.byte	0x8
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 1
  274 0002 01       		.byte	0x1
  275 0003 25       		.uleb128 0x25
  276 0004 0E       		.uleb128 0xe
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 10
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccR2YXeg.s 			page 10
 
 
  277 0005 13       		.uleb128 0x13
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 1
  331 003b 00       		.byte	0
  332 003c 00       		.byte	0
  333 003d 06       		.uleb128 0x6
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 11
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccR2YXeg.s 			page 11
 
 
  334 003e 2E       		.uleb128 0x2e
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 1
  388 0028 00000000 		.4byte	.LFB3
  389 002c 0C000000 		.4byte	.LFE3-.LFB3
  390 0030 00000000 		.4byte	0
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 12
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccR2YXeg.s 			page 12
 
 
  391 0034 00000000 		.4byte	0
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 1
  418 00bb 536F4335 		.ascii	"SoC5OneWire.cydsn\000"
  418      4F6E6557 
  418      6972652E 
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 13
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccR2YXeg.s 			page 13
 
 
  418      63796473 
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 1
  436      20636861 
  436      7200
  437              	.LASF11:
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc5brdcb.s 			page 14
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccR2YXeg.s 			page 14
 
 
  438 01ce 63686172 		.ascii	"char\000"

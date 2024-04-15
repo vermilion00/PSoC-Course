@@ -97,8 +97,6 @@ Discarded input sections
  .text          0x00000000        0x0 .\ARM_GCC_541\Debug\OneWire.o
  .data          0x00000000        0x0 .\ARM_GCC_541\Debug\OneWire.o
  .bss           0x00000000        0x0 .\ARM_GCC_541\Debug\OneWire.o
- .text.TouchByte
-                0x00000000       0x58 .\ARM_GCC_541\Debug\OneWire.o
  .text          0x00000000        0x0 .\ARM_GCC_541\Debug\cyfitter_cfg.o
  .data          0x00000000        0x0 .\ARM_GCC_541\Debug\cyfitter_cfg.o
  .bss           0x00000000        0x0 .\ARM_GCC_541\Debug\cyfitter_cfg.o
@@ -666,7 +664,7 @@ END GROUP
                 0x00000800                ee_size = (CY_APPL_LOADABLE && ! (CY_EE_IN_BTLDR))?(CY_EE_SIZE / CY_APPL_MAX):CY_EE_SIZE
                 [!provide]                PROVIDE (CY_ECC_OFFSET, ecc_offset)
 
-.text           0x00000000     0x251c
+.text           0x00000000     0x2514
  CREATE_OBJECT_SYMBOLS
                 0x00000000                PROVIDE (__cy_interrupt_vector, RomVectors)
  *(.romvectors)
@@ -683,313 +681,314 @@ END GROUP
                 0x00000001                ASSERT ((((appl_start + .) <= 0x10000) || 0x1), DMA Init must be within the first 64k of flash)
  *(.text .text.* .gnu.linkonce.t.*)
  .text          0x00000028       0x5c c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
- .text.main     0x00000084      0x2d4 .\ARM_GCC_541\Debug\main.o
+ .text.main     0x00000084      0x2c8 .\ARM_GCC_541\Debug\main.o
                 0x00000084                main
  .text.ResetBus
-                0x00000358       0x44 .\ARM_GCC_541\Debug\OneWire.o
-                0x00000358                ResetBus
+                0x0000034c       0x44 .\ARM_GCC_541\Debug\OneWire.o
+                0x0000034c                ResetBus
  .text.WriteBit
-                0x0000039c       0x44 .\ARM_GCC_541\Debug\OneWire.o
-                0x0000039c                WriteBit
+                0x00000390       0x44 .\ARM_GCC_541\Debug\OneWire.o
+                0x00000390                WriteBit
  .text.WriteByte
-                0x000003e0       0x34 .\ARM_GCC_541\Debug\OneWire.o
-                0x000003e0                WriteByte
- .text.ReadBit  0x00000414       0x38 .\ARM_GCC_541\Debug\OneWire.o
-                0x00000414                ReadBit
+                0x000003d4       0x34 .\ARM_GCC_541\Debug\OneWire.o
+                0x000003d4                WriteByte
+ .text.ReadBit  0x00000408       0x38 .\ARM_GCC_541\Debug\OneWire.o
+                0x00000408                ReadBit
  .text.ReadByte
-                0x0000044c       0x44 .\ARM_GCC_541\Debug\OneWire.o
-                0x0000044c                ReadByte
+                0x00000440       0x44 .\ARM_GCC_541\Debug\OneWire.o
+                0x00000440                ReadByte
  .text.CYMEMZERO
-                0x00000490       0x1c .\ARM_GCC_541\Debug\cyfitter_cfg.o
+                0x00000484       0x1c .\ARM_GCC_541\Debug\cyfitter_cfg.o
  .text.CYCONFIGCPY
-                0x000004ac       0x20 .\ARM_GCC_541\Debug\cyfitter_cfg.o
+                0x000004a0       0x20 .\ARM_GCC_541\Debug\cyfitter_cfg.o
  .text.CyClockStartupError
-                0x000004cc        0xc .\ARM_GCC_541\Debug\cyfitter_cfg.o
+                0x000004c0        0xc .\ARM_GCC_541\Debug\cyfitter_cfg.o
  .text.cfg_write_bytes32
-                0x000004d8       0x74 .\ARM_GCC_541\Debug\cyfitter_cfg.o
+                0x000004cc       0x74 .\ARM_GCC_541\Debug\cyfitter_cfg.o
  .text.ClockSetup
-                0x0000054c      0x15c .\ARM_GCC_541\Debug\cyfitter_cfg.o
+                0x00000540      0x15c .\ARM_GCC_541\Debug\cyfitter_cfg.o
  .text.AnalogSetDefault
-                0x000006a8       0x58 .\ARM_GCC_541\Debug\cyfitter_cfg.o
+                0x0000069c       0x58 .\ARM_GCC_541\Debug\cyfitter_cfg.o
  .text.ADC_DelSig_1_AMux_Set
-                0x00000700       0x40 .\ARM_GCC_541\Debug\cyfitter_cfg.o
-                0x00000700                ADC_DelSig_1_AMux_Set
+                0x000006f4       0x40 .\ARM_GCC_541\Debug\cyfitter_cfg.o
+                0x000006f4                ADC_DelSig_1_AMux_Set
  .text.ADC_DelSig_1_AMux_Unset
-                0x00000740       0x44 .\ARM_GCC_541\Debug\cyfitter_cfg.o
-                0x00000740                ADC_DelSig_1_AMux_Unset
+                0x00000734       0x44 .\ARM_GCC_541\Debug\cyfitter_cfg.o
+                0x00000734                ADC_DelSig_1_AMux_Unset
  .text.cyfitter_cfg
-                0x00000784      0x19c .\ARM_GCC_541\Debug\cyfitter_cfg.o
-                0x00000784                cyfitter_cfg
+                0x00000778      0x19c .\ARM_GCC_541\Debug\cyfitter_cfg.o
+                0x00000778                cyfitter_cfg
  .text.IntDefaultHandler
-                0x00000920       0x14 .\ARM_GCC_541\Debug\Cm3Start.o
-                0x00000920                IntDefaultHandler
- .text._sbrk    0x00000934       0x50 .\ARM_GCC_541\Debug\Cm3Start.o
-                0x00000934                _sbrk
- .text.Start_c  0x00000984       0x98 .\ARM_GCC_541\Debug\Cm3Start.o
-                0x00000984                Start_c
+                0x00000914       0x14 .\ARM_GCC_541\Debug\Cm3Start.o
+                0x00000914                IntDefaultHandler
+ .text._sbrk    0x00000928       0x50 .\ARM_GCC_541\Debug\Cm3Start.o
+                0x00000928                _sbrk
+ .text.Start_c  0x00000978       0x98 .\ARM_GCC_541\Debug\Cm3Start.o
+                0x00000978                Start_c
  .text.initialize_psoc
-                0x00000a1c       0x90 .\ARM_GCC_541\Debug\Cm3Start.o
-                0x00000a1c                initialize_psoc
+                0x00000a10       0x90 .\ARM_GCC_541\Debug\Cm3Start.o
+                0x00000a10                initialize_psoc
  .text.ADC_DelSig_1_Init
-                0x00000aac      0x158 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
-                0x00000aac                ADC_DelSig_1_Init
+                0x00000aa0      0x158 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
+                0x00000aa0                ADC_DelSig_1_Init
  .text.ADC_DelSig_1_Enable
-                0x00000c04      0x158 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
-                0x00000c04                ADC_DelSig_1_Enable
+                0x00000bf8      0x158 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
+                0x00000bf8                ADC_DelSig_1_Enable
  .text.ADC_DelSig_1_Start
-                0x00000d5c       0x30 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
-                0x00000d5c                ADC_DelSig_1_Start
+                0x00000d50       0x30 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
+                0x00000d50                ADC_DelSig_1_Start
  .text.ADC_DelSig_1_StartConvert
-                0x00000d8c       0x20 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
-                0x00000d8c                ADC_DelSig_1_StartConvert
+                0x00000d80       0x20 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
+                0x00000d80                ADC_DelSig_1_StartConvert
  .text.ADC_DelSig_1_IsEndConversion
-                0x00000dac       0x4c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
-                0x00000dac                ADC_DelSig_1_IsEndConversion
+                0x00000da0       0x4c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
+                0x00000da0                ADC_DelSig_1_IsEndConversion
  .text.ADC_DelSig_1_GetResult16
-                0x00000df8       0x7c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
-                0x00000df8                ADC_DelSig_1_GetResult16
+                0x00000dec       0x7c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
+                0x00000dec                ADC_DelSig_1_GetResult16
  .text.ADC_DelSig_1_CountsTo_mVolts
-                0x00000e74       0x3c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
-                0x00000e74                ADC_DelSig_1_CountsTo_mVolts
+                0x00000e68       0x3c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
+                0x00000e68                ADC_DelSig_1_CountsTo_mVolts
  .text.ADC_DelSig_1_InitConfig
-                0x00000eb0      0x410 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
+                0x00000ea4      0x410 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
  .text.ADC_DelSig_1_GainCompensation
-                0x000012c0      0x170 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
+                0x000012b4      0x170 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
  .text.ADC_DelSig_1_SetDSMRef0Reg
-                0x00001430       0x7c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
+                0x00001424       0x7c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
  .text.ADC_DelSig_1_ISR1
-                0x000014ac       0x18 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
-                0x000014ac                ADC_DelSig_1_ISR1
+                0x000014a0       0x18 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
+                0x000014a0                ADC_DelSig_1_ISR1
  .text.ADC_DelSig_1_ISR2
-                0x000014c4        0xc .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
-                0x000014c4                ADC_DelSig_1_ISR2
+                0x000014b8        0xc .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
+                0x000014b8                ADC_DelSig_1_ISR2
  .text.ADC_DelSig_1_ISR3
-                0x000014d0        0xc .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
-                0x000014d0                ADC_DelSig_1_ISR3
+                0x000014c4        0xc .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
+                0x000014c4                ADC_DelSig_1_ISR3
  .text.ADC_DelSig_1_ISR4
-                0x000014dc        0xc .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
-                0x000014dc                ADC_DelSig_1_ISR4
+                0x000014d0        0xc .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
+                0x000014d0                ADC_DelSig_1_ISR4
  .text.UART_1_Start
-                0x000014e8       0x24 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
-                0x000014e8                UART_1_Start
+                0x000014dc       0x24 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
+                0x000014dc                UART_1_Start
  .text.UART_1_Init
-                0x0000150c       0x40 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
-                0x0000150c                UART_1_Init
+                0x00001500       0x40 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
+                0x00001500                UART_1_Init
  .text.UART_1_Enable
-                0x0000154c       0x60 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
-                0x0000154c                UART_1_Enable
+                0x00001540       0x60 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
+                0x00001540                UART_1_Enable
  .text.UART_1_GetChar
-                0x000015ac       0x44 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
-                0x000015ac                UART_1_GetChar
+                0x000015a0       0x44 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
+                0x000015a0                UART_1_GetChar
  .text.UART_1_PutChar
-                0x000015f0       0x34 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
-                0x000015f0                UART_1_PutChar
+                0x000015e4       0x34 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
+                0x000015e4                UART_1_PutChar
  .text.UART_1_PutString
-                0x00001624       0x44 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
-                0x00001624                UART_1_PutString
+                0x00001618       0x44 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
+                0x00001618                UART_1_PutString
  .text.ADC_DelSig_1_AMux_Start
-                0x00001668       0x34 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_AMux.o)
-                0x00001668                ADC_DelSig_1_AMux_Start
+                0x0000165c       0x34 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_AMux.o)
+                0x0000165c                ADC_DelSig_1_AMux_Start
  .text.ADC_DelSig_1_AMux_Select
-                0x0000169c       0x28 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_AMux.o)
-                0x0000169c                ADC_DelSig_1_AMux_Select
+                0x00001690       0x28 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_AMux.o)
+                0x00001690                ADC_DelSig_1_AMux_Select
  .text.ADC_DelSig_1_Ext_CP_Clk_SetDividerRegister
-                0x000016c4      0x164 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
-                0x000016c4                ADC_DelSig_1_Ext_CP_Clk_SetDividerRegister
+                0x000016b8      0x164 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
+                0x000016b8                ADC_DelSig_1_Ext_CP_Clk_SetDividerRegister
  .text.ADC_DelSig_1_Ext_CP_Clk_GetDividerRegister
-                0x00001828       0x18 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
-                0x00001828                ADC_DelSig_1_Ext_CP_Clk_GetDividerRegister
+                0x0000181c       0x18 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
+                0x0000181c                ADC_DelSig_1_Ext_CP_Clk_GetDividerRegister
  .text.ADC_DelSig_1_Ext_CP_Clk_SetModeRegister
-                0x00001840       0x34 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
-                0x00001840                ADC_DelSig_1_Ext_CP_Clk_SetModeRegister
+                0x00001834       0x34 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
+                0x00001834                ADC_DelSig_1_Ext_CP_Clk_SetModeRegister
  .text.ADC_DelSig_1_Ext_CP_Clk_GetSourceRegister
-                0x00001874       0x1c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
-                0x00001874                ADC_DelSig_1_Ext_CP_Clk_GetSourceRegister
+                0x00001868       0x1c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
+                0x00001868                ADC_DelSig_1_Ext_CP_Clk_GetSourceRegister
  .text.ADC_DelSig_1_theACLK_SetDividerRegister
-                0x00001890      0x164 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
-                0x00001890                ADC_DelSig_1_theACLK_SetDividerRegister
+                0x00001884      0x164 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
+                0x00001884                ADC_DelSig_1_theACLK_SetDividerRegister
  .text.ADC_DelSig_1_theACLK_GetDividerRegister
-                0x000019f4       0x18 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
-                0x000019f4                ADC_DelSig_1_theACLK_GetDividerRegister
+                0x000019e8       0x18 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
+                0x000019e8                ADC_DelSig_1_theACLK_GetDividerRegister
  .text.ADC_DelSig_1_theACLK_SetModeRegister
-                0x00001a0c       0x34 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
-                0x00001a0c                ADC_DelSig_1_theACLK_SetModeRegister
+                0x00001a00       0x34 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
+                0x00001a00                ADC_DelSig_1_theACLK_SetModeRegister
  .text.ADC_DelSig_1_theACLK_GetSourceRegister
-                0x00001a40       0x1c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
-                0x00001a40                ADC_DelSig_1_theACLK_GetSourceRegister
+                0x00001a34       0x1c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
+                0x00001a34                ADC_DelSig_1_theACLK_GetSourceRegister
  .text.UART_1_IntClock_Start
-                0x00001a5c       0x34 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1_IntClock.o)
-                0x00001a5c                UART_1_IntClock_Start
- .text.CyHalt   0x00001a90       0x18 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
-                0x00001a90                CyHalt
+                0x00001a50       0x34 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1_IntClock.o)
+                0x00001a50                UART_1_IntClock_Start
+ .text.CyHalt   0x00001a84       0x18 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
+                0x00001a84                CyHalt
  .text.CyDelayUs
-                0x00001aa8       0x28 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
-                0x00001aa8                CyDelayUs
+                0x00001a9c       0x28 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
+                0x00001a9c                CyDelayUs
  .text.CyIntSetVector
-                0x00001ad0       0x50 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
-                0x00001ad0                CyIntSetVector
+                0x00001ac4       0x50 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
+                0x00001ac4                CyIntSetVector
  .text.CyIntSetPriority
-                0x00001b20       0x48 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
-                0x00001b20                CyIntSetPriority
+                0x00001b14       0x48 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
+                0x00001b14                CyIntSetPriority
  .text.onewire_pin_Write
-                0x00001b68       0x3c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
-                0x00001b68                onewire_pin_Write
+                0x00001b5c       0x3c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
+                0x00001b5c                onewire_pin_Write
  .text.onewire_pin_SetDriveMode
-                0x00001ba4       0x3c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
-                0x00001ba4                onewire_pin_SetDriveMode
+                0x00001b98       0x3c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
+                0x00001b98                onewire_pin_SetDriveMode
  .text.onewire_pin_Read
-                0x00001be0       0x20 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
-                0x00001be0                onewire_pin_Read
- .text          0x00001c00       0x54 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyBootAsmGnu.o)
-                0x00001c00                CyDelayCycles
-                0x00001c3e                CyEnterCriticalSection
-                0x00001c46                CyExitCriticalSection
- .text.__errno  0x00001c54        0xc c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-errno.o)
-                0x00001c54                __errno
+                0x00001bd4       0x20 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
+                0x00001bd4                onewire_pin_Read
+ *fill*         0x00001bf4        0x4 
+ .text          0x00001bf8       0x54 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyBootAsmGnu.o)
+                0x00001bf8                CyDelayCycles
+                0x00001c36                CyEnterCriticalSection
+                0x00001c3e                CyExitCriticalSection
+ .text.__errno  0x00001c4c        0xc c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-errno.o)
+                0x00001c4c                __errno
  .text.__libc_init_array
-                0x00001c60       0x4c c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-init.o)
-                0x00001c60                __libc_init_array
- .text.memcpy   0x00001cac       0x16 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memcpy-stub.o)
-                0x00001cac                memcpy
- .text.memset   0x00001cc2       0x10 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memset.o)
-                0x00001cc2                memset
- *fill*         0x00001cd2        0x2 
- .text.sprintf  0x00001cd4       0x48 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-sprintf.o)
-                0x00001cd4                siprintf
-                0x00001cd4                sprintf
+                0x00001c58       0x4c c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-init.o)
+                0x00001c58                __libc_init_array
+ .text.memcpy   0x00001ca4       0x16 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memcpy-stub.o)
+                0x00001ca4                memcpy
+ .text.memset   0x00001cba       0x10 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memset.o)
+                0x00001cba                memset
+ *fill*         0x00001cca        0x2 
+ .text.sprintf  0x00001ccc       0x48 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-sprintf.o)
+                0x00001ccc                siprintf
+                0x00001ccc                sprintf
  .text.__ssputs_r
-                0x00001d1c       0xb2 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-svfprintf.o)
-                0x00001d1c                __ssputs_r
- *fill*         0x00001dce        0x2 
+                0x00001d14       0xb2 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-svfprintf.o)
+                0x00001d14                __ssputs_r
+ *fill*         0x00001dc6        0x2 
  .text._svfprintf_r
-                0x00001dd0      0x1e8 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-svfprintf.o)
-                0x00001dd0                _svfiprintf_r
-                0x00001dd0                _svfprintf_r
+                0x00001dc8      0x1e8 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-svfprintf.o)
+                0x00001dc8                _svfiprintf_r
+                0x00001dc8                _svfprintf_r
  .text._printf_common
-                0x00001fb8       0xec c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
-                0x00001fb8                _printf_common
+                0x00001fb0       0xec c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
+                0x00001fb0                _printf_common
  .text._printf_i
-                0x000020a4      0x24c c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
-                0x000020a4                _printf_i
- .text.memchr   0x000022f0       0x1c c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memchr-stub.o)
-                0x000022f0                memchr
- .text.memmove  0x0000230c       0x36 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memmove.o)
-                0x0000230c                memmove
- *fill*         0x00002342        0x2 
- .text._free_r  0x00002344       0x98 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-freer.o)
-                0x00002344                _free_r
+                0x0000209c      0x24c c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
+                0x0000209c                _printf_i
+ .text.memchr   0x000022e8       0x1c c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memchr-stub.o)
+                0x000022e8                memchr
+ .text.memmove  0x00002304       0x36 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memmove.o)
+                0x00002304                memmove
+ *fill*         0x0000233a        0x2 
+ .text._free_r  0x0000233c       0x98 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-freer.o)
+                0x0000233c                _free_r
  .text._malloc_r
-                0x000023dc       0xbc c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-mallocr.o)
-                0x000023dc                _malloc_r
+                0x000023d4       0xbc c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-mallocr.o)
+                0x000023d4                _malloc_r
  .text._realloc_r
-                0x00002498       0x4c c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-reallocr.o)
-                0x00002498                _realloc_r
- .text._sbrk_r  0x000024e4       0x20 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-sbrkr.o)
-                0x000024e4                _sbrk_r
+                0x00002490       0x4c c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-reallocr.o)
+                0x00002490                _realloc_r
+ .text._sbrk_r  0x000024dc       0x20 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-sbrkr.o)
+                0x000024dc                _sbrk_r
  .text.__malloc_lock
-                0x00002504        0x2 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-mlock.o)
-                0x00002504                __malloc_lock
+                0x000024fc        0x2 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-mlock.o)
+                0x000024fc                __malloc_lock
  .text.__malloc_unlock
-                0x00002506        0x2 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-mlock.o)
-                0x00002506                __malloc_unlock
+                0x000024fe        0x2 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-mlock.o)
+                0x000024fe                __malloc_unlock
  .text._malloc_usable_size_r
-                0x00002508       0x14 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-msizer.o)
-                0x00002508                _malloc_usable_size_r
+                0x00002500       0x14 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-msizer.o)
+                0x00002500                _malloc_usable_size_r
  *(.plt)
  *(.gnu.warning)
  *(.glue_7t)
- .glue_7t       0x0000251c        0x0 linker stubs
+ .glue_7t       0x00002514        0x0 linker stubs
  *(.glue_7)
- .glue_7        0x0000251c        0x0 linker stubs
+ .glue_7        0x00002514        0x0 linker stubs
  *(.vfp11_veneer)
- .vfp11_veneer  0x0000251c        0x0 linker stubs
+ .vfp11_veneer  0x00002514        0x0 linker stubs
  *(.bootloader)
  *(.ARM.extab* .gnu.linkonce.armextab.*)
  *(.gcc_except_table)
 
-.v4_bx          0x0000251c        0x0
- .v4_bx         0x0000251c        0x0 linker stubs
+.v4_bx          0x00002514        0x0
+ .v4_bx         0x00002514        0x0 linker stubs
 
-.iplt           0x0000251c        0x0
- .iplt          0x0000251c        0x0 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
+.iplt           0x00002514        0x0
+ .iplt          0x00002514        0x0 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
 
 .eh_frame_hdr
  *(.eh_frame_hdr)
 
-.eh_frame       0x0000251c        0x4
+.eh_frame       0x00002514        0x4
  *(.eh_frame)
- .eh_frame      0x0000251c        0x0 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
- .eh_frame      0x0000251c        0x4 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtend.o
+ .eh_frame      0x00002514        0x0 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
+ .eh_frame      0x00002514        0x4 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtend.o
                 [!provide]                PROVIDE (__exidx_start, .)
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x00002520                __exidx_end = .
+                0x00002518                __exidx_end = .
 
-.rodata         0x00002520      0x160
+.rodata         0x00002518      0x160
  *(.rodata .rodata.* .gnu.linkonce.r.*)
- .rodata        0x00002520       0xad .\ARM_GCC_541\Debug\main.o
- *fill*         0x000025cd        0x3 
- .rodata        0x000025d0       0x42 .\ARM_GCC_541\Debug\cyfitter_cfg.o
-                0x000025d0                ADC_DelSig_1_AMux__addrTable
-                0x000025d8                ADC_DelSig_1_AMux__maskTable
+ .rodata        0x00002518       0xad .\ARM_GCC_541\Debug\main.o
+ *fill*         0x000025c5        0x3 
+ .rodata        0x000025c8       0x42 .\ARM_GCC_541\Debug\cyfitter_cfg.o
+                0x000025c8                ADC_DelSig_1_AMux__addrTable
+                0x000025d0                ADC_DelSig_1_AMux__maskTable
  .rodata.str1.1
-                0x00002612        0x2 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-impure.o)
+                0x0000260a        0x2 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-impure.o)
  .rodata.str1.1
-                0x00002614       0x11 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-svfprintf.o)
+                0x0000260c       0x11 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-svfprintf.o)
  .rodata.str1.1
-                0x00002625       0x22 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
-                0x00002648                . = ALIGN (0x4)
- *fill*         0x00002647        0x1 
+                0x0000261d       0x22 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
+                0x00002640                . = ALIGN (0x4)
+ *fill*         0x0000263f        0x1 
  *(.init)
- .init          0x00002648        0x4 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crti.o
-                0x00002648                _init
- .init          0x0000264c        0x8 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtn.o
-                0x00002654                . = ALIGN (0x4)
-                0x00002654                __preinit_array_start = .
+ .init          0x00002640        0x4 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crti.o
+                0x00002640                _init
+ .init          0x00002644        0x8 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtn.o
+                0x0000264c                . = ALIGN (0x4)
+                0x0000264c                __preinit_array_start = .
  *(.preinit_array)
-                0x00002654                __preinit_array_end = .
-                0x00002654                . = ALIGN (0x4)
-                0x00002654                __init_array_start = .
+                0x0000264c                __preinit_array_end = .
+                0x0000264c                . = ALIGN (0x4)
+                0x0000264c                __init_array_start = .
  *(SORT(.init_array.*))
  *(.init_array)
- .init_array    0x00002654        0x4 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
- .init_array    0x00002658        0x4 .\ARM_GCC_541\Debug\Cm3Start.o
-                0x0000265c                __init_array_end = .
-                0x0000265c                . = ALIGN (0x4)
+ .init_array    0x0000264c        0x4 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
+ .init_array    0x00002650        0x4 .\ARM_GCC_541\Debug\Cm3Start.o
+                0x00002654                __init_array_end = .
+                0x00002654                . = ALIGN (0x4)
  *(.fini)
- .fini          0x0000265c        0x4 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crti.o
-                0x0000265c                _fini
- .fini          0x00002660        0x8 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtn.o
-                0x00002668                . = ALIGN (0x4)
-                0x00002668                __fini_array_start = .
+ .fini          0x00002654        0x4 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crti.o
+                0x00002654                _fini
+ .fini          0x00002658        0x8 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtn.o
+                0x00002660                . = ALIGN (0x4)
+                0x00002660                __fini_array_start = .
  *(.fini_array)
- .fini_array    0x00002668        0x4 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
+ .fini_array    0x00002660        0x4 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
  *(SORT(.fini_array.*))
-                0x0000266c                __fini_array_end = .
-                0x0000266c                . = ALIGN (0x4)
+                0x00002664                __fini_array_end = .
+                0x00002664                . = ALIGN (0x4)
  *crtbegin.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o) .ctors)
  *(SORT(.ctors.*))
  *crtend.o(.ctors)
-                0x0000266c                . = ALIGN (0x4)
+                0x00002664                . = ALIGN (0x4)
  *crtbegin.o(.dtors)
  *(EXCLUDE_FILE(*crtend.o) .dtors)
  *(SORT(.dtors.*))
  *crtend.o(.dtors)
-                0x0000266c                . = ALIGN (0x4)
-                0x0000266c                __cy_regions = .
-                0x0000266c        0x4 LONG 0x2680 __cy_region_init_ram
-                0x00002670        0x4 LONG 0x1fff80c8 __cy_region_start_data
-                0x00002674        0x4 LONG 0x80 __cy_region_init_size_ram
-                0x00002678        0x4 LONG 0x50 __cy_region_zero_size_ram
-                0x0000267c                __cy_regions_end = .
-                0x00002680                . = ALIGN (0x8)
- *fill*         0x0000267c        0x4 
-                0x00002680                _etext = .
+                0x00002664                . = ALIGN (0x4)
+                0x00002664                __cy_regions = .
+                0x00002664        0x4 LONG 0x2678 __cy_region_init_ram
+                0x00002668        0x4 LONG 0x1fff80c8 __cy_region_start_data
+                0x0000266c        0x4 LONG 0x80 __cy_region_init_size_ram
+                0x00002670        0x4 LONG 0x50 __cy_region_zero_size_ram
+                0x00002674                __cy_regions_end = .
+                0x00002678                . = ALIGN (0x8)
+ *fill*         0x00002674        0x4 
+                0x00002678                _etext = .
 
 .cy_checksum_exclude
-                0x00002680        0x0
+                0x00002678        0x0
  *(.cy_checksum_exclude)
 
 .ramvectors     0x1fff8000       0xc0
@@ -1004,7 +1003,7 @@ END GROUP
  .noinit        0x1fff80c4        0x1 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
                 0x1fff80c4                CyResetStatus
 
-.data           0x1fff80c8       0x80 load address 0x00002680
+.data           0x1fff80c8       0x80 load address 0x00002678
                 0x1fff80c8                __cy_region_start_data = .
  *(.jcr)
  .jcr           0x1fff80c8        0x0 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
@@ -1032,10 +1031,10 @@ END GROUP
  *(.ram)
                 0x1fff8148                _edata = .
 
-.igot.plt       0x1fff8148        0x0 load address 0x00002700
+.igot.plt       0x1fff8148        0x0 load address 0x000026f8
  .igot.plt      0x1fff8148        0x0 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
 
-.bss            0x1fff8148       0x50 load address 0x00002700
+.bss            0x1fff8148       0x50 load address 0x000026f8
                 0x1fff8148                PROVIDE (__bss_start__, .)
  *(.shbss)
  *(.bss .bss.* .gnu.linkonce.b.*)
@@ -1070,11 +1069,11 @@ END GROUP
                 0x1fff8198                __end = .
                 0x1fff8198                PROVIDE (end, .)
                 0x1fff8198                PROVIDE (__bss_end__, .)
-                0x00002680                __cy_region_init_ram = LOADADDR (.data)
+                0x00002678                __cy_region_init_ram = LOADADDR (.data)
                 0x00000080                __cy_region_init_size_ram = (_edata - ADDR (.data))
                 0x00000050                __cy_region_zero_size_ram = (_end - _edata)
 
-.heap           0x1fff8198       0x80 load address 0x00002700
+.heap           0x1fff8198       0x80 load address 0x000026f8
                 0x1fff8198                . = _end
                 0x1fff8218                . = (. + 0x80)
  *fill*         0x1fff8198       0x80 
@@ -1125,8 +1124,8 @@ END GROUP
  .cymeta        0x90500000        0xc .\ARM_GCC_541\Debug\cymetadata.o
                 0x90500000                cy_metadata
 
-.rel.dyn        0x00002700        0x0 load address 0x9050000c
- .rel.iplt      0x00002700        0x0 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
+.rel.dyn        0x000026f8        0x0 load address 0x9050000c
+ .rel.iplt      0x000026f8        0x0 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
 
 .stab
  *(.stab)
@@ -1146,182 +1145,182 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x970
+.debug_aranges  0x00000000      0x968
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x20 .\ARM_GCC_541\Debug\main.o
  .debug_aranges
-                0x00000020       0x48 .\ARM_GCC_541\Debug\OneWire.o
+                0x00000020       0x40 .\ARM_GCC_541\Debug\OneWire.o
  .debug_aranges
-                0x00000068       0x70 .\ARM_GCC_541\Debug\cyfitter_cfg.o
+                0x00000060       0x70 .\ARM_GCC_541\Debug\cyfitter_cfg.o
  .debug_aranges
-                0x000000d8       0x18 .\ARM_GCC_541\Debug\cymetadata.o
+                0x000000d0       0x18 .\ARM_GCC_541\Debug\cymetadata.o
  .debug_aranges
-                0x000000f0       0x48 .\ARM_GCC_541\Debug\Cm3Start.o
+                0x000000e8       0x48 .\ARM_GCC_541\Debug\Cm3Start.o
  .debug_aranges
-                0x00000138       0xe8 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
+                0x00000130       0xe8 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
  .debug_aranges
-                0x00000220       0x38 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
+                0x00000218       0x38 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
  .debug_aranges
-                0x00000258       0xf0 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
+                0x00000250       0xf0 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
  .debug_aranges
-                0x00000348       0x30 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_AMux.o)
+                0x00000340       0x30 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_AMux.o)
  .debug_aranges
-                0x00000378       0x70 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
+                0x00000370       0x70 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
  .debug_aranges
-                0x000003e8       0x80 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
+                0x000003e0       0x80 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
  .debug_aranges
-                0x00000468       0x70 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1_IntClock.o)
+                0x00000460       0x70 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1_IntClock.o)
  .debug_aranges
-                0x000004d8      0x2a0 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
+                0x000004d0      0x2a0 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
  .debug_aranges
-                0x00000778       0x98 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(cyPm.o)
+                0x00000770       0x98 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(cyPm.o)
  .debug_aranges
-                0x00000810       0x38 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
+                0x00000808       0x38 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
  .debug_aranges
-                0x00000848       0x20 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyBootAsmGnu.o)
+                0x00000840       0x20 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyBootAsmGnu.o)
  .debug_aranges
-                0x00000868       0x88 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyFlash.o)
+                0x00000860       0x88 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyFlash.o)
  .debug_aranges
-                0x000008f0       0x80 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CySpc.o)
+                0x000008e8       0x80 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CySpc.o)
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x4143
+.debug_info     0x00000000     0x40e3
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000      0x255 .\ARM_GCC_541\Debug\main.o
- .debug_info    0x00000255      0x1ec .\ARM_GCC_541\Debug\OneWire.o
- .debug_info    0x00000441      0x500 .\ARM_GCC_541\Debug\cyfitter_cfg.o
- .debug_info    0x00000941      0x135 .\ARM_GCC_541\Debug\cymetadata.o
- .debug_info    0x00000a76      0x32b .\ARM_GCC_541\Debug\Cm3Start.o
- .debug_info    0x00000da1      0x72c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
- .debug_info    0x000014cd       0xef .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
- .debug_info    0x000015bc      0x50a .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
- .debug_info    0x00001ac6      0x10a .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_AMux.o)
- .debug_info    0x00001bd0      0x25d .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
- .debug_info    0x00001e2d      0x299 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
- .debug_info    0x000020c6      0x25d .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1_IntClock.o)
- .debug_info    0x00002323      0xe51 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
- .debug_info    0x00003174      0x57a .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(cyPm.o)
- .debug_info    0x000036ee      0x11e .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
- .debug_info    0x0000380c       0xbe .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyBootAsmGnu.o)
- .debug_info    0x000038ca      0x3b9 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyFlash.o)
- .debug_info    0x00003c83      0x4c0 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CySpc.o)
+ .debug_info    0x00000000      0x239 .\ARM_GCC_541\Debug\main.o
+ .debug_info    0x00000239      0x1a8 .\ARM_GCC_541\Debug\OneWire.o
+ .debug_info    0x000003e1      0x500 .\ARM_GCC_541\Debug\cyfitter_cfg.o
+ .debug_info    0x000008e1      0x135 .\ARM_GCC_541\Debug\cymetadata.o
+ .debug_info    0x00000a16      0x32b .\ARM_GCC_541\Debug\Cm3Start.o
+ .debug_info    0x00000d41      0x72c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
+ .debug_info    0x0000146d       0xef .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
+ .debug_info    0x0000155c      0x50a .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
+ .debug_info    0x00001a66      0x10a .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_AMux.o)
+ .debug_info    0x00001b70      0x25d .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
+ .debug_info    0x00001dcd      0x299 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
+ .debug_info    0x00002066      0x25d .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1_IntClock.o)
+ .debug_info    0x000022c3      0xe51 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
+ .debug_info    0x00003114      0x57a .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(cyPm.o)
+ .debug_info    0x0000368e      0x11e .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
+ .debug_info    0x000037ac       0xbe .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyBootAsmGnu.o)
+ .debug_info    0x0000386a      0x3b9 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyFlash.o)
+ .debug_info    0x00003c23      0x4c0 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CySpc.o)
 
-.debug_abbrev   0x00000000     0x13a4
+.debug_abbrev   0x00000000     0x1388
  *(.debug_abbrev)
  .debug_abbrev  0x00000000       0xcb .\ARM_GCC_541\Debug\main.o
- .debug_abbrev  0x000000cb       0xd3 .\ARM_GCC_541\Debug\OneWire.o
- .debug_abbrev  0x0000019e      0x1ca .\ARM_GCC_541\Debug\cyfitter_cfg.o
- .debug_abbrev  0x00000368       0x66 .\ARM_GCC_541\Debug\cymetadata.o
- .debug_abbrev  0x000003ce      0x1d6 .\ARM_GCC_541\Debug\Cm3Start.o
- .debug_abbrev  0x000005a4      0x19d .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
- .debug_abbrev  0x00000741       0x67 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
- .debug_abbrev  0x000007a8      0x163 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
- .debug_abbrev  0x0000090b       0x6f .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_AMux.o)
- .debug_abbrev  0x0000097a      0x11d .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
- .debug_abbrev  0x00000a97      0x11d .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
- .debug_abbrev  0x00000bb4      0x11d .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1_IntClock.o)
- .debug_abbrev  0x00000cd1      0x217 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
- .debug_abbrev  0x00000ee8      0x161 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(cyPm.o)
- .debug_abbrev  0x00001049       0x90 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
- .debug_abbrev  0x000010d9       0x14 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyBootAsmGnu.o)
- .debug_abbrev  0x000010ed      0x14b .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyFlash.o)
- .debug_abbrev  0x00001238      0x16c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CySpc.o)
+ .debug_abbrev  0x000000cb       0xb7 .\ARM_GCC_541\Debug\OneWire.o
+ .debug_abbrev  0x00000182      0x1ca .\ARM_GCC_541\Debug\cyfitter_cfg.o
+ .debug_abbrev  0x0000034c       0x66 .\ARM_GCC_541\Debug\cymetadata.o
+ .debug_abbrev  0x000003b2      0x1d6 .\ARM_GCC_541\Debug\Cm3Start.o
+ .debug_abbrev  0x00000588      0x19d .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
+ .debug_abbrev  0x00000725       0x67 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
+ .debug_abbrev  0x0000078c      0x163 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
+ .debug_abbrev  0x000008ef       0x6f .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_AMux.o)
+ .debug_abbrev  0x0000095e      0x11d .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
+ .debug_abbrev  0x00000a7b      0x11d .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
+ .debug_abbrev  0x00000b98      0x11d .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1_IntClock.o)
+ .debug_abbrev  0x00000cb5      0x217 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
+ .debug_abbrev  0x00000ecc      0x161 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(cyPm.o)
+ .debug_abbrev  0x0000102d       0x90 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
+ .debug_abbrev  0x000010bd       0x14 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyBootAsmGnu.o)
+ .debug_abbrev  0x000010d1      0x14b .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyFlash.o)
+ .debug_abbrev  0x0000121c      0x16c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CySpc.o)
 
-.debug_line     0x00000000     0x2826
+.debug_line     0x00000000     0x27f4
  *(.debug_line)
- .debug_line    0x00000000      0x1e1 .\ARM_GCC_541\Debug\main.o
- .debug_line    0x000001e1      0x213 .\ARM_GCC_541\Debug\OneWire.o
- .debug_line    0x000003f4      0x24b .\ARM_GCC_541\Debug\cyfitter_cfg.o
- .debug_line    0x0000063f      0x141 .\ARM_GCC_541\Debug\cymetadata.o
- .debug_line    0x00000780      0x1dc .\ARM_GCC_541\Debug\Cm3Start.o
- .debug_line    0x0000095c      0x3d7 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
- .debug_line    0x00000d33       0xa5 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
- .debug_line    0x00000dd8      0x2e4 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
- .debug_line    0x000010bc       0xa6 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_AMux.o)
- .debug_line    0x00001162      0x1b6 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
- .debug_line    0x00001318      0x1d7 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
- .debug_line    0x000014ef      0x1ae .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1_IntClock.o)
- .debug_line    0x0000169d      0x883 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
- .debug_line    0x00001f20      0x38e .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(cyPm.o)
- .debug_line    0x000022ae       0x9b .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
- .debug_line    0x00002349       0x7d .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyBootAsmGnu.o)
- .debug_line    0x000023c6      0x22f .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyFlash.o)
- .debug_line    0x000025f5      0x231 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CySpc.o)
+ .debug_line    0x00000000      0x1dd .\ARM_GCC_541\Debug\main.o
+ .debug_line    0x000001dd      0x1e5 .\ARM_GCC_541\Debug\OneWire.o
+ .debug_line    0x000003c2      0x24b .\ARM_GCC_541\Debug\cyfitter_cfg.o
+ .debug_line    0x0000060d      0x141 .\ARM_GCC_541\Debug\cymetadata.o
+ .debug_line    0x0000074e      0x1dc .\ARM_GCC_541\Debug\Cm3Start.o
+ .debug_line    0x0000092a      0x3d7 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
+ .debug_line    0x00000d01       0xa5 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
+ .debug_line    0x00000da6      0x2e4 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
+ .debug_line    0x0000108a       0xa6 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_AMux.o)
+ .debug_line    0x00001130      0x1b6 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
+ .debug_line    0x000012e6      0x1d7 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
+ .debug_line    0x000014bd      0x1ae .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1_IntClock.o)
+ .debug_line    0x0000166b      0x883 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
+ .debug_line    0x00001eee      0x38e .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(cyPm.o)
+ .debug_line    0x0000227c       0x9b .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
+ .debug_line    0x00002317       0x7d .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyBootAsmGnu.o)
+ .debug_line    0x00002394      0x22f .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyFlash.o)
+ .debug_line    0x000025c3      0x231 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CySpc.o)
 
-.debug_frame    0x00000000     0x29bc
+.debug_frame    0x00000000     0x2994
  *(.debug_frame)
  .debug_frame   0x00000000       0x34 .\ARM_GCC_541\Debug\main.o
- .debug_frame   0x00000034      0x100 .\ARM_GCC_541\Debug\OneWire.o
- .debug_frame   0x00000134      0x1bc .\ARM_GCC_541\Debug\cyfitter_cfg.o
- .debug_frame   0x000002f0       0xd8 .\ARM_GCC_541\Debug\Cm3Start.o
- .debug_frame   0x000003c8      0x40c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
- .debug_frame   0x000007d4       0xa0 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
- .debug_frame   0x00000874      0x42c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
- .debug_frame   0x00000ca0       0x88 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_AMux.o)
- .debug_frame   0x00000d28      0x1b4 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
- .debug_frame   0x00000edc      0x200 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
- .debug_frame   0x000010dc      0x1b4 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1_IntClock.o)
- .debug_frame   0x00001290      0xc0c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
- .debug_frame   0x00001e9c      0x234 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(cyPm.o)
- .debug_frame   0x000020d0       0xa8 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
- .debug_frame   0x00002178      0x238 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyFlash.o)
- .debug_frame   0x000023b0      0x228 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CySpc.o)
- .debug_frame   0x000025d8       0x20 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-errno.o)
- .debug_frame   0x000025f8       0x28 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-exit.o)
- .debug_frame   0x00002620       0x2c c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-init.o)
- .debug_frame   0x0000264c       0x28 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memcpy-stub.o)
- .debug_frame   0x00002674       0x20 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memset.o)
- .debug_frame   0x00002694       0x70 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-sprintf.o)
- .debug_frame   0x00002704       0x90 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-svfprintf.o)
- .debug_frame   0x00002794       0x60 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
- .debug_frame   0x000027f4       0x28 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memchr-stub.o)
- .debug_frame   0x0000281c       0x28 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memmove.o)
- .debug_frame   0x00002844       0x38 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-freer.o)
- .debug_frame   0x0000287c       0x2c c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-mallocr.o)
- .debug_frame   0x000028a8       0x3c c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-reallocr.o)
- .debug_frame   0x000028e4       0x2c c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-sbrkr.o)
- .debug_frame   0x00002910       0x30 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-mlock.o)
- .debug_frame   0x00002940       0x20 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-msizer.o)
- .debug_frame   0x00002960       0x5c c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-reent.o)
+ .debug_frame   0x00000034       0xd8 .\ARM_GCC_541\Debug\OneWire.o
+ .debug_frame   0x0000010c      0x1bc .\ARM_GCC_541\Debug\cyfitter_cfg.o
+ .debug_frame   0x000002c8       0xd8 .\ARM_GCC_541\Debug\Cm3Start.o
+ .debug_frame   0x000003a0      0x40c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
+ .debug_frame   0x000007ac       0xa0 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
+ .debug_frame   0x0000084c      0x42c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
+ .debug_frame   0x00000c78       0x88 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_AMux.o)
+ .debug_frame   0x00000d00      0x1b4 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
+ .debug_frame   0x00000eb4      0x200 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
+ .debug_frame   0x000010b4      0x1b4 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1_IntClock.o)
+ .debug_frame   0x00001268      0xc0c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
+ .debug_frame   0x00001e74      0x234 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(cyPm.o)
+ .debug_frame   0x000020a8       0xa8 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
+ .debug_frame   0x00002150      0x238 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyFlash.o)
+ .debug_frame   0x00002388      0x228 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CySpc.o)
+ .debug_frame   0x000025b0       0x20 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-errno.o)
+ .debug_frame   0x000025d0       0x28 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-exit.o)
+ .debug_frame   0x000025f8       0x2c c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-init.o)
+ .debug_frame   0x00002624       0x28 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memcpy-stub.o)
+ .debug_frame   0x0000264c       0x20 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memset.o)
+ .debug_frame   0x0000266c       0x70 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-sprintf.o)
+ .debug_frame   0x000026dc       0x90 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-svfprintf.o)
+ .debug_frame   0x0000276c       0x60 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
+ .debug_frame   0x000027cc       0x28 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memchr-stub.o)
+ .debug_frame   0x000027f4       0x28 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memmove.o)
+ .debug_frame   0x0000281c       0x38 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-freer.o)
+ .debug_frame   0x00002854       0x2c c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-mallocr.o)
+ .debug_frame   0x00002880       0x3c c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-reallocr.o)
+ .debug_frame   0x000028bc       0x2c c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-sbrkr.o)
+ .debug_frame   0x000028e8       0x30 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-mlock.o)
+ .debug_frame   0x00002918       0x20 c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-msizer.o)
+ .debug_frame   0x00002938       0x5c c:/program files (x86)/cypress/psoc creator/4.4/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-reent.o)
 
-.debug_str      0x00000000     0x225a
+.debug_str      0x00000000     0x2250
  *(.debug_str)
  .debug_str     0x00000000      0x24d .\ARM_GCC_541\Debug\main.o
                                 0x2a2 (size before relaxing)
- .debug_str     0x0000024d       0x74 .\ARM_GCC_541\Debug\OneWire.o
-                                0x24e (size before relaxing)
- .debug_str     0x000002c1      0x200 .\ARM_GCC_541\Debug\cyfitter_cfg.o
+ .debug_str     0x0000024d       0x63 .\ARM_GCC_541\Debug\OneWire.o
+                                0x23d (size before relaxing)
+ .debug_str     0x000002b0      0x200 .\ARM_GCC_541\Debug\cyfitter_cfg.o
                                 0x3d6 (size before relaxing)
- .debug_str     0x000004c1       0x7f .\ARM_GCC_541\Debug\cymetadata.o
+ .debug_str     0x000004b0       0x7f .\ARM_GCC_541\Debug\cymetadata.o
                                 0x212 (size before relaxing)
- .debug_str     0x00000540      0x117 .\ARM_GCC_541\Debug\Cm3Start.o
+ .debug_str     0x0000052f      0x117 .\ARM_GCC_541\Debug\Cm3Start.o
                                 0x305 (size before relaxing)
- .debug_str     0x00000657      0x437 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
+ .debug_str     0x00000646      0x43e .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
                                 0x651 (size before relaxing)
- .debug_str     0x00000a8e       0x72 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
+ .debug_str     0x00000a84       0x72 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
                                 0x22a (size before relaxing)
- .debug_str     0x00000b00      0x2a1 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
+ .debug_str     0x00000af6      0x2a1 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
                                 0x489 (size before relaxing)
- .debug_str     0x00000da1       0x9c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_AMux.o)
+ .debug_str     0x00000d97       0x9c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_AMux.o)
                                 0x23e (size before relaxing)
- .debug_str     0x00000e3d      0x220 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
+ .debug_str     0x00000e33      0x220 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
                                 0x3dc (size before relaxing)
- .debug_str     0x0000105d      0x208 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
+ .debug_str     0x00001053      0x208 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
                                 0x40d (size before relaxing)
- .debug_str     0x00001265      0x177 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1_IntClock.o)
+ .debug_str     0x0000125b      0x177 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1_IntClock.o)
                                 0x37c (size before relaxing)
- .debug_str     0x000013dc      0x806 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
+ .debug_str     0x000013d2      0x806 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
                                 0xa18 (size before relaxing)
- .debug_str     0x00001be2      0x371 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(cyPm.o)
+ .debug_str     0x00001bd8      0x371 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(cyPm.o)
                                 0x571 (size before relaxing)
- .debug_str     0x00001f53       0x84 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
+ .debug_str     0x00001f49       0x84 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
                                 0x22e (size before relaxing)
- .debug_str     0x00001fd7      0x156 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyFlash.o)
+ .debug_str     0x00001fcd      0x156 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyFlash.o)
                                 0x335 (size before relaxing)
- .debug_str     0x0000212d      0x12d .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CySpc.o)
+ .debug_str     0x00002123      0x12d .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CySpc.o)
                                 0x32f (size before relaxing)
 
 .debug_loc
@@ -1330,24 +1329,24 @@ END GROUP
 .debug_macinfo
  *(.debug_macinfo)
 
-.debug_ranges   0x00000000      0x838
+.debug_ranges   0x00000000      0x830
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x10 .\ARM_GCC_541\Debug\main.o
- .debug_ranges  0x00000010       0x38 .\ARM_GCC_541\Debug\OneWire.o
- .debug_ranges  0x00000048       0x60 .\ARM_GCC_541\Debug\cyfitter_cfg.o
- .debug_ranges  0x000000a8       0x38 .\ARM_GCC_541\Debug\Cm3Start.o
- .debug_ranges  0x000000e0       0xd8 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
- .debug_ranges  0x000001b8       0x28 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
- .debug_ranges  0x000001e0       0xe0 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
- .debug_ranges  0x000002c0       0x20 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_AMux.o)
- .debug_ranges  0x000002e0       0x60 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
- .debug_ranges  0x00000340       0x70 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
- .debug_ranges  0x000003b0       0x60 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1_IntClock.o)
- .debug_ranges  0x00000410      0x290 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
- .debug_ranges  0x000006a0       0x88 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(cyPm.o)
- .debug_ranges  0x00000728       0x28 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
- .debug_ranges  0x00000750       0x78 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyFlash.o)
- .debug_ranges  0x000007c8       0x70 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CySpc.o)
+ .debug_ranges  0x00000010       0x30 .\ARM_GCC_541\Debug\OneWire.o
+ .debug_ranges  0x00000040       0x60 .\ARM_GCC_541\Debug\cyfitter_cfg.o
+ .debug_ranges  0x000000a0       0x38 .\ARM_GCC_541\Debug\Cm3Start.o
+ .debug_ranges  0x000000d8       0xd8 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1.o)
+ .debug_ranges  0x000001b0       0x28 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_INT.o)
+ .debug_ranges  0x000001d8       0xe0 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1.o)
+ .debug_ranges  0x000002b8       0x20 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_AMux.o)
+ .debug_ranges  0x000002d8       0x60 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_Ext_CP_Clk.o)
+ .debug_ranges  0x00000338       0x70 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(ADC_DelSig_1_theACLK.o)
+ .debug_ranges  0x000003a8       0x60 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(UART_1_IntClock.o)
+ .debug_ranges  0x00000408      0x290 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyLib.o)
+ .debug_ranges  0x00000698       0x88 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(cyPm.o)
+ .debug_ranges  0x00000720       0x28 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(onewire_pin.o)
+ .debug_ranges  0x00000748       0x78 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CyFlash.o)
+ .debug_ranges  0x000007c0       0x70 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.a(CySpc.o)
 
 .comment        0x00000000       0x6e
  .comment       0x00000000       0x6e .\ARM_GCC_541\Debug\main.o

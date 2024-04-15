@@ -1,13 +1,14 @@
-/* ========================================
- *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
- *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
- *
- * ========================================
+/* ===============================================================================
+*
+* Names: Luca Spengler (1399655), Fabian Fritz (1394906)
+* Emails: luca.spengler2@stud.fra-uas.de, fabian.fritz@stud.fra-uas.de
+* Date: 12.04.2024
+* Course ID: TX00DB04
+* Description: This program reads the analog value of a temperature sensor
+*              connected over OneWire and sends the output over UART using
+*              the JSON format.
+*
+* ===============================================================================
 */
 
 #include "OneWire.h"
