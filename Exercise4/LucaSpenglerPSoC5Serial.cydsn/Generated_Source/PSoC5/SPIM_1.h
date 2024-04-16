@@ -1,13 +1,14 @@
-/*******************************************************************************
-* File Name: SPIM_1.h
-* Version 2.50
+/* ===============================================================================
 *
-* Description:
-*  Contains the function prototypes, constants and register definition
-*  of the SPI Master Component.
+* Names: Luca Spengler (1399655), Fabian Fritz (1394906)
+* Emails: luca.spengler2@stud.fra-uas.de, fabian.fritz@stud.fra-uas.de
+* Date: 11.04.2024
+* Course ID: TX00DB04
+* Description: This program reads the analog outputs of several temperature
+*              sensors using I2C and SPI and output the converted temperature
+*              value over UART.
 *
-* Note:
-*  None
+* ===============================================================================
 *
 ********************************************************************************
 * Copyright 2008-2015, Cypress Semiconductor Corporation.  All rights reserved.

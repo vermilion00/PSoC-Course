@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccTiPpR0.s 			page 1
 
 
    1              		.syntax unified
@@ -28,22 +28,23 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
   25              	ResetBus:
   26              	.LFB63:
   27              		.file 1 "OneWire.c"
-   1:OneWire.c     **** /* ========================================
-   2:OneWire.c     ****  *
-   3:OneWire.c     ****  * Copyright YOUR COMPANY, THE YEAR
-   4:OneWire.c     ****  * All Rights Reserved
-   5:OneWire.c     ****  * UNPUBLISHED, LICENSED SOFTWARE.
-   6:OneWire.c     ****  *
-   7:OneWire.c     ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
-   8:OneWire.c     ****  * WHICH IS THE PROPERTY OF your company.
-   9:OneWire.c     ****  *
-  10:OneWire.c     ****  * ========================================
-  11:OneWire.c     **** */
-  12:OneWire.c     **** 
-  13:OneWire.c     **** #include "OneWire.h"
-  14:OneWire.c     **** 
-  15:OneWire.c     **** int ResetBus(){ //Reset the communication bus at the start of communications
-  28              		.loc 1 15 0
+   1:OneWire.c     **** /* ===============================================================================
+   2:OneWire.c     **** *
+   3:OneWire.c     **** * Names: Luca Spengler (1399655), Fabian Fritz (1394906)
+   4:OneWire.c     **** * Emails: luca.spengler2@stud.fra-uas.de, fabian.fritz@stud.fra-uas.de
+   5:OneWire.c     **** * Date: 12.04.2024
+   6:OneWire.c     **** * Course ID: TX00DB04
+   7:OneWire.c     **** * Description: This program reads the analog value of a temperature sensor
+   8:OneWire.c     **** *              connected over OneWire and sends the output over UART using
+   9:OneWire.c     **** *              the JSON format.
+  10:OneWire.c     **** *
+  11:OneWire.c     **** * ===============================================================================
+  12:OneWire.c     **** */
+  13:OneWire.c     **** 
+  14:OneWire.c     **** #include "OneWire.h"
+  15:OneWire.c     **** 
+  16:OneWire.c     **** int ResetBus(){ //Reset the communication bus at the start of communications
+  28              		.loc 1 16 0
   29              		.cfi_startproc
   30              		@ args = 0, pretend = 0, frame = 8
   31              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -55,45 +56,45 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
   37              		.cfi_def_cfa_offset 16
   38 0004 00AF     		add	r7, sp, #0
   39              		.cfi_def_cfa_register 7
-  16:OneWire.c     ****     int returnValue = 0;
-  40              		.loc 1 16 0
+  17:OneWire.c     ****     int returnValue = 0;
+  40              		.loc 1 17 0
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccTiPpR0.s 			page 2
+
+
   41 0006 0023     		movs	r3, #0
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 2
-
-
   42 0008 7B60     		str	r3, [r7, #4]
-  17:OneWire.c     ****     onewire_pin_Write(LOW); //Write low to the communication pin
-  43              		.loc 1 17 0
+  18:OneWire.c     ****     onewire_pin_Write(LOW); //Write low to the communication pin
+  43              		.loc 1 18 0
   44 000a 0020     		movs	r0, #0
   45 000c FFF7FEFF 		bl	onewire_pin_Write
-  18:OneWire.c     ****     CyDelayUs(WAIT_H);  //Wait 480 us
-  46              		.loc 1 18 0
+  19:OneWire.c     ****     CyDelayUs(WAIT_H);  //Wait 480 us
+  46              		.loc 1 19 0
   47 0010 4FF4F070 		mov	r0, #480
   48 0014 FFF7FEFF 		bl	CyDelayUs
-  19:OneWire.c     ****     onewire_pin_Write(HIGH);    //Write high to the communication pin
-  49              		.loc 1 19 0
+  20:OneWire.c     ****     onewire_pin_Write(HIGH);    //Write high to the communication pin
+  49              		.loc 1 20 0
   50 0018 0120     		movs	r0, #1
   51 001a FFF7FEFF 		bl	onewire_pin_Write
-  20:OneWire.c     ****     CyDelayUs(WAIT_I);  //Wait 70 us
-  52              		.loc 1 20 0
+  21:OneWire.c     ****     CyDelayUs(WAIT_I);  //Wait 70 us
+  52              		.loc 1 21 0
   53 001e 4620     		movs	r0, #70
   54 0020 FFF7FEFF 		bl	CyDelayUs
-  21:OneWire.c     ****     returnValue = onewire_pin_Read() ^ 0x01;    //Read the pin status
-  55              		.loc 1 21 0
+  22:OneWire.c     ****     returnValue = onewire_pin_Read() ^ 0x01;    //Read the pin status
+  55              		.loc 1 22 0
   56 0024 FFF7FEFF 		bl	onewire_pin_Read
   57 0028 0346     		mov	r3, r0
   58 002a 83F00103 		eor	r3, r3, #1
   59 002e DBB2     		uxtb	r3, r3
   60 0030 7B60     		str	r3, [r7, #4]
-  22:OneWire.c     ****     CyDelayUs(WAIT_J);  //Wait 410 us
-  61              		.loc 1 22 0
+  23:OneWire.c     ****     CyDelayUs(WAIT_J);  //Wait 410 us
+  61              		.loc 1 23 0
   62 0032 4FF4CD70 		mov	r0, #410
   63 0036 FFF7FEFF 		bl	CyDelayUs
-  23:OneWire.c     ****     return(returnValue);    //return the pin status
-  64              		.loc 1 23 0
+  24:OneWire.c     ****     return(returnValue);    //return the pin status
+  64              		.loc 1 24 0
   65 003a 7B68     		ldr	r3, [r7, #4]
-  24:OneWire.c     **** }
-  66              		.loc 1 24 0
+  25:OneWire.c     **** }
+  66              		.loc 1 25 0
   67 003c 1846     		mov	r0, r3
   68 003e 0837     		adds	r7, r7, #8
   69              		.cfi_def_cfa_offset 8
@@ -112,15 +113,15 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
   82              		.type	WriteBit, %function
   83              	WriteBit:
   84              	.LFB64:
-  25:OneWire.c     **** 
-  26:OneWire.c     **** void WriteBit(int message){ //Write a single bit to the slave
-  85              		.loc 1 26 0
+  26:OneWire.c     **** 
+  27:OneWire.c     **** void WriteBit(int message){ //Write a single bit to the slave
+  85              		.loc 1 27 0
   86              		.cfi_startproc
   87              		@ args = 0, pretend = 0, frame = 8
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccTiPpR0.s 			page 3
+
+
   88              		@ frame_needed = 1, uses_anonymous_args = 0
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 3
-
-
   89 0000 80B5     		push	{r7, lr}
   90              		.cfi_def_cfa_offset 8
   91              		.cfi_offset 7, -8
@@ -130,57 +131,57 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
   95 0004 00AF     		add	r7, sp, #0
   96              		.cfi_def_cfa_register 7
   97 0006 7860     		str	r0, [r7, #4]
-  27:OneWire.c     ****     onewire_pin_Write(LOW);     //Write low to the communication pin
-  98              		.loc 1 27 0
+  28:OneWire.c     ****     onewire_pin_Write(LOW);     //Write low to the communication pin
+  98              		.loc 1 28 0
   99 0008 0020     		movs	r0, #0
  100 000a FFF7FEFF 		bl	onewire_pin_Write
-  28:OneWire.c     ****     if(message == HIGH){    //Check if writing a 1 or a 0
- 101              		.loc 1 28 0
+  29:OneWire.c     ****     if(message == HIGH){    //Check if writing a 1 or a 0
+ 101              		.loc 1 29 0
  102 000e 7B68     		ldr	r3, [r7, #4]
  103 0010 012B     		cmp	r3, #1
  104 0012 09D1     		bne	.L4
-  29:OneWire.c     ****         CyDelayUs(WAIT_A); //Wait 6 us
- 105              		.loc 1 29 0
+  30:OneWire.c     ****         CyDelayUs(WAIT_A); //Wait 6 us
+ 105              		.loc 1 30 0
  106 0014 0620     		movs	r0, #6
  107 0016 FFF7FEFF 		bl	CyDelayUs
-  30:OneWire.c     ****         onewire_pin_Write(HIGH);    //Write high
- 108              		.loc 1 30 0
+  31:OneWire.c     ****         onewire_pin_Write(HIGH);    //Write high
+ 108              		.loc 1 31 0
  109 001a 0120     		movs	r0, #1
  110 001c FFF7FEFF 		bl	onewire_pin_Write
-  31:OneWire.c     ****         CyDelayUs(WAIT_B);  //Wait 64 us
- 111              		.loc 1 31 0
+  32:OneWire.c     ****         CyDelayUs(WAIT_B);  //Wait 64 us
+ 111              		.loc 1 32 0
  112 0020 4020     		movs	r0, #64
  113 0022 FFF7FEFF 		bl	CyDelayUs
-  32:OneWire.c     ****     }else{     		    
-  33:OneWire.c     ****         CyDelayUs(WAIT_C); //Wait 60 us
-  34:OneWire.c     ****         onewire_pin_Write(HIGH);    //Write high
-  35:OneWire.c     ****         CyDelayUs(WAIT_D);  //Wait 10 us
-  36:OneWire.c     ****     }
-  37:OneWire.c     **** }
- 114              		.loc 1 37 0
+  33:OneWire.c     ****     }else{     		    
+  34:OneWire.c     ****         CyDelayUs(WAIT_C); //Wait 60 us
+  35:OneWire.c     ****         onewire_pin_Write(HIGH);    //Write high
+  36:OneWire.c     ****         CyDelayUs(WAIT_D);  //Wait 10 us
+  37:OneWire.c     ****     }
+  38:OneWire.c     **** }
+ 114              		.loc 1 38 0
  115 0026 08E0     		b	.L6
  116              	.L4:
-  33:OneWire.c     ****         onewire_pin_Write(HIGH);    //Write high
- 117              		.loc 1 33 0
+  34:OneWire.c     ****         onewire_pin_Write(HIGH);    //Write high
+ 117              		.loc 1 34 0
  118 0028 3C20     		movs	r0, #60
  119 002a FFF7FEFF 		bl	CyDelayUs
-  34:OneWire.c     ****         CyDelayUs(WAIT_D);  //Wait 10 us
- 120              		.loc 1 34 0
+  35:OneWire.c     ****         CyDelayUs(WAIT_D);  //Wait 10 us
+ 120              		.loc 1 35 0
  121 002e 0120     		movs	r0, #1
  122 0030 FFF7FEFF 		bl	onewire_pin_Write
-  35:OneWire.c     ****     }
- 123              		.loc 1 35 0
+  36:OneWire.c     ****     }
+ 123              		.loc 1 36 0
  124 0034 0A20     		movs	r0, #10
  125 0036 FFF7FEFF 		bl	CyDelayUs
  126              	.L6:
- 127              		.loc 1 37 0
+ 127              		.loc 1 38 0
  128 003a 00BF     		nop
  129 003c 0837     		adds	r7, r7, #8
  130              		.cfi_def_cfa_offset 8
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccTiPpR0.s 			page 4
+
+
  131 003e BD46     		mov	sp, r7
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 4
-
-
  132              		.cfi_def_cfa_register 13
  133              		@ sp needed
  134 0040 80BD     		pop	{r7, pc}
@@ -195,9 +196,9 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  143              		.type	WriteByte, %function
  144              	WriteByte:
  145              	.LFB65:
-  38:OneWire.c     **** 
-  39:OneWire.c     **** void WriteByte(int message){ //Write a full byte to the slave
- 146              		.loc 1 39 0
+  39:OneWire.c     **** 
+  40:OneWire.c     **** void WriteByte(int message){ //Write a full byte to the slave
+ 146              		.loc 1 40 0
  147              		.cfi_startproc
  148              		@ args = 0, pretend = 0, frame = 16
  149              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -211,38 +212,38 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  157              		.cfi_def_cfa_register 7
  158 0006 7860     		str	r0, [r7, #4]
  159              	.LBB2:
-  40:OneWire.c     ****     for (uint8 shiftcount = 0; shiftcount <= 7; shiftcount++){  //Works by sending 8 single bits
- 160              		.loc 1 40 0
+  41:OneWire.c     ****     for (uint8 shiftcount = 0; shiftcount <= 7; shiftcount++){  //Works by sending 8 single bits
+ 160              		.loc 1 41 0
  161 0008 0023     		movs	r3, #0
  162 000a FB73     		strb	r3, [r7, #15]
  163 000c 0BE0     		b	.L8
  164              	.L9:
-  41:OneWire.c     ****         WriteBit((message >> shiftcount) & 0x01);       //Shift the message bits once to the right 
- 165              		.loc 1 41 0 discriminator 3
+  42:OneWire.c     ****         WriteBit((message >> shiftcount) & 0x01);       //Shift the message bits once to the right 
+ 165              		.loc 1 42 0 discriminator 3
  166 000e FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
  167 0010 7A68     		ldr	r2, [r7, #4]
  168 0012 42FA03F3 		asr	r3, r2, r3
  169 0016 03F00103 		and	r3, r3, #1
  170 001a 1846     		mov	r0, r3
  171 001c FFF7FEFF 		bl	WriteBit
-  40:OneWire.c     ****     for (uint8 shiftcount = 0; shiftcount <= 7; shiftcount++){  //Works by sending 8 single bits
- 172              		.loc 1 40 0 discriminator 3
+  41:OneWire.c     ****     for (uint8 shiftcount = 0; shiftcount <= 7; shiftcount++){  //Works by sending 8 single bits
+ 172              		.loc 1 41 0 discriminator 3
  173 0020 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
  174 0022 0133     		adds	r3, r3, #1
  175 0024 FB73     		strb	r3, [r7, #15]
  176              	.L8:
-  40:OneWire.c     ****     for (uint8 shiftcount = 0; shiftcount <= 7; shiftcount++){  //Works by sending 8 single bits
- 177              		.loc 1 40 0 is_stmt 0 discriminator 1
+  41:OneWire.c     ****     for (uint8 shiftcount = 0; shiftcount <= 7; shiftcount++){  //Works by sending 8 single bits
+ 177              		.loc 1 41 0 is_stmt 0 discriminator 1
  178 0026 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
  179 0028 072B     		cmp	r3, #7
  180 002a F0D9     		bls	.L9
  181              	.LBE2:
-  42:OneWire.c     ****     }
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 5
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccTiPpR0.s 			page 5
 
 
-  43:OneWire.c     **** }
- 182              		.loc 1 43 0 is_stmt 1
+  43:OneWire.c     ****     }
+  44:OneWire.c     **** }
+ 182              		.loc 1 44 0 is_stmt 1
  183 002c 00BF     		nop
  184 002e 1037     		adds	r7, r7, #16
  185              		.cfi_def_cfa_offset 8
@@ -261,9 +262,9 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  198              		.type	ReadBit, %function
  199              	ReadBit:
  200              	.LFB66:
-  44:OneWire.c     **** 
-  45:OneWire.c     **** int ReadBit(){  //Read a single bit
- 201              		.loc 1 45 0
+  45:OneWire.c     **** 
+  46:OneWire.c     **** int ReadBit(){  //Read a single bit
+ 201              		.loc 1 46 0
  202              		.cfi_startproc
  203              		@ args = 0, pretend = 0, frame = 8
  204              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -275,39 +276,39 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  210              		.cfi_def_cfa_offset 16
  211 0004 00AF     		add	r7, sp, #0
  212              		.cfi_def_cfa_register 7
-  46:OneWire.c     ****     onewire_pin_Write(LOW);    // Write low to the communication pin
- 213              		.loc 1 46 0
+  47:OneWire.c     ****     onewire_pin_Write(LOW);    // Write low to the communication pin
+ 213              		.loc 1 47 0
  214 0006 0020     		movs	r0, #0
  215 0008 FFF7FEFF 		bl	onewire_pin_Write
-  47:OneWire.c     ****     CyDelayUs(WAIT_A);  //Wait 6 us
- 216              		.loc 1 47 0
+  48:OneWire.c     ****     CyDelayUs(WAIT_A);  //Wait 6 us
+ 216              		.loc 1 48 0
  217 000c 0620     		movs	r0, #6
  218 000e FFF7FEFF 		bl	CyDelayUs
-  48:OneWire.c     ****     onewire_pin_Write(HIGH);    //Write high to read slave response
- 219              		.loc 1 48 0
+  49:OneWire.c     ****     onewire_pin_Write(HIGH);    //Write high to read slave response
+ 219              		.loc 1 49 0
  220 0012 0120     		movs	r0, #1
  221 0014 FFF7FEFF 		bl	onewire_pin_Write
-  49:OneWire.c     ****     CyDelayUs(WAIT_E);  //Wait 9 us
- 222              		.loc 1 49 0
+  50:OneWire.c     ****     CyDelayUs(WAIT_E);  //Wait 9 us
+ 222              		.loc 1 50 0
  223 0018 0920     		movs	r0, #9
  224 001a FFF7FEFF 		bl	CyDelayUs
-  50:OneWire.c     ****     int resultValue = onewire_pin_Read();   //Read the pin state
- 225              		.loc 1 50 0
+  51:OneWire.c     ****     int resultValue = onewire_pin_Read();   //Read the pin state
+ 225              		.loc 1 51 0
  226 001e FFF7FEFF 		bl	onewire_pin_Read
  227 0022 0346     		mov	r3, r0
  228 0024 7B60     		str	r3, [r7, #4]
-  51:OneWire.c     ****     CyDelayUs(WAIT_F);  //Wait 55 us
- 229              		.loc 1 51 0
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 6
+  52:OneWire.c     ****     CyDelayUs(WAIT_F);  //Wait 55 us
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccTiPpR0.s 			page 6
 
 
+ 229              		.loc 1 52 0
  230 0026 3720     		movs	r0, #55
  231 0028 FFF7FEFF 		bl	CyDelayUs
-  52:OneWire.c     ****  	return(resultValue);    //return the pin state
- 232              		.loc 1 52 0
+  53:OneWire.c     ****  	return(resultValue);    //return the pin state
+ 232              		.loc 1 53 0
  233 002c 7B68     		ldr	r3, [r7, #4]
-  53:OneWire.c     **** }
- 234              		.loc 1 53 0
+  54:OneWire.c     **** }
+ 234              		.loc 1 54 0
  235 002e 1846     		mov	r0, r3
  236 0030 0837     		adds	r7, r7, #8
  237              		.cfi_def_cfa_offset 8
@@ -326,9 +327,9 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  250              		.type	ReadByte, %function
  251              	ReadByte:
  252              	.LFB67:
-  54:OneWire.c     **** 
-  55:OneWire.c     **** int ReadByte(){     //Read a full byte
- 253              		.loc 1 55 0
+  55:OneWire.c     **** 
+  56:OneWire.c     **** int ReadByte(){     //Read a full byte
+ 253              		.loc 1 56 0
  254              		.cfi_startproc
  255              		@ args = 0, pretend = 0, frame = 8
  256              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -340,56 +341,56 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  262              		.cfi_def_cfa_offset 16
  263 0004 00AF     		add	r7, sp, #0
  264              		.cfi_def_cfa_register 7
-  56:OneWire.c     **** 	uint8 IncomingByte = 0, shiftcount = 0;
- 265              		.loc 1 56 0
+  57:OneWire.c     **** 	uint8 IncomingByte = 0, shiftcount = 0;
+ 265              		.loc 1 57 0
  266 0006 0023     		movs	r3, #0
  267 0008 FB71     		strb	r3, [r7, #7]
  268 000a 0023     		movs	r3, #0
  269 000c BB71     		strb	r3, [r7, #6]
-  57:OneWire.c     **** 	for(shiftcount = 0; shiftcount <= 7; shiftcount++){ //Works by reading 8 single bits
- 270              		.loc 1 57 0
+  58:OneWire.c     **** 	for(shiftcount = 0; shiftcount <= 7; shiftcount++){ //Works by reading 8 single bits
+ 270              		.loc 1 58 0
  271 000e 0023     		movs	r3, #0
  272 0010 BB71     		strb	r3, [r7, #6]
  273 0012 0EE0     		b	.L13
  274              	.L15:
-  58:OneWire.c     ****         IncomingByte >>= 1; //Shift the received message 1 bit to the right
- 275              		.loc 1 58 0
+  59:OneWire.c     ****         IncomingByte >>= 1; //Shift the received message 1 bit to the right
+ 275              		.loc 1 59 0
  276 0014 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
  277 0016 5B08     		lsrs	r3, r3, #1
  278 0018 FB71     		strb	r3, [r7, #7]
-  59:OneWire.c     ****         if(ReadBit()){  //If received bit is a 1, set the MSB
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 7
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccTiPpR0.s 			page 7
 
 
- 279              		.loc 1 59 0
+  60:OneWire.c     ****         if(ReadBit()){  //If received bit is a 1, set the MSB
+ 279              		.loc 1 60 0
  280 001a FFF7FEFF 		bl	ReadBit
  281 001e 0346     		mov	r3, r0
  282 0020 002B     		cmp	r3, #0
  283 0022 03D0     		beq	.L14
-  60:OneWire.c     ****             IncomingByte |= 0x80;   //0x80 = 10000000
- 284              		.loc 1 60 0
+  61:OneWire.c     ****             IncomingByte |= 0x80;   //0x80 = 10000000
+ 284              		.loc 1 61 0
  285 0024 FB79     		ldrb	r3, [r7, #7]
  286 0026 63F07F03 		orn	r3, r3, #127
  287 002a FB71     		strb	r3, [r7, #7]
  288              	.L14:
-  57:OneWire.c     ****         IncomingByte >>= 1; //Shift the received message 1 bit to the right
- 289              		.loc 1 57 0 discriminator 2
+  58:OneWire.c     ****         IncomingByte >>= 1; //Shift the received message 1 bit to the right
+ 289              		.loc 1 58 0 discriminator 2
  290 002c BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
  291 002e 0133     		adds	r3, r3, #1
  292 0030 BB71     		strb	r3, [r7, #6]
  293              	.L13:
-  57:OneWire.c     ****         IncomingByte >>= 1; //Shift the received message 1 bit to the right
- 294              		.loc 1 57 0 is_stmt 0 discriminator 1
+  58:OneWire.c     ****         IncomingByte >>= 1; //Shift the received message 1 bit to the right
+ 294              		.loc 1 58 0 is_stmt 0 discriminator 1
  295 0032 BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
  296 0034 072B     		cmp	r3, #7
  297 0036 EDD9     		bls	.L15
-  61:OneWire.c     ****         }
-  62:OneWire.c     ****     }
-  63:OneWire.c     ****     return(IncomingByte);   //Return the read byte
- 298              		.loc 1 63 0 is_stmt 1
+  62:OneWire.c     ****         }
+  63:OneWire.c     ****     }
+  64:OneWire.c     ****     return(IncomingByte);   //Return the read byte
+ 298              		.loc 1 64 0 is_stmt 1
  299 0038 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
-  64:OneWire.c     **** }
- 300              		.loc 1 64 0
+  65:OneWire.c     **** }
+ 300              		.loc 1 65 0
  301 003a 1846     		mov	r0, r3
  302 003c 0837     		adds	r7, r7, #8
  303              		.cfi_def_cfa_offset 8
@@ -417,10 +418,10 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  325 0010 0C       		.byte	0xc
  326 0011 33020000 		.4byte	.LASF28
  327 0015 36010000 		.4byte	.LASF29
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccTiPpR0.s 			page 8
+
+
  328 0019 00000000 		.4byte	.Ldebug_ranges0+0
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 8
-
-
  329 001d 00000000 		.4byte	0
  330 0021 00000000 		.4byte	.Ldebug_line0
  331 0025 02       		.uleb128 0x2
@@ -477,10 +478,10 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  382 0082 03020000 		.4byte	.LASF11
  383 0086 04       		.byte	0x4
  384 0087 E801     		.2byte	0x1e8
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccTiPpR0.s 			page 9
+
+
  385 0089 2C000000 		.4byte	0x2c
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 9
-
-
  386 008d 02       		.uleb128 0x2
  387 008e 04       		.byte	0x4
  388 008f 04       		.byte	0x4
@@ -504,7 +505,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  406 00b0 06       		.uleb128 0x6
  407 00b1 BB000000 		.4byte	.LASF17
  408 00b5 01       		.byte	0x1
- 409 00b6 0F       		.byte	0xf
+ 409 00b6 10       		.byte	0x10
  410 00b7 68000000 		.4byte	0x68
  411 00bb 00000000 		.4byte	.LFB63
  412 00bf 44000000 		.4byte	.LFE63-.LFB63
@@ -514,7 +515,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  416 00c9 07       		.uleb128 0x7
  417 00ca D2000000 		.4byte	.LASF21
  418 00ce 01       		.byte	0x1
- 419 00cf 10       		.byte	0x10
+ 419 00cf 11       		.byte	0x11
  420 00d0 68000000 		.4byte	0x68
  421 00d4 02       		.uleb128 0x2
  422 00d5 91       		.byte	0x91
@@ -523,7 +524,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  425 00d8 08       		.uleb128 0x8
  426 00d9 A0000000 		.4byte	.LASF18
  427 00dd 01       		.byte	0x1
- 428 00de 1A       		.byte	0x1a
+ 428 00de 1B       		.byte	0x1b
  429 00df 00000000 		.4byte	.LFB64
  430 00e3 42000000 		.4byte	.LFE64-.LFB64
  431 00e7 01       		.uleb128 0x1
@@ -532,19 +533,19 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  434 00ed 09       		.uleb128 0x9
  435 00ee 00000000 		.4byte	.LASF20
  436 00f2 01       		.byte	0x1
- 437 00f3 1A       		.byte	0x1a
+ 437 00f3 1B       		.byte	0x1b
  438 00f4 68000000 		.4byte	0x68
  439 00f8 02       		.uleb128 0x2
  440 00f9 91       		.byte	0x91
  441 00fa 74       		.sleb128 -12
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccTiPpR0.s 			page 10
+
+
  442 00fb 00       		.byte	0
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 10
-
-
  443 00fc 08       		.uleb128 0x8
  444 00fd 25010000 		.4byte	.LASF19
  445 0101 01       		.byte	0x1
- 446 0102 27       		.byte	0x27
+ 446 0102 28       		.byte	0x28
  447 0103 00000000 		.4byte	.LFB65
  448 0107 34000000 		.4byte	.LFE65-.LFB65
  449 010b 01       		.uleb128 0x1
@@ -553,7 +554,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  452 0111 09       		.uleb128 0x9
  453 0112 00000000 		.4byte	.LASF20
  454 0116 01       		.byte	0x1
- 455 0117 27       		.byte	0x27
+ 455 0117 28       		.byte	0x28
  456 0118 68000000 		.4byte	0x68
  457 011c 02       		.uleb128 0x2
  458 011d 91       		.byte	0x91
@@ -564,7 +565,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  463 0128 07       		.uleb128 0x7
  464 0129 EE010000 		.4byte	.LASF22
  465 012d 01       		.byte	0x1
- 466 012e 28       		.byte	0x28
+ 466 012e 29       		.byte	0x29
  467 012f 81000000 		.4byte	0x81
  468 0133 02       		.uleb128 0x2
  469 0134 91       		.byte	0x91
@@ -574,7 +575,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  473 0138 06       		.uleb128 0x6
  474 0139 1D010000 		.4byte	.LASF23
  475 013d 01       		.byte	0x1
- 476 013e 2D       		.byte	0x2d
+ 476 013e 2E       		.byte	0x2e
  477 013f 68000000 		.4byte	0x68
  478 0143 00000000 		.4byte	.LFB66
  479 0147 36000000 		.4byte	.LFE66-.LFB66
@@ -584,7 +585,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  483 0151 07       		.uleb128 0x7
  484 0152 A9000000 		.4byte	.LASF24
  485 0156 01       		.byte	0x1
- 486 0157 32       		.byte	0x32
+ 486 0157 33       		.byte	0x33
  487 0158 68000000 		.4byte	0x68
  488 015c 02       		.uleb128 0x2
  489 015d 91       		.byte	0x91
@@ -593,20 +594,20 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  492 0160 06       		.uleb128 0x6
  493 0161 2A020000 		.4byte	.LASF25
  494 0165 01       		.byte	0x1
- 495 0166 37       		.byte	0x37
+ 495 0166 38       		.byte	0x38
  496 0167 68000000 		.4byte	0x68
  497 016b 00000000 		.4byte	.LFB67
  498 016f 42000000 		.4byte	.LFE67-.LFB67
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccTiPpR0.s 			page 11
+
+
  499 0173 01       		.uleb128 0x1
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 11
-
-
  500 0174 9C       		.byte	0x9c
  501 0175 96010000 		.4byte	0x196
  502 0179 07       		.uleb128 0x7
  503 017a 03010000 		.4byte	.LASF26
  504 017e 01       		.byte	0x1
- 505 017f 38       		.byte	0x38
+ 505 017f 39       		.byte	0x39
  506 0180 81000000 		.4byte	0x81
  507 0184 02       		.uleb128 0x2
  508 0185 91       		.byte	0x91
@@ -614,7 +615,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  510 0187 07       		.uleb128 0x7
  511 0188 EE010000 		.4byte	.LASF22
  512 018c 01       		.byte	0x1
- 513 018d 38       		.byte	0x38
+ 513 018d 39       		.byte	0x39
  514 018e 81000000 		.4byte	0x81
  515 0192 02       		.uleb128 0x2
  516 0193 91       		.byte	0x91
@@ -657,10 +658,10 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  553 0018 3E       		.uleb128 0x3e
  554 0019 0B       		.uleb128 0xb
  555 001a 03       		.uleb128 0x3
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccTiPpR0.s 			page 12
+
+
  556 001b 0E       		.uleb128 0xe
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 12
-
-
  557 001c 00       		.byte	0
  558 001d 00       		.byte	0
  559 001e 03       		.uleb128 0x3
@@ -717,10 +718,10 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  610 0051 01       		.uleb128 0x1
  611 0052 12       		.uleb128 0x12
  612 0053 06       		.uleb128 0x6
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccTiPpR0.s 			page 13
+
+
  613 0054 40       		.uleb128 0x40
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 13
-
-
  614 0055 18       		.uleb128 0x18
  615 0056 9642     		.uleb128 0x2116
  616 0058 19       		.uleb128 0x19
@@ -777,10 +778,10 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  667 008c 0B       		.uleb128 0xb
  668 008d 3B       		.uleb128 0x3b
  669 008e 0B       		.uleb128 0xb
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccTiPpR0.s 			page 14
+
+
  670 008f 49       		.uleb128 0x49
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 14
-
-
  671 0090 13       		.uleb128 0x13
  672 0091 02       		.uleb128 0x2
  673 0092 18       		.uleb128 0x18
@@ -837,10 +838,10 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  724 0028 00000000 		.4byte	.LFB66
  725 002c 36000000 		.4byte	.LFE66-.LFB66
  726 0030 00000000 		.4byte	.LFB67
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccTiPpR0.s 			page 15
+
+
  727 0034 42000000 		.4byte	.LFE67-.LFB67
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 15
-
-
  728 0038 00000000 		.4byte	0
  729 003c 00000000 		.4byte	0
  730              		.section	.debug_ranges,"",%progbits
@@ -897,10 +898,10 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  758      6C756500 
  759              	.LASF12:
  760 00b5 666C6F61 		.ascii	"float\000"
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccTiPpR0.s 			page 16
+
+
  760      7400
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 16
-
-
  761              	.LASF17:
  762 00bb 52657365 		.ascii	"ResetBus\000"
  762      74427573 
@@ -957,10 +958,10 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  783      6F432043 
  783      72656174 
  783      6F725C50 
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccTiPpR0.s 			page 17
+
+
  784 0194 536F4335 		.ascii	"SoC5OneWire.cydsn\000"
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 17
-
-
  784      4F6E6557 
  784      6972652E 
  784      63796473 
@@ -1017,10 +1018,10 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 1
  809              	.LASF25:
  810 022a 52656164 		.ascii	"ReadByte\000"
  810      42797465 
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccTiPpR0.s 			page 18
+
+
  810      00
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cchAZ48D.s 			page 18
-
-
  811              	.LASF28:
  812 0233 4F6E6557 		.ascii	"OneWire.c\000"
  812      6972652E 

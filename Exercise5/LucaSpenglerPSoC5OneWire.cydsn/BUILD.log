@@ -1,4 +1,4 @@
---------------- Build Started: 04/15/2024 14:23:51 Project: LucaSpenglerPSoC5OneWire, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
+--------------- Build Started: 04/15/2024 14:43:09 Project: LucaSpenglerPSoC5OneWire, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
 The code generation step is up to date.
 arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\ARM_GCC_541\Debug/main.lst -g -ffunction-sections -ffat-lto-objects -O0 -c main.c -o .\ARM_GCC_541\Debug\main.o
 arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\ARM_GCC_541\Debug/OneWire.lst -g -ffunction-sections -ffat-lto-objects -O0 -c OneWire.c -o .\ARM_GCC_541\Debug\OneWire.o
@@ -13,4 +13,4 @@ Checksum calculated and stored in ELF section .cymeta
 cyelftool.exe -S "C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Exercise5\LucaSpenglerPSoC5OneWire.cydsn\ARM_GCC_541\Debug\LucaSpenglerPSoC5OneWire.elf"
 Flash used: 9976 of 262144 bytes (3,8 %).
 SRAM used: 2581 of 65536 bytes (3,9 %). Stack: 2048 bytes. Heap: 128 bytes.
---------------- Build Succeeded: 04/15/2024 14:23:58 ---------------
+--------------- Build Succeeded: 04/15/2024 14:43:11 ---------------

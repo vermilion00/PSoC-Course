@@ -1,12 +1,14 @@
-/*******************************************************************************
-* File Name: ADC_DelSig_1_INT.c
-* Version 3.30
+/* ===============================================================================
 *
-* Description:
-*  This file contains the code that operates during the ADC_DelSig interrupt
-*  service routine.
+* Names: Luca Spengler (1399655), Fabian Fritz (1394906)
+* Emails: luca.spengler2@stud.fra-uas.de, fabian.fritz@stud.fra-uas.de
+* Date: 11.04.2024
+* Course ID: TX00DB04
+* Description: This program reads the analog outputs of several temperature
+*              sensors using I2C and SPI and output the converted temperature
+*              value over UART.
 *
-* Note:
+* ===============================================================================
 *
 ********************************************************************************
 * Copyright 2008-2017, Cypress Semiconductor Corporation.  All rights reserved.
@@ -235,6 +237,5 @@ volatile extern uint8 gADC_ISR;
     }
 
 #endif   /* End ADC_DelSig_1_IRQ_REMOVE */
-
 
 /* [] END OF FILE */
