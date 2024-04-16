@@ -1,5 +1,5 @@
-#Exercise 1
-#Contents of main.c:
+# Exercise 1
+# Contents of main.c:
 
 /* =======================================================================
  *

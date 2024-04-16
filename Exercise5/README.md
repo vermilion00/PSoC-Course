@@ -1,5 +1,5 @@
-#Exercise 5:
-#Contents of main.c:
+# Exercise 5:
+# Contents of main.c:
 
 /*
 * ===============================================================================
@@ -241,7 +241,7 @@ int main()
 
 
 
-#Contents of OneWire.c:
+# Contents of OneWire.c:
 
 /* ===============================================================================
 *
@@ -313,7 +313,7 @@ int ReadByte(){     //Read a full byte
 
 
 
-#Contents of OneWire.h:
+# Contents of OneWire.h:
 
 /* ===============================================================================
 *
@@ -387,7 +387,7 @@ int ResetBus();
 /* [] END OF FILE */
 
 
-#Contents of ADC_DelSig_1_INT.c:
+# Contents of ADC_DelSig_1_INT.c:
 
 /* ===============================================================================
 *

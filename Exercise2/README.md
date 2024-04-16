@@ -1,5 +1,5 @@
-#Exercise 2
-#Contents of main.c:
+# Exercise 2
+# Contents of main.c:
 
 /* ===========================================================================
  *
@@ -59,8 +59,8 @@ int main(void){
 
 
 
-#Contents of rx_isr.c:
-#Only the interrupt flag is set here
+# Contents of rx_isr.c:
+# Only the interrupt flag is set here
 
 /* ===========================================================================
  *
