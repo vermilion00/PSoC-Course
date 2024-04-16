@@ -1,5 +1,5 @@
 # Exercise 1
-# Contents of main.c:
+## Contents of main.c:
 
 ```
 
@@ -15,6 +15,7 @@
  *
  * =======================================================================
 */
+
 #include "project.h"
 #include <stdio.h>
 

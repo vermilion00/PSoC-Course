@@ -1,5 +1,5 @@
 # Exercise 5:
-# Contents of main.c:
+## Contents of main.c:
 
 ```
 /*
@@ -240,9 +240,11 @@ int main()
 
 /* [] END OF FILE */
 
+```
 
+## Contents of OneWire.c:
 
-# Contents of OneWire.c:
+```
 
 /* ===============================================================================
 *
@@ -312,9 +314,11 @@ int ReadByte(){     //Read a full byte
 
 /* [] END OF FILE */
 
+```
 
+## Contents of OneWire.h:
 
-# Contents of OneWire.h:
+```
 
 /* ===============================================================================
 *
@@ -387,8 +391,11 @@ int ResetBus();
 
 /* [] END OF FILE */
 
+```
 
-# Contents of ADC_DelSig_1_INT.c:
+## Contents of ADC_DelSig_1_INT.c:
+
+```
 
 /* ===============================================================================
 *
@@ -634,4 +641,5 @@ extern volatile uint8 gADC_ISR; //global flag for the ADC ISR
 
 
 /* [] END OF FILE */
+
 ```

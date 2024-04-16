@@ -1,5 +1,5 @@
 # Exercise 3
-# Contents of main.c:
+## Contents of main.c:
 
 ```
 
@@ -210,8 +210,8 @@ int main()
 
 ```
 
-# Contents of ADC_DelSig_1_INT.c:
-# Only the interrupt flag is set here
+## Contents of ADC_DelSig_1_INT.c:
+### Only the interrupt flag is set here
 
 ```
 
