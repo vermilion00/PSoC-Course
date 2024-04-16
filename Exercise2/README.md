@@ -1,6 +1,8 @@
 # Exercise 2
 # Contents of main.c:
 
+```
+
 /* ===========================================================================
  *
  * Names: Luca Spengler (1399655), Fabian Fritz (1394906)
@@ -57,10 +59,12 @@ int main(void){
 
 /* [] END OF FILE */
 
-
+```
 
 # Contents of rx_isr.c:
 # Only the interrupt flag is set here
+
+```
 
 /* ===========================================================================
  *
@@ -475,3 +479,4 @@ void rx_isr_ClearPending(void)
 
 /* [] END OF FILE */
 
+```

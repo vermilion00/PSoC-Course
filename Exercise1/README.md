@@ -1,6 +1,8 @@
 # Exercise 1
 # Contents of main.c:
 
+```
+
 /* =======================================================================
  *
  * Names: Luca Spengler (1399655), Fabian Fritz (1394906)
@@ -47,4 +49,6 @@ int main(void)
 }
 
 /* [] END OF FILE */
+
+```
 

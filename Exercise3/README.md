@@ -1,6 +1,8 @@
 # Exercise 3
 # Contents of main.c:
 
+```
+
 /*
 * ===============================================================================
 *
@@ -206,9 +208,12 @@ int main()
 
 /* [] END OF FILE */
 
+```
 
 # Contents of ADC_DelSig_1_INT.c:
 # Only the interrupt flag is set here
+
+```
 
 /*
 * ===============================================================================
@@ -454,3 +459,5 @@ volatile extern uint8 gADC_ISR;
 
 
 /* [] END OF FILE */
+
+```

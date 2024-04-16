@@ -1,6 +1,7 @@
 # Exercise 5:
 # Contents of main.c:
 
+```
 /*
 * ===============================================================================
 *
@@ -633,3 +634,4 @@ extern volatile uint8 gADC_ISR; //global flag for the ADC ISR
 
 
 /* [] END OF FILE */
+```

@@ -1,6 +1,8 @@
 # Exercise 4
 # Contents of main.c:
 
+```
+
 /*
 * ===============================================================================
 *
@@ -243,9 +245,12 @@ int main()
 
 /* [] END OF FILE */
 
+```
  
 # Contents of ADC_DelSig_1_INT.c:
 # Only the interrupt flag is set in this file
+
+```
 
 /* ===============================================================================
 *
@@ -489,10 +494,12 @@ volatile extern uint8 gADC_ISR;
 
 /* [] END OF FILE */
 
+```
 
 # Contents of SPIM_1.c:
 # Only the type of some functions has been changed from uint8 to uint16
 
+```
 /* ===============================================================================
 *
 * Names: Luca Spengler (1399655), Fabian Fritz (1394906)
@@ -1649,13 +1656,14 @@ uint8 SPIM_1_ReadStatus(void)
 
 /* [] END OF FILE */
 
-
+```
 
 
 
 # Contents of SPIM_1.h:
 # Only the type of some functions has been changed from uint8 to uint16
 
+```
 /* ===============================================================================
 *
 * Names: Luca Spengler (1399655), Fabian Fritz (1394906)
@@ -2025,3 +2033,4 @@ void  SPIM_1_DisableInt(void)                     ;
 
 /* [] END OF FILE */
 
+```
