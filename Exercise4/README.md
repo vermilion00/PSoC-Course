@@ -187,7 +187,7 @@ int main()
                 average_value_spi = SpiAdcSum / SAMPLE_RATE;    //Calculate the average sampled SPI value
                 sprintf(TransmitBuffer, "{\r\n\t\"Avg ADC Value\": \"%1u mV\",\r\n", average_value);    //Convert the sampled value to a string
                 UART_1_PutString(TransmitBuffer);   //Output the average adc value in mV
-                sprintf(TransmitBuffer, "\t\"Temperature (Int)\": \"%i.%i \",\r\n", average_value / TEN_CONSTANT, average_value % TEN_CONSTANT);   //Convert the output to a string
+                sprintf(TransmitBuffer, "\t\"Temperature (Int)\": \"%i.%i C\",\r\n", average_value / TEN_CONSTANT, average_value % TEN_CONSTANT);   //Convert the output to a string
                 UART_1_PutString(TransmitBuffer);   //Output the Temperature using the internal ADC
                 sample_count = 0;   //Reset the sample count
                 sample_sum = 0;   //Reset the sample sum value
