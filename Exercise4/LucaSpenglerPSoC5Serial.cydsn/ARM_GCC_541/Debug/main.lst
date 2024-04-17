@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 1
 
 
    1              		.syntax unified
@@ -42,12 +42,12 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
   32 0030 00       		.ascii	"\000"
   33 0031 000000   		.align	2
   34              	.LC2:
-  35 0034 09225465 		.ascii	"\011\"Temperature (Int)\": \"%i.%i \",\015\012\000"
+  35 0034 09225465 		.ascii	"\011\"Temperature (Int)\": \"%i.%i C\",\015\012\000"
   35      6D706572 
   35      61747572 
   35      65202849 
   35      6E742922 
-  36 0056 0000     		.align	2
+  36 0057 00       		.align	2
   37              	.LC3:
   38 0058 09225465 		.ascii	"\011\"Temperature (I2C)\": \"%i C\",\015\012\000"
   38      6D706572 
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
   40              	.LC4:
   41 0078 09225465 		.ascii	"\011\"Temperature (SPI): \"%i.%i C\"\015\012}\015\012"
   41      6D706572 
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 2
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 2
 
 
   41      61747572 
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
   28:main.c        **** * code solely for use in connection with Cypress’s integrated circuit products.
   29:main.c        **** * Any reproduction, modification, translation, compilation, or representation
   30:main.c        **** * of this Software except as specified above is prohibited without the express
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 3
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 3
 
 
   31:main.c        **** * written permission of Cypress.
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
   85:main.c        **** *  None.
   86:main.c        **** *
   87:main.c        **** *******************************************************************************/
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 4
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 4
 
 
   88:main.c        **** int main()
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  110:main.c        ****     UART_1_Start();
   90              		.loc 1 110 0
   91 0028 FFF7FEFF 		bl	UART_1_Start
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 5
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 5
 
 
  111:main.c        ****     I2C_1_Start();
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  126              		.loc 1 130 0
  127 0064 0023     		movs	r3, #0
  128 0066 BB65     		str	r3, [r7, #88]
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 6
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 6
 
 
  131:main.c        ****     uint16 average_value = 0; //Stores the average value of the sample sum
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  162:main.c        ****                 /* Place error handling code here */
  163:main.c        ****                 break;    
  152              		.loc 1 163 0
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 7
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 7
 
 
  153 0096 21E0     		b	.L11
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  198              	.L8:
  159:main.c        ****                 break;
  199              		.loc 1 159 0
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 8
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 8
 
 
  200 00d2 0123     		movs	r3, #1
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  175:main.c        ****             SPIM_1_PutArray(TransmitDummy, 2);  //Transmit 16 dummy bits to start communication
  241              		.loc 1 175 0
  242 0120 3B1D     		adds	r3, r7, #4
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 9
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 9
 
 
  243 0122 0221     		movs	r1, #2
@@ -538,10 +538,10 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  288 018e 07F10803 		add	r3, r7, #8
  289 0192 1846     		mov	r0, r3
  290 0194 FFF7FEFF 		bl	UART_1_PutString
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 10
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 10
 
 
- 185:main.c        ****                 sprintf(TransmitBuffer, "\t\"Temperature (Int)\": \"%i.%i \",\r\n", average_value /
+ 185:main.c        ****                 sprintf(TransmitBuffer, "\t\"Temperature (Int)\": \"%i.%i C\",\r\n", average_value 
  291              		.loc 1 185 0
  292 0198 B7F85030 		ldrh	r3, [r7, #80]
  293 019c 584A     		ldr	r2, .L18+16
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  334 01f8 0121     		movs	r1, #1
  335 01fa 4D20     		movs	r0, #77
  336 01fc FFF7FEFF 		bl	I2C_1_MasterSendRestart
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 11
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 11
 
 
  196:main.c        ****                 ReceiveI2CVal= I2C_1_MasterReadByte(I2C_1_NAK_DATA);    //Read the temperature data
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  204:main.c        ****             }
  205:main.c        ****         }
  206:main.c        ****         
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 12
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 12
 
 
  207:main.c        ****         /* Check to see if an ADC conversion has completed */
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  418 02b8 19E0     		b	.L13
  419              	.L15:
  226:main.c        ****             }
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 13
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 13
 
 
  227:main.c        ****             else if(SendEmulatedData)
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  462              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
  463              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
  464              		.file 4 "Generated_Source\\PSoC5/cytypes.h"
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 14
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 14
 
 
  465              		.file 5 "Generated_Source\\PSoC5/core_cm3.h"
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  519 006a 05       		.byte	0x5
  520 006b 696E7400 		.ascii	"int\000"
  521 006f 02       		.uleb128 0x2
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 15
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 15
 
 
  522 0070 04       		.byte	0x4
@@ -898,7 +898,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  576 00e2 C8010000 		.4byte	0x1c8
  577 00e6 08       		.uleb128 0x8
  578 00e7 D3000000 		.4byte	.LASF19
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 16
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 16
 
 
  579 00eb 01       		.byte	0x1
@@ -958,7 +958,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  633 0148 08       		.uleb128 0x8
  634 0149 1B010000 		.4byte	.LASF25
  635 014d 01       		.byte	0x1
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 17
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 17
 
 
  636 014e 66       		.byte	0x66
@@ -1018,7 +1018,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  690 01ac A9000000 		.4byte	.LASF32
  691 01b0 01       		.byte	0x1
  692 01b1 83       		.byte	0x83
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 18
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 18
 
 
  693 01b2 8D000000 		.4byte	0x8d
@@ -1078,7 +1078,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  747 0009 1B       		.uleb128 0x1b
  748 000a 0E       		.uleb128 0xe
  749 000b 55       		.uleb128 0x55
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 19
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 19
 
 
  750 000c 17       		.uleb128 0x17
@@ -1138,7 +1138,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  804 0042 00       		.byte	0
  805 0043 06       		.uleb128 0x6
  806 0044 35       		.uleb128 0x35
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 20
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 20
 
 
  807 0045 00       		.byte	0
@@ -1198,7 +1198,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  861 007c 49       		.uleb128 0x49
  862 007d 13       		.uleb128 0x13
  863 007e 02       		.uleb128 0x2
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 21
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 21
 
 
  864 007f 18       		.uleb128 0x18
@@ -1258,7 +1258,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  918 00b5 00       		.byte	0
  919 00b6 00       		.byte	0
  920              		.section	.debug_aranges,"",%progbits
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 22
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 22
 
 
  921 0000 1C000000 		.4byte	0x1c
@@ -1318,7 +1318,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  950      6500
  951              	.LASF9:
  952 00b7 5F5F696E 		.ascii	"__int32_t\000"
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 23
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 23
 
 
  952      7433325F 
@@ -1378,7 +1378,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  975              	.LASF1:
  976 0153 756E7369 		.ascii	"unsigned char\000"
  976      676E6564 
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 24
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 24
 
 
  976      20636861 
@@ -1438,7 +1438,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 1
  999              	.LASF24:
  1000 0230 5472616E 		.ascii	"TransmitBuffer\000"
  1000      736D6974 
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccyEidoL.s 			page 25
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccmdaP01.s 			page 25
 
 
  1000      42756666 

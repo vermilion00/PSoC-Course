@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccXQFGV5.s 			page 1
 
 
    1              		.syntax unified
@@ -28,65 +28,67 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
   25              	ADC_DelSig_1_ISR1:
   26              	.LFB0:
   27              		.file 1 "Generated_Source\\PSoC5\\ADC_DelSig_1_INT.c"
-   1:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** /*******************************************************************************
-   2:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * File Name: ADC_DelSig_1_INT.c
-   3:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * Version 3.30
-   4:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** *
-   5:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * Description:
-   6:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** *  This file contains the code that operates during the ADC_DelSig interrupt
-   7:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** *  service routine.
-   8:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** *
-   9:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * Note:
+   1:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** /* ===============================================================================
+   2:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** *
+   3:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * Names: Luca Spengler (1399655), Fabian Fritz (1394906)
+   4:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * Emails: luca.spengler2@stud.fra-uas.de, fabian.fritz@stud.fra-uas.de
+   5:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * Date: 11.04.2024
+   6:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * Course ID: TX00DB04
+   7:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * Description: This program reads the analog outputs of several temperature
+   8:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** *              sensors using I2C and SPI and output the converted temperature
+   9:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** *              value over UART.
   10:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** *
-  11:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** ********************************************************************************
-  12:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * Copyright 2008-2017, Cypress Semiconductor Corporation.  All rights reserved.
-  13:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * You may use this file only in accordance with the license, terms, conditions,
-  14:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * disclaimers, and limitations in the end user license agreement accompanying
-  15:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * the software package with which this file was provided.
-  16:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** *******************************************************************************/
-  17:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
-  18:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** #include "ADC_DelSig_1.h"
-  19:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** #include "cyapicallbacks.h"
-  20:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
-  21:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
-  22:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** /*******************************************************************************
-  23:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * Custom Declarations and Variables
-  24:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * - add user include files, prototypes and variables between the following
-  25:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** *   #START and #END tags
-  26:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** *******************************************************************************/
-  27:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** /* `#START ADC_SYS_VAR`  */
-  28:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** #define TRUE 1
-  29:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** #define FALSE 0
-  30:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 2
+  11:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * ===============================================================================
+  12:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** *
+  13:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** ********************************************************************************
+  14:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * Copyright 2008-2017, Cypress Semiconductor Corporation.  All rights reserved.
+  15:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * You may use this file only in accordance with the license, terms, conditions,
+  16:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  17:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * the software package with which this file was provided.
+  18:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** *******************************************************************************/
+  19:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+  20:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** #include "ADC_DelSig_1.h"
+  21:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** #include "cyapicallbacks.h"
+  22:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+  23:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+  24:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** /*******************************************************************************
+  25:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * Custom Declarations and Variables
+  26:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** * - add user include files, prototypes and variables between the following
+  27:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** *   #START and #END tags
+  28:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** *******************************************************************************/
+  29:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** /* `#START ADC_SYS_VAR`  */
+  30:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** #define TRUE 1
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccXQFGV5.s 			page 2
 
 
-  31:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** volatile extern uint8 gADC_ISR;
-  32:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** /* `#END`  */
-  33:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
-  34:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** #if(ADC_DelSig_1_IRQ_REMOVE == 0u)
+  31:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** #define FALSE 0
+  32:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+  33:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** volatile extern uint8 gADC_ISR;
+  34:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** /* `#END`  */
   35:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
-  36:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
-  37:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     /*****************************************************************************
-  38:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Function Name: ADC_DelSig_1_ISR1
-  39:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     ******************************************************************************
-  40:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
-  41:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Summary:
-  42:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  Handle Interrupt Service Routine.
-  43:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
-  44:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Parameters:
-  45:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  None
-  46:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
-  47:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Return:
-  48:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  None
-  49:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
-  50:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Reentrant:
-  51:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  No
-  52:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
-  53:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *****************************************************************************/
-  54:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     CY_ISR( ADC_DelSig_1_ISR1)
-  55:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     {
-  28              		.loc 1 55 0
+  36:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** #if(ADC_DelSig_1_IRQ_REMOVE == 0u)
+  37:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+  38:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+  39:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     /*****************************************************************************
+  40:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Function Name: ADC_DelSig_1_ISR1
+  41:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     ******************************************************************************
+  42:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+  43:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Summary:
+  44:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  Handle Interrupt Service Routine.
+  45:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+  46:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Parameters:
+  47:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  None
+  48:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+  49:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Return:
+  50:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  None
+  51:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+  52:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Reentrant:
+  53:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  No
+  54:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+  55:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *****************************************************************************/
+  56:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     CY_ISR( ADC_DelSig_1_ISR1)
+  57:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     {
+  28              		.loc 1 57 0
   29              		.cfi_startproc
   30              		@ args = 0, pretend = 0, frame = 0
   31              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -96,44 +98,44 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
   35              		.cfi_offset 7, -4
   36 0002 00AF     		add	r7, sp, #0
   37              		.cfi_def_cfa_register 7
-  56:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #ifdef ADC_DelSig_1_ISR1_ENTRY_CALLBACK
-  57:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_ISR1_EntryCallback();
-  58:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* ADC_DelSig_1_ISR1_ENTRY_CALLBACK */
-  59:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         
-  60:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
-  61:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /**************************************************************************
-  62:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  Custom Code
-  63:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  - add user ISR code between the following #START and #END tags
-  64:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         **************************************************************************/
-  65:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* `#START MAIN_ADC_ISR1`  */
-  66:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         gADC_ISR = TRUE;    //Set the flag for the ADC interrupt
-  38              		.loc 1 66 0
+  58:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #ifdef ADC_DelSig_1_ISR1_ENTRY_CALLBACK
+  59:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_ISR1_EntryCallback();
+  60:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* ADC_DelSig_1_ISR1_ENTRY_CALLBACK */
+  61:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         
+  62:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+  63:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /**************************************************************************
+  64:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  Custom Code
+  65:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  - add user ISR code between the following #START and #END tags
+  66:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         **************************************************************************/
+  67:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* `#START MAIN_ADC_ISR1`  */
+  68:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         gADC_ISR = TRUE;    //Set the flag for the ADC interrupt
+  38              		.loc 1 68 0
   39 0004 034B     		ldr	r3, .L2
   40 0006 0122     		movs	r2, #1
   41 0008 1A70     		strb	r2, [r3]
-  67:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
-  68:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* `#END`  */
-  69:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         
-  70:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* Stop the conversion if conversion mode is single sample and resolution
-  71:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  is above 16 bits.
-  72:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         */
-  73:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #if(ADC_DelSig_1_CFG1_RESOLUTION > 16 && \
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 3
+  69:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+  70:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* `#END`  */
+  71:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         
+  72:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* Stop the conversion if conversion mode is single sample and resolution
+  73:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  is above 16 bits.
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccXQFGV5.s 			page 3
 
 
-  74:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_CFG1_CONV_MODE == ADC_DelSig_1_MODE_SINGLE_SAMPLE)
-  75:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_StopConvert();
-  76:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             /* Software flag for checking conversion complete or not. Will be used when
-  77:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             *  resolution is above 16 bits and conversion mode is single sample 
-  78:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 			*/
-  79:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_convDone = ADC_DelSig_1_DEC_CONV_DONE;
-  80:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* Single sample conversion mode with resolution above 16 bits */
-  81:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
-  82:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #ifdef ADC_DelSig_1_ISR1_EXIT_CALLBACK
-  83:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_ISR1_ExitCallback();
-  84:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* ADC_DelSig_1_ISR1_EXIT_CALLBACK */
-  85:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     }
-  42              		.loc 1 85 0
+  74:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         */
+  75:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #if(ADC_DelSig_1_CFG1_RESOLUTION > 16 && \
+  76:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_CFG1_CONV_MODE == ADC_DelSig_1_MODE_SINGLE_SAMPLE)
+  77:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_StopConvert();
+  78:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             /* Software flag for checking conversion complete or not. Will be used when
+  79:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             *  resolution is above 16 bits and conversion mode is single sample 
+  80:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 			*/
+  81:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_convDone = ADC_DelSig_1_DEC_CONV_DONE;
+  82:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* Single sample conversion mode with resolution above 16 bits */
+  83:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+  84:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #ifdef ADC_DelSig_1_ISR1_EXIT_CALLBACK
+  85:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_ISR1_ExitCallback();
+  86:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* ADC_DelSig_1_ISR1_EXIT_CALLBACK */
+  87:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     }
+  42              		.loc 1 87 0
   43 000a 00BF     		nop
   44 000c BD46     		mov	sp, r7
   45              		.cfi_def_cfa_register 13
@@ -157,31 +159,31 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
   63              		.type	ADC_DelSig_1_ISR2, %function
   64              	ADC_DelSig_1_ISR2:
   65              	.LFB1:
-  86:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
-  87:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
-  88:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     /*****************************************************************************
-  89:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Function Name: ADC_DelSig_1_ISR2
-  90:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     ******************************************************************************
-  91:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
-  92:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Summary:
-  93:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  Handle Interrupt Service Routine.
-  94:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
-  95:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Parameters:
-  96:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  None
-  97:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
-  98:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Return:
-  99:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  None
- 100:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
- 101:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Reentrant:
- 102:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  No
- 103:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
- 104:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *****************************************************************************/
- 105:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     CY_ISR( ADC_DelSig_1_ISR2)
- 106:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     {
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 4
+  88:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+  89:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+  90:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     /*****************************************************************************
+  91:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Function Name: ADC_DelSig_1_ISR2
+  92:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     ******************************************************************************
+  93:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+  94:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Summary:
+  95:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  Handle Interrupt Service Routine.
+  96:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+  97:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Parameters:
+  98:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  None
+  99:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+ 100:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Return:
+ 101:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  None
+ 102:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+ 103:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Reentrant:
+ 104:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  No
+ 105:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+ 106:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *****************************************************************************/
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccXQFGV5.s 			page 4
 
 
-  66              		.loc 1 106 0
+ 107:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     CY_ISR( ADC_DelSig_1_ISR2)
+ 108:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     {
+  66              		.loc 1 108 0
   67              		.cfi_startproc
   68              		@ args = 0, pretend = 0, frame = 0
   69              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -191,36 +193,36 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
   73              		.cfi_offset 7, -4
   74 0002 00AF     		add	r7, sp, #0
   75              		.cfi_def_cfa_register 7
- 107:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #ifdef ADC_DelSig_1_ISR2_ENTRY_CALLBACK
- 108:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_ISR2_EntryCallback();
- 109:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* ADC_DelSig_1_ISR2_ENTRY_CALLBACK */
- 110:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         
- 111:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         
- 112:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /***************************************************************************
- 113:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  Custom Code
- 114:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  - add user ISR code between the following #START and #END tags
- 115:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         **************************************************************************/
- 116:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* `#START MAIN_ADC_ISR2`  */
- 117:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
- 118:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* `#END`  */
+ 109:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #ifdef ADC_DelSig_1_ISR2_ENTRY_CALLBACK
+ 110:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_ISR2_EntryCallback();
+ 111:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* ADC_DelSig_1_ISR2_ENTRY_CALLBACK */
+ 112:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         
+ 113:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         
+ 114:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /***************************************************************************
+ 115:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  Custom Code
+ 116:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  - add user ISR code between the following #START and #END tags
+ 117:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         **************************************************************************/
+ 118:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* `#START MAIN_ADC_ISR2`  */
  119:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
- 120:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* Stop the conversion conversion mode is single sample and resolution
- 121:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  is above 16 bits.
- 122:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         */
- 123:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #if(ADC_DelSig_1_CFG2_RESOLUTION > 16 && \
- 124:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_CFG2_CONVMODE == ADC_DelSig_1_MODE_SINGLE_SAMPLE)
- 125:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_StopConvert();
- 126:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             /* Software flag for checking conversion complete or not. Will be used when
- 127:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             *   resolution is above 16 bits and conversion mode is single sample 
- 128:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 			*/
- 129:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_convDone = ADC_DelSig_1_DEC_CONV_DONE;
- 130:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* Single sample conversion mode with resolution above 16 bits */
- 131:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
- 132:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #ifdef ADC_DelSig_1_ISR2_EXIT_CALLBACK
- 133:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_ISR2_ExitCallback();
- 134:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* ADC_DelSig_1_ISR2_EXIT_CALLBACK */
- 135:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     }
-  76              		.loc 1 135 0
+ 120:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* `#END`  */
+ 121:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+ 122:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* Stop the conversion conversion mode is single sample and resolution
+ 123:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  is above 16 bits.
+ 124:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         */
+ 125:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #if(ADC_DelSig_1_CFG2_RESOLUTION > 16 && \
+ 126:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_CFG2_CONVMODE == ADC_DelSig_1_MODE_SINGLE_SAMPLE)
+ 127:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_StopConvert();
+ 128:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             /* Software flag for checking conversion complete or not. Will be used when
+ 129:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             *   resolution is above 16 bits and conversion mode is single sample 
+ 130:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 			*/
+ 131:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_convDone = ADC_DelSig_1_DEC_CONV_DONE;
+ 132:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* Single sample conversion mode with resolution above 16 bits */
+ 133:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+ 134:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #ifdef ADC_DelSig_1_ISR2_EXIT_CALLBACK
+ 135:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_ISR2_ExitCallback();
+ 136:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* ADC_DelSig_1_ISR2_EXIT_CALLBACK */
+ 137:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     }
+  76              		.loc 1 137 0
   77 0004 00BF     		nop
   78 0006 BD46     		mov	sp, r7
   79              		.cfi_def_cfa_register 13
@@ -236,35 +238,35 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
   89              		.align	2
   90              		.global	ADC_DelSig_1_ISR3
   91              		.thumb
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccXQFGV5.s 			page 5
+
+
   92              		.thumb_func
   93              		.type	ADC_DelSig_1_ISR3, %function
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 5
-
-
   94              	ADC_DelSig_1_ISR3:
   95              	.LFB2:
- 136:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
- 137:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
- 138:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     /*****************************************************************************
- 139:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Function Name: ADC_DelSig_1_ISR3
- 140:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     ******************************************************************************
- 141:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
- 142:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Summary:
- 143:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  Handle Interrupt Service Routine.
- 144:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
- 145:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Parameters:
- 146:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  None
- 147:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
- 148:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Return:
- 149:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  None
- 150:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
- 151:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Reentrant:
- 152:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  No
- 153:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
- 154:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *****************************************************************************/
- 155:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     CY_ISR( ADC_DelSig_1_ISR3)
- 156:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     {
-  96              		.loc 1 156 0
+ 138:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+ 139:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+ 140:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     /*****************************************************************************
+ 141:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Function Name: ADC_DelSig_1_ISR3
+ 142:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     ******************************************************************************
+ 143:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+ 144:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Summary:
+ 145:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  Handle Interrupt Service Routine.
+ 146:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+ 147:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Parameters:
+ 148:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  None
+ 149:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+ 150:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Return:
+ 151:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  None
+ 152:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+ 153:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Reentrant:
+ 154:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  No
+ 155:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+ 156:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *****************************************************************************/
+ 157:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     CY_ISR( ADC_DelSig_1_ISR3)
+ 158:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     {
+  96              		.loc 1 158 0
   97              		.cfi_startproc
   98              		@ args = 0, pretend = 0, frame = 0
   99              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -274,39 +276,39 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
  103              		.cfi_offset 7, -4
  104 0002 00AF     		add	r7, sp, #0
  105              		.cfi_def_cfa_register 7
- 157:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #ifdef ADC_DelSig_1_ISR3_ENTRY_CALLBACK
- 158:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_ISR3_EntryCallback();
- 159:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* ADC_DelSig_1_ISR3_ENTRY_CALLBACK */        
- 160:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
- 161:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         
- 162:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /***************************************************************************
- 163:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  Custom Code
- 164:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  - add user ISR code between the following #START and #END tags
- 165:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         **************************************************************************/
- 166:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* `#START MAIN_ADC_ISR3`  */
- 167:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
- 168:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* `#END`  */
- 169:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         
- 170:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* Stop the conversion if conversion mode is set to single sample and
- 171:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  resolution is above 16 bits.
- 172:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         */
- 173:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #if(ADC_DelSig_1_CFG3_RESOLUTION > 16 && \
- 174:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_CFG3_CONVMODE == ADC_DelSig_1_MODE_SINGLE_SAMPLE)
- 175:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_StopConvert();
- 176:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             /* Software flag for checking conversion complete or not. Will be used when
- 177:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             *  resolution is above 16 bits and conversion mode is single sample 
- 178:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 			*/
- 179:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_convDone = ADC_DelSig_1_DEC_CONV_DONE;
- 180:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* Single sample conversion mode with resolution above 16 bits */
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 6
+ 159:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #ifdef ADC_DelSig_1_ISR3_ENTRY_CALLBACK
+ 160:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_ISR3_EntryCallback();
+ 161:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* ADC_DelSig_1_ISR3_ENTRY_CALLBACK */        
+ 162:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+ 163:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         
+ 164:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /***************************************************************************
+ 165:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  Custom Code
+ 166:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  - add user ISR code between the following #START and #END tags
+ 167:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         **************************************************************************/
+ 168:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* `#START MAIN_ADC_ISR3`  */
+ 169:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+ 170:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* `#END`  */
+ 171:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         
+ 172:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* Stop the conversion if conversion mode is set to single sample and
+ 173:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  resolution is above 16 bits.
+ 174:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         */
+ 175:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #if(ADC_DelSig_1_CFG3_RESOLUTION > 16 && \
+ 176:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_CFG3_CONVMODE == ADC_DelSig_1_MODE_SINGLE_SAMPLE)
+ 177:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_StopConvert();
+ 178:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             /* Software flag for checking conversion complete or not. Will be used when
+ 179:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             *  resolution is above 16 bits and conversion mode is single sample 
+ 180:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 			*/
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccXQFGV5.s 			page 6
 
 
- 181:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
- 182:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #ifdef ADC_DelSig_1_ISR3_EXIT_CALLBACK
- 183:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_ISR3_ExitCallback();
- 184:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* ADC_DelSig_1_ISR3_EXIT_CALLBACK */        
- 185:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     }
- 106              		.loc 1 185 0
+ 181:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_convDone = ADC_DelSig_1_DEC_CONV_DONE;
+ 182:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* Single sample conversion mode with resolution above 16 bits */
+ 183:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+ 184:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #ifdef ADC_DelSig_1_ISR3_EXIT_CALLBACK
+ 185:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_ISR3_ExitCallback();
+ 186:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* ADC_DelSig_1_ISR3_EXIT_CALLBACK */        
+ 187:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     }
+ 106              		.loc 1 187 0
  107 0004 00BF     		nop
  108 0006 BD46     		mov	sp, r7
  109              		.cfi_def_cfa_register 13
@@ -326,28 +328,28 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
  123              		.type	ADC_DelSig_1_ISR4, %function
  124              	ADC_DelSig_1_ISR4:
  125              	.LFB3:
- 186:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
- 187:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
- 188:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     /*****************************************************************************
- 189:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Function Name: ADC_DelSig_1_ISR4
- 190:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     ******************************************************************************
- 191:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
- 192:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Summary:
- 193:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  Handle Interrupt Service Routine.
- 194:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
- 195:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Parameters:
- 196:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  None
- 197:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
- 198:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Return:
- 199:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  None
- 200:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
- 201:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Reentrant:
- 202:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  No
- 203:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
- 204:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *****************************************************************************/
- 205:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     CY_ISR( ADC_DelSig_1_ISR4)
- 206:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     {
- 126              		.loc 1 206 0
+ 188:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+ 189:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+ 190:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     /*****************************************************************************
+ 191:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Function Name: ADC_DelSig_1_ISR4
+ 192:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     ******************************************************************************
+ 193:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+ 194:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Summary:
+ 195:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  Handle Interrupt Service Routine.
+ 196:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+ 197:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Parameters:
+ 198:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  None
+ 199:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+ 200:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Return:
+ 201:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  None
+ 202:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+ 203:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     * Reentrant:
+ 204:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *  No
+ 205:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *
+ 206:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     *****************************************************************************/
+ 207:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     CY_ISR( ADC_DelSig_1_ISR4)
+ 208:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     {
+ 126              		.loc 1 208 0
  127              		.cfi_startproc
  128              		@ args = 0, pretend = 0, frame = 0
  129              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -356,40 +358,40 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
  132              		.cfi_def_cfa_offset 4
  133              		.cfi_offset 7, -4
  134 0002 00AF     		add	r7, sp, #0
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccXQFGV5.s 			page 7
+
+
  135              		.cfi_def_cfa_register 7
- 207:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #ifdef ADC_DelSig_1_ISR4_ENTRY_CALLBACK
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 7
-
-
- 208:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_ISR4_EntryCallback();
- 209:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* ADC_DelSig_1_ISR4_ENTRY_CALLBACK */            
- 210:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
- 211:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         
- 212:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /***************************************************************************
- 213:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  Custom Code
- 214:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  - add user ISR code between the following #START and #END tags
- 215:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         **************************************************************************/
- 216:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* `#START MAIN_ADC_ISR4`  */
- 217:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
- 218:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* `#END`  */
+ 209:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #ifdef ADC_DelSig_1_ISR4_ENTRY_CALLBACK
+ 210:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_ISR4_EntryCallback();
+ 211:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* ADC_DelSig_1_ISR4_ENTRY_CALLBACK */            
+ 212:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+ 213:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         
+ 214:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /***************************************************************************
+ 215:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  Custom Code
+ 216:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  - add user ISR code between the following #START and #END tags
+ 217:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         **************************************************************************/
+ 218:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* `#START MAIN_ADC_ISR4`  */
  219:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
- 220:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* Stop the conversion if conversion mode is set to single sample and
- 221:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  resolution is above 16 bits.
- 222:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         */
- 223:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #if(ADC_DelSig_1_CFG4_RESOLUTION > 16 && \
- 224:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_CFG4_CONVMODE == ADC_DelSig_1_MODE_SINGLE_SAMPLE)
- 225:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_StopConvert();
- 226:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             /* Software flag for checking conversion complete or not. Will be used when
- 227:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             *  resolution is above 16 bits and conversion mode is single sample 
- 228:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 			*/
- 229:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_convDone = ADC_DelSig_1_DEC_CONV_DONE;
- 230:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* Single sample conversion mode with resolution above 16 bits */
- 231:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         
- 232:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #ifdef ADC_DelSig_1_ISR4_EXIT_CALLBACK
- 233:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_ISR4_ExitCallback();
- 234:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* ADC_DelSig_1_ISR4_EXIT_CALLBACK */            
- 235:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     }
- 136              		.loc 1 235 0
+ 220:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* `#END`  */
+ 221:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 
+ 222:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         /* Stop the conversion if conversion mode is set to single sample and
+ 223:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         *  resolution is above 16 bits.
+ 224:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         */
+ 225:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #if(ADC_DelSig_1_CFG4_RESOLUTION > 16 && \
+ 226:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_CFG4_CONVMODE == ADC_DelSig_1_MODE_SINGLE_SAMPLE)
+ 227:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_StopConvert();
+ 228:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             /* Software flag for checking conversion complete or not. Will be used when
+ 229:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             *  resolution is above 16 bits and conversion mode is single sample 
+ 230:Generated_Source\PSoC5/ADC_DelSig_1_INT.c **** 			*/
+ 231:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_convDone = ADC_DelSig_1_DEC_CONV_DONE;
+ 232:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* Single sample conversion mode with resolution above 16 bits */
+ 233:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         
+ 234:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #ifdef ADC_DelSig_1_ISR4_EXIT_CALLBACK
+ 235:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****             ADC_DelSig_1_ISR4_ExitCallback();
+ 236:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****         #endif /* ADC_DelSig_1_ISR4_EXIT_CALLBACK */            
+ 237:Generated_Source\PSoC5/ADC_DelSig_1_INT.c ****     }
+ 136              		.loc 1 237 0
  137 0004 00BF     		nop
  138 0006 BD46     		mov	sp, r7
  139              		.cfi_def_cfa_register 13
@@ -416,11 +418,11 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
  160 0011 20000000 		.4byte	.LASF19
  161 0015 B5000000 		.4byte	.LASF20
  162 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccXQFGV5.s 			page 8
+
+
  163 001d 00000000 		.4byte	0
  164 0021 00000000 		.4byte	.Ldebug_line0
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 8
-
-
  165 0025 02       		.uleb128 0x2
  166 0026 01       		.byte	0x1
  167 0027 06       		.byte	0x6
@@ -476,11 +478,11 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
  217 0081 CE010000 		.4byte	.LASF10
  218 0085 02       		.uleb128 0x2
  219 0086 01       		.byte	0x1
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccXQFGV5.s 			page 9
+
+
  220 0087 08       		.byte	0x8
  221 0088 C0010000 		.4byte	.LASF11
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 9
-
-
  222 008c 05       		.uleb128 0x5
  223 008d 6B000000 		.4byte	0x6b
  224 0091 02       		.uleb128 0x2
@@ -494,7 +496,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
  232 009f 06       		.uleb128 0x6
  233 00a0 62000000 		.4byte	.LASF14
  234 00a4 01       		.byte	0x1
- 235 00a5 36       		.byte	0x36
+ 235 00a5 38       		.byte	0x38
  236 00a6 00000000 		.4byte	.LFB0
  237 00aa 18000000 		.4byte	.LFE0-.LFB0
  238 00ae 01       		.uleb128 0x1
@@ -502,7 +504,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
  240 00b0 06       		.uleb128 0x6
  241 00b1 0E000000 		.4byte	.LASF15
  242 00b5 01       		.byte	0x1
- 243 00b6 69       		.byte	0x69
+ 243 00b6 6B       		.byte	0x6b
  244 00b7 00000000 		.4byte	.LFB1
  245 00bb 0C000000 		.4byte	.LFE1-.LFB1
  246 00bf 01       		.uleb128 0x1
@@ -510,7 +512,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
  248 00c1 06       		.uleb128 0x6
  249 00c2 8B000000 		.4byte	.LASF16
  250 00c6 01       		.byte	0x1
- 251 00c7 9B       		.byte	0x9b
+ 251 00c7 9D       		.byte	0x9d
  252 00c8 00000000 		.4byte	.LFB2
  253 00cc 0C000000 		.4byte	.LFE2-.LFB2
  254 00d0 01       		.uleb128 0x1
@@ -518,7 +520,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
  256 00d2 06       		.uleb128 0x6
  257 00d3 9D000000 		.4byte	.LASF17
  258 00d7 01       		.byte	0x1
- 259 00d8 CD       		.byte	0xcd
+ 259 00d8 CF       		.byte	0xcf
  260 00d9 00000000 		.4byte	.LFB3
  261 00dd 0C000000 		.4byte	.LFE3-.LFB3
  262 00e1 01       		.uleb128 0x1
@@ -526,7 +528,7 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
  264 00e3 07       		.uleb128 0x7
  265 00e4 00020000 		.4byte	.LASF22
  266 00e8 01       		.byte	0x1
- 267 00e9 1F       		.byte	0x1f
+ 267 00e9 21       		.byte	0x21
  268 00ea 8C000000 		.4byte	0x8c
  269 00ee 00       		.byte	0
  270              		.section	.debug_abbrev,"",%progbits
@@ -536,11 +538,11 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
  274 0002 01       		.byte	0x1
  275 0003 25       		.uleb128 0x25
  276 0004 0E       		.uleb128 0xe
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccXQFGV5.s 			page 10
+
+
  277 0005 13       		.uleb128 0x13
  278 0006 0B       		.uleb128 0xb
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 10
-
-
  279 0007 03       		.uleb128 0x3
  280 0008 0E       		.uleb128 0xe
  281 0009 1B       		.uleb128 0x1b
@@ -596,11 +598,11 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
  331 003b 00       		.byte	0
  332 003c 00       		.byte	0
  333 003d 06       		.uleb128 0x6
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccXQFGV5.s 			page 11
+
+
  334 003e 2E       		.uleb128 0x2e
  335 003f 00       		.byte	0
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 11
-
-
  336 0040 3F       		.uleb128 0x3f
  337 0041 19       		.uleb128 0x19
  338 0042 03       		.uleb128 0x3
@@ -656,11 +658,11 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
  388 0028 00000000 		.4byte	.LFB3
  389 002c 0C000000 		.4byte	.LFE3-.LFB3
  390 0030 00000000 		.4byte	0
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccXQFGV5.s 			page 12
+
+
  391 0034 00000000 		.4byte	0
  392              		.section	.debug_ranges,"",%progbits
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 12
-
-
  393              	.Ldebug_ranges0:
  394 0000 00000000 		.4byte	.LFB0
  395 0004 18000000 		.4byte	.LFE0
@@ -716,11 +718,11 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
  420      206C6F6E 
  420      6720756E 
  420      7369676E 
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccXQFGV5.s 			page 13
+
+
  420      65642069 
  421              	.LASF16:
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 13
-
-
  422 008b 4144435F 		.ascii	"ADC_DelSig_1_ISR3\000"
  422      44656C53 
  422      69675F31 
@@ -776,11 +778,11 @@ ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 1
  438 01c0 63686172 		.ascii	"char\000"
  438      00
  439              	.LASF4:
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccXQFGV5.s 			page 14
+
+
  440 01c5 6C6F6E67 		.ascii	"long int\000"
  440      20696E74 
-ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\ccRP8hds.s 			page 14
-
-
  440      00
  441              	.LASF10:
  442 01ce 646F7562 		.ascii	"double\000"

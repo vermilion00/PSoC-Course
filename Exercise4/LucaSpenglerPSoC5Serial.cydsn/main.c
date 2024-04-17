@@ -7,7 +7,10 @@
 * Course ID: TX00DB04
 * Description: This program reads the analog outputs of several temperature
 *              sensors using I2C and SPI and output the converted temperature
-*              value over UART.
+*              value over UART. Keep in mind that even though it wasn't required,
+*              the LM35 is wired to both the internal and the external ADC.
+*              The temperature (INT) is displaying the value provided by the
+*              internal ADC, for debugging purposes.
 *
 * ===============================================================================
 *

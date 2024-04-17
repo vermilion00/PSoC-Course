@@ -1422,7 +1422,7 @@ END GROUP
  .debug_abbrev  0x00001524      0x14b .\ARM_GCC_541\Debug\LucaSpenglerPSoC5Serial.a(CyFlash.o)
  .debug_abbrev  0x0000166f      0x16c .\ARM_GCC_541\Debug\LucaSpenglerPSoC5Serial.a(CySpc.o)
 
-.debug_line     0x00000000     0x2ea9
+.debug_line     0x00000000     0x2eaa
  *(.debug_line)
  .debug_line    0x00000000      0x1d8 .\ARM_GCC_541\Debug\main.o
  .debug_line    0x000001d8      0x24f .\ARM_GCC_541\Debug\cyfitter_cfg.o
@@ -1440,13 +1440,13 @@ END GROUP
  .debug_line    0x00002099       0xc5 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5Serial.a(I2C_1.o)
  .debug_line    0x0000215e      0x140 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5Serial.a(I2C_1_INT.o)
  .debug_line    0x0000229e      0x214 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5Serial.a(I2C_1_MASTER.o)
- .debug_line    0x000024b2      0x26d .\ARM_GCC_541\Debug\LucaSpenglerPSoC5Serial.a(SPIM_1.o)
- .debug_line    0x0000271f       0x69 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5Serial.a(SPIM_1_INT.o)
- .debug_line    0x00002788       0x96 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5Serial.a(cs_pin.o)
- .debug_line    0x0000281e      0x1ae .\ARM_GCC_541\Debug\LucaSpenglerPSoC5Serial.a(SPIM_1_IntClock.o)
- .debug_line    0x000029cc       0x7d .\ARM_GCC_541\Debug\LucaSpenglerPSoC5Serial.a(CyBootAsmGnu.o)
- .debug_line    0x00002a49      0x22f .\ARM_GCC_541\Debug\LucaSpenglerPSoC5Serial.a(CyFlash.o)
- .debug_line    0x00002c78      0x231 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5Serial.a(CySpc.o)
+ .debug_line    0x000024b2      0x26e .\ARM_GCC_541\Debug\LucaSpenglerPSoC5Serial.a(SPIM_1.o)
+ .debug_line    0x00002720       0x69 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5Serial.a(SPIM_1_INT.o)
+ .debug_line    0x00002789       0x96 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5Serial.a(cs_pin.o)
+ .debug_line    0x0000281f      0x1ae .\ARM_GCC_541\Debug\LucaSpenglerPSoC5Serial.a(SPIM_1_IntClock.o)
+ .debug_line    0x000029cd       0x7d .\ARM_GCC_541\Debug\LucaSpenglerPSoC5Serial.a(CyBootAsmGnu.o)
+ .debug_line    0x00002a4a      0x22f .\ARM_GCC_541\Debug\LucaSpenglerPSoC5Serial.a(CyFlash.o)
+ .debug_line    0x00002c79      0x231 .\ARM_GCC_541\Debug\LucaSpenglerPSoC5Serial.a(CySpc.o)
 
 .debug_frame    0x00000000     0x3130
  *(.debug_frame)
