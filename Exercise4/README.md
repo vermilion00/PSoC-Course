@@ -59,6 +59,8 @@
 /* Project Defines */
 #define FALSE  0    //Fake boolean operations
 #define TRUE   1    //Fake boolean operations
+#define LOW 0
+#define HIGH 1
 #define TRANSMIT_BUFFER_SIZE  64    //8 bytes transmit buffer
 #define RECEIVE_BUFFER_SIZE 8   //One byte receive buffer
 #define DUMMY_SIZE 2    //Number of dummy bytes to transmit
@@ -118,7 +120,7 @@ int main()
     UART_1_Start();
     I2C_1_Start();
     SPIM_1_Start();
-    cs_pin_Write(1);    //Deactivate the chip select line
+    cs_pin_Write(HIGH);    //Deactivate the chip select line
     
     /* Initialize Variables */
     ContinuouslySendData = FALSE;
@@ -179,13 +181,15 @@ int main()
             SPIM_1_ClearRxBuffer(); //Clear the Rx buffer
             SPIM_1_ClearTxBuffer(); //Clear the Tx buffer
             SPIM_1_ClearFIFO(); //Clear FIFO
-            cs_pin_Write(0);    //Activate the Slave
+            cs_pin_Write(LOW);    //Activate the Slave
             SPIM_1_PutArray(TransmitDummy, 2);  //Transmit 16 dummy bits to start communication
             ReceiveSPIVal = ADC_DelSig_1_CountsTo_mVolts(SPIM_1_ReadRxData()) - VALUE_CORRECTION;  //Read the SPI data, convert it to mV and correct an offset
-            cs_pin_Write(1);    //Deactivate the Slave
+            cs_pin_Write(HIGH);    //Deactivate the Slave
             SpiAdcSum += ReceiveSPIVal; //Add the received SPI samples together
             
             if(sample_count >= SAMPLE_RATE){ //Check if the sample threshhold has been reached
+			
+				/* Internal ADC Value logic */
                 average_value = sample_sum / SAMPLE_RATE; //Calculate the average sampled value
                 average_value_spi = SpiAdcSum / SAMPLE_RATE;    //Calculate the average sampled SPI value
                 sprintf(TransmitBuffer, "{\r\n\t\"Avg ADC Value\": \"%1u mV\",\r\n", average_value);    //Convert the sampled value to a string
@@ -195,7 +199,7 @@ int main()
                 sample_count = 0;   //Reset the sample count
                 sample_sum = 0;   //Reset the sample sum value
                 
-                //Get I2C Sensor temperature
+                /* Get I2C Sensor temperature */
                 I2C_1_MasterClearStatus();  //Clear the status of the I2C Master
                 I2C_1_MasterSendStart(ADDRESS_TC74, I2C_1_WRITE_XFER_MODE); //Send the start message to the I2C slave in write mode
                 status = I2C_1_MasterWriteByte(TEMPERATURE_COMMAND);    //Send the temperature command
@@ -206,7 +210,8 @@ int main()
                 sprintf(TransmitBuffer, "\t\"Temperature (I2C)\": \"%i C\",\r\n", ReceiveI2CVal);   //Convert the I2C temperature value to a string
                 UART_1_PutString(TransmitBuffer);   //Output the I2C temperature
                 
-                sprintf(TransmitBuffer, "\t\"Temperature (SPI): \"%i.%i C\"\r\n}\r\n", average_value_spi / 10, average_value % 10); //Convert the SPI temperature value to a string
+				/* Output the SPI temperature data */
+                sprintf(TransmitBuffer, "\t\"Temperature (SPI): \"%i.%i C\"\r\n}\r\n", average_value_spi / TEN_CONSTANT, average_value % TEN_CONSTANT); //Convert the SPI temperature value to a string
                 UART_1_PutString(TransmitBuffer);   //Output the SPI temperature
                 SpiAdcSum = 0;  //Reset the SPI value sum
             }

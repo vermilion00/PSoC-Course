@@ -1,0 +1,28 @@
+(DELAYFILE
+ (SDFVERSION "IEEE 1497 4.0")
+ (DATE "2024-04-17T13:20:35Z")
+ (DESIGN "Design01")
+ (VENDOR "Cypress Semiconductor")
+ (PROGRAM "PSoC Creator")
+ (VERSION " 4.4")
+ (DIVIDER .)
+ (TIMESCALE 1 ns)
+ (CELL
+  (CELLTYPE "Design01")
+  (INSTANCE *)
+  (DELAY
+   (ABSOLUTE
+    (INTERCONNECT Row1\(0\)_PAD Row1\(0\).pad_in (0.000:0.000:0.000))
+    (INTERCONNECT Row2\(0\)_PAD Row2\(0\).pad_in (0.000:0.000:0.000))
+    (INTERCONNECT Row3\(0\)_PAD Row3\(0\).pad_in (0.000:0.000:0.000))
+    (INTERCONNECT Row4\(0\)_PAD Row4\(0\).pad_in (0.000:0.000:0.000))
+    (INTERCONNECT Row5\(0\)_PAD Row5\(0\).pad_in (0.000:0.000:0.000))
+    (INTERCONNECT Col1\(0\)_PAD Col1\(0\).pad_in (0.000:0.000:0.000))
+    (INTERCONNECT Col2\(0\)_PAD Col2\(0\).pad_in (0.000:0.000:0.000))
+    (INTERCONNECT Col3\(0\)_PAD Col3\(0\).pad_in (0.000:0.000:0.000))
+    (INTERCONNECT Col4\(0\)_PAD Col4\(0\).pad_in (0.000:0.000:0.000))
+    (INTERCONNECT Col5\(0\)_PAD Col5\(0\).pad_in (0.000:0.000:0.000))
+   )
+  )
+ )
+)

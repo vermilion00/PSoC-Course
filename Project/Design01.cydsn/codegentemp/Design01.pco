@@ -1,0 +1,20 @@
+# Design01
+# 2024-04-17 13:20:34Z
+
+# IO_0@[IOP=(1)][IoId=(0)] is reserved: SWDDebugEnabled
+dont_use_io iocell 1 0
+# IO_1@[IOP=(1)][IoId=(1)] is reserved: SWDDebugEnabled
+dont_use_io iocell 1 1
+# IO_3@[IOP=(1)][IoId=(3)] is reserved: SWDDebugEnabled
+dont_use_io iocell 1 3
+set_location "ClockBlock" clockblockcell -1 -1 0
+set_io "Row1(0)" iocell 0 0
+set_io "Row2(0)" iocell 0 1
+set_io "Row3(0)" iocell 0 2
+set_io "Row4(0)" iocell 0 3
+set_io "Row5(0)" iocell 0 4
+set_io "Col1(0)" iocell 3 0
+set_io "Col2(0)" iocell 3 1
+set_io "Col3(0)" iocell 3 2
+set_io "Col4(0)" iocell 3 3
+set_io "Col5(0)" iocell 3 4
