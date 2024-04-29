@@ -1,0 +1,3380 @@
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"HallEffect.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.scanMatrix,"ax",%progbits
+  20              		.align	2
+  21              		.global	scanMatrix
+  22              		.thumb
+  23              		.thumb_func
+  24              		.type	scanMatrix, %function
+  25              	scanMatrix:
+  26              	.LFB64:
+  27              		.file 1 "HallEffect.c"
+   1:HallEffect.c  **** /* ========================================
+   2:HallEffect.c  ****  *
+   3:HallEffect.c  ****  * Copyright YOUR COMPANY, THE YEAR
+   4:HallEffect.c  ****  * All Rights Reserved
+   5:HallEffect.c  ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:HallEffect.c  ****  *
+   7:HallEffect.c  ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:HallEffect.c  ****  * WHICH IS THE PROPERTY OF your company.
+   9:HallEffect.c  ****  *
+  10:HallEffect.c  ****  * ========================================
+  11:HallEffect.c  **** */
+  12:HallEffect.c  **** 
+  13:HallEffect.c  **** /* The ADC reads a lower value the further the switch is pressed */
+  14:HallEffect.c  **** 
+  15:HallEffect.c  **** #include "HallEffect.h"
+  16:HallEffect.c  **** 
+  17:HallEffect.c  **** /* Array of functions to make accessing the pins in a for loop easier */
+  18:HallEffect.c  **** void (*pinWriteArr[COLUMNS])(uint8) = {Col1_Write, Col2_Write, Col3_Write, Col4_Write};
+  19:HallEffect.c  **** 
+  20:HallEffect.c  **** //TODO: Check if define works
+  21:HallEffect.c  **** /* Initialize the keyboard */
+  22:HallEffect.c  **** void keyboardInit(Matrix *matrix){
+  23:HallEffect.c  ****     //TODO: Find out if its possible to use define directly
+  24:HallEffect.c  ****     float triggerHeight[ROWS][COLUMNS] = TRIGGER_HEIGHT;
+  25:HallEffect.c  ****     uint8 row, col;
+  26:HallEffect.c  ****     uint8 error = 0;
+  27:HallEffect.c  ****     for(row = 0; row < ROWS; row++){
+  28:HallEffect.c  ****         for(col = 0; col < COLUMNS; col++){
+  29:HallEffect.c  ****             //Check if the trigger height set in config.h is within spec
+  30:HallEffect.c  ****             if(triggerHeight[row][col] > MAX_TRIGGER_HEIGHT){
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 2
+
+
+  31:HallEffect.c  ****                 error = 1;
+  32:HallEffect.c  ****             }else if(triggerHeight[row][col] < MIN_TRIGGER_HEIGHT){
+  33:HallEffect.c  ****                 error = 2;
+  34:HallEffect.c  ****             }else{
+  35:HallEffect.c  ****                 //Set the individual trigger heights per switch
+  36:HallEffect.c  ****                 matrix[row][col]->trigger_height = convertToVal(triggerHeight[row][col]);
+  37:HallEffect.c  ****                 //Reset switch statuses
+  38:HallEffect.c  ****                 matrix[row][col]->pressed = FALSE;
+  39:HallEffect.c  ****                 
+  40:HallEffect.c  ****                 //If Rapid Trigger is enabled, reset low value
+  41:HallEffect.c  ****                 #ifdef RAPID_TRIGGER
+  42:HallEffect.c  ****                 matrix[row][col]->lowestVal = matrix[row][col]->trigger_height;
+  43:HallEffect.c  ****                 #endif
+  44:HallEffect.c  ****                 
+  45:HallEffect.c  ****                 //If calibration is enabled, call calibration function if calibrate button is press
+  46:HallEffect.c  ****                 #ifdef CALIBRATE_SWITCHES
+  47:HallEffect.c  ****                 //TODO: Check if indexing the defined string works
+  48:HallEffect.c  ****                 //Convert char to uint8
+  49:HallEffect.c  ****                 uint8 calibrationKey[2] = {(uint8)atoi(&CALIBRATION_KEY[0]), (uint8)atoi(&CALIBRATI
+  50:HallEffect.c  ****                 //Read the designated calibration key, as defined in config.h
+  51:HallEffect.c  ****                 ADC_AMux_Select(calibrationKey[0]);
+  52:HallEffect.c  ****                 (*pinWriteArr[calibrationKey[1]])(HIGH);
+  53:HallEffect.c  ****                 //Call the calibration function if the key is held at startup
+  54:HallEffect.c  ****                 if(ADC_Read16() < matrix[calibrationKey[0]][calibrationKey[1]]->trigger_height){
+  55:HallEffect.c  ****                     uint8 completed = FALSE;
+  56:HallEffect.c  ****                     //Only start calibrating after the calibration key has been released
+  57:HallEffect.c  ****                     //Display message to release calibration key
+  58:HallEffect.c  ****                     while(!completed){
+  59:HallEffect.c  ****                         //Wait until key is released again
+  60:HallEffect.c  ****                         if(ADC_Read16() > matrix[calibrationKey[0]][calibrationKey[1]]->trigger_hei
+  61:HallEffect.c  ****                             completed = TRUE;
+  62:HallEffect.c  ****                         }
+  63:HallEffect.c  ****                     }
+  64:HallEffect.c  ****                     //Call the calibration function
+  65:HallEffect.c  ****                     calibrateSwitches(matrix);
+  66:HallEffect.c  ****                 }
+  67:HallEffect.c  ****                 //Deactivate row and column
+  68:HallEffect.c  ****                 ADC_AMux_Disconnect(calibrationKey[0]);
+  69:HallEffect.c  ****                 (*pinWriteArr[calibrationKey[1]])(LOW);
+  70:HallEffect.c  ****                 #endif
+  71:HallEffect.c  ****             }
+  72:HallEffect.c  ****         }
+  73:HallEffect.c  ****     }
+  74:HallEffect.c  ****     #ifdef RAPID_TRIGGER
+  75:HallEffect.c  ****     //Check if the Rapid trigger distance is acceptable
+  76:HallEffect.c  ****     if(RAPID_TRIGGER > MAX_RAPID_TRIGGER_DISTANCE){
+  77:HallEffect.c  ****         error = 3;
+  78:HallEffect.c  ****     }else if(RAPID_TRIGGER < MIN_RAPID_TRIGGER_DISTANCE){
+  79:HallEffect.c  ****         error = 4;
+  80:HallEffect.c  ****     }else{
+  81:HallEffect.c  ****         //Convert mm value to adc value at initialization to avoid conversions each matrix scan
+  82:HallEffect.c  ****         rapidTriggerDistance = convertToVal(RAPID_TRIGGER);
+  83:HallEffect.c  ****     }
+  84:HallEffect.c  ****     #endif
+  85:HallEffect.c  ****     //Check if Error messages are being thrown
+  86:HallEffect.c  ****     //TODO: Check for more possible error messages
+  87:HallEffect.c  ****     if(error != 0){
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 3
+
+
+  88:HallEffect.c  ****         //Output "Error: Please change the following setting in config.h and flash the firmware aga
+  89:HallEffect.c  ****         switch(error){
+  90:HallEffect.c  ****             case 1:
+  91:HallEffect.c  ****             //Output "Trigger height is too high! The maximum height allowed is MAX_TRIGGER_HEIGHT.
+  92:HallEffect.c  ****             #ifdef UART
+  93:HallEffect.c  ****             UART_PutString("Trigger height is too high! The maximum height allowed is MAX_TRIGGER_H
+  94:HallEffect.c  ****             #endif
+  95:HallEffect.c  ****             break;
+  96:HallEffect.c  ****             case 2:
+  97:HallEffect.c  ****             //Output "Trigger height is too low! The minimum height allowed is MIN_TRIGGER_HEIGHT."
+  98:HallEffect.c  ****             #ifdef UART
+  99:HallEffect.c  ****             UART_PutString("Trigger height is too low! The minimum height allowed is MIN_TRIGGER_HE
+ 100:HallEffect.c  ****             #endif
+ 101:HallEffect.c  ****             break;
+ 102:HallEffect.c  ****             #ifdef RAPID_TRIGGER
+ 103:HallEffect.c  ****             case 3:
+ 104:HallEffect.c  ****             //Output "Rapid trigger distance is too high! The maximum distance allowed is MAX_RAPID
+ 105:HallEffect.c  ****             #ifdef UART
+ 106:HallEffect.c  ****             UART_PutString("Rapid trigger distance is too high! The maximum distance allowed is MAX
+ 107:HallEffect.c  ****             #endif
+ 108:HallEffect.c  ****             break;
+ 109:HallEffect.c  ****             case 4:
+ 110:HallEffect.c  ****             //Output "Rapid trigger distance is too low! The minimum distance allowed is MIN_RAPID_
+ 111:HallEffect.c  ****             #ifdef UART
+ 112:HallEffect.c  ****             UART_PutString("Rapid trigger distance is too low! The minimum distance allowed is MIN_
+ 113:HallEffect.c  ****             #endif
+ 114:HallEffect.c  ****             break;
+ 115:HallEffect.c  ****             #endif
+ 116:HallEffect.c  ****             //Don't allow the program to continue in case of error
+ 117:HallEffect.c  ****         }
+ 118:HallEffect.c  ****         #ifdef UART
+ 119:HallEffect.c  ****         UART_PutString("Error: Please change the following setting in config.h and flash the firmwa
+ 120:HallEffect.c  ****         #endif
+ 121:HallEffect.c  ****         while(TRUE){
+ 122:HallEffect.c  ****             //Do nothing, message repeats every 5 seconds
+ 123:HallEffect.c  ****             CyDelay(ERROR_WAIT_TIME);
+ 124:HallEffect.c  ****         }
+ 125:HallEffect.c  ****     }
+ 126:HallEffect.c  **** }
+ 127:HallEffect.c  **** 
+ 128:HallEffect.c  **** /* Get switch values and set switch states, runs every loop */
+ 129:HallEffect.c  **** void scanMatrix(Matrix *matrix){
+  28              		.loc 1 129 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              	.LVL0:
+  33 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+  34              		.cfi_def_cfa_offset 24
+  35              		.cfi_offset 4, -24
+  36              		.cfi_offset 5, -20
+  37              		.cfi_offset 6, -16
+  38              		.cfi_offset 7, -12
+  39              		.cfi_offset 8, -8
+  40              		.cfi_offset 14, -4
+  41 0004 0746     		mov	r7, r0
+  42              	.LVL1:
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 4
+
+
+ 130:HallEffect.c  ****     uint8 row, col;
+ 131:HallEffect.c  ****     for(row = 0; row < ROWS; row++){
+  43              		.loc 1 131 0
+  44 0006 0026     		movs	r6, #0
+  45 0008 54E0     		b	.L2
+  46              	.LVL2:
+  47              	.L10:
+ 132:HallEffect.c  ****         //Set Mux pins to read the correct input
+ 133:HallEffect.c  ****         ADC_AMux_Select(row);  
+  48              		.loc 1 133 0
+  49 000a 3046     		mov	r0, r6
+  50 000c FFF7FEFF 		bl	ADC_AMux_Select
+  51              	.LVL3:
+ 134:HallEffect.c  ****         for(col = 0; col < COLUMNS; col++){
+  52              		.loc 1 134 0
+  53 0010 0024     		movs	r4, #0
+  54 0012 4BE0     		b	.L3
+  55              	.LVL4:
+  56              	.L9:
+ 135:HallEffect.c  ****             //Check if switch location is used, ignore if it isn't
+ 136:HallEffect.c  ****             //TODO: Check if it's slower when ignoring
+ 137:HallEffect.c  ****             if(matrix[row][col]->trigger_height != 0){
+  57              		.loc 1 137 0
+  58 0014 06EB8602 		add	r2, r6, r6, lsl #2
+  59 0018 5301     		lsls	r3, r2, #5
+  60 001a FD18     		adds	r5, r7, r3
+  61 001c A046     		mov	r8, r4
+  62 001e 04EB8402 		add	r2, r4, r4, lsl #2
+  63 0022 D300     		lsls	r3, r2, #3
+  64 0024 2B44     		add	r3, r3, r5
+  65 0026 5B88     		ldrh	r3, [r3, #2]
+  66 0028 002B     		cmp	r3, #0
+  67 002a 3DD0     		beq	.L4
+  68              	.LBB2:
+ 138:HallEffect.c  ****                 //Activate the column pin
+ 139:HallEffect.c  ****                 (*pinWriteArr[col])(HIGH);
+  69              		.loc 1 139 0
+  70 002c 234B     		ldr	r3, .L12
+  71 002e 53F82430 		ldr	r3, [r3, r4, lsl #2]
+  72 0032 0120     		movs	r0, #1
+  73 0034 9847     		blx	r3
+  74              	.LVL5:
+ 140:HallEffect.c  ****                 //Read row pin to check if switch is activated, save state in 2D array
+ 141:HallEffect.c  ****                 //TODO: Save in 1D array instead
+ 142:HallEffect.c  ****                 uint16 val = ADC_Read16();
+  75              		.loc 1 142 0
+  76 0036 FFF7FEFF 		bl	ADC_Read16
+  77              	.LVL6:
+  78 003a 80B2     		uxth	r0, r0
+  79              	.LVL7:
+ 143:HallEffect.c  ****                 //The read value is higher the further the switch is pressed
+ 144:HallEffect.c  ****                 if(val < matrix[row][col]->trigger_height){
+  80              		.loc 1 144 0
+  81 003c 04EB8402 		add	r2, r4, r4, lsl #2
+  82 0040 D300     		lsls	r3, r2, #3
+  83 0042 2B44     		add	r3, r3, r5
+  84 0044 5B88     		ldrh	r3, [r3, #2]
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 5
+
+
+  85 0046 9842     		cmp	r0, r3
+  86 0048 23D2     		bcs	.L5
+ 145:HallEffect.c  ****                     //Rapid trigger logic, only compiled when needed
+ 146:HallEffect.c  ****                     #ifdef RAPID_TRIGGER
+ 147:HallEffect.c  ****                     //TODO: Check if this works
+ 148:HallEffect.c  ****                     //Set the lowest value if needed
+ 149:HallEffect.c  ****                     if(val < matrix[row][col]->lowestVal){
+  87              		.loc 1 149 0
+  88 004a 04EB8402 		add	r2, r4, r4, lsl #2
+  89 004e D300     		lsls	r3, r2, #3
+  90 0050 2B44     		add	r3, r3, r5
+  91 0052 9B88     		ldrh	r3, [r3, #4]
+  92 0054 9842     		cmp	r0, r3
+  93 0056 07D2     		bcs	.L6
+ 150:HallEffect.c  ****                         matrix[row][col]->lowestVal = val;
+  94              		.loc 1 150 0
+  95 0058 A200     		lsls	r2, r4, #2
+  96 005a 2244     		add	r2, r2, r4
+  97 005c D300     		lsls	r3, r2, #3
+  98 005e 2B44     		add	r3, r3, r5
+  99 0060 9880     		strh	r0, [r3, #4]	@ movhi
+ 151:HallEffect.c  ****                         matrix[row][col]->pressed = TRUE;
+ 100              		.loc 1 151 0
+ 101 0062 0122     		movs	r2, #1
+ 102 0064 5A70     		strb	r2, [r3, #1]
+ 103 0066 1AE0     		b	.L7
+ 104              	.L6:
+ 152:HallEffect.c  ****                     //Reset the switch pressed status if it's been lifted past the rapid trigger di
+ 153:HallEffect.c  ****                     }else if((val - matrix[row][col]->lowestVal) > rapidTriggerDistance){
+ 105              		.loc 1 153 0
+ 106 0068 C01A     		subs	r0, r0, r3
+ 107              	.LVL8:
+ 108 006a 154B     		ldr	r3, .L12+4
+ 109 006c 1B88     		ldrh	r3, [r3]
+ 110 006e 9842     		cmp	r0, r3
+ 111 0070 08DD     		ble	.L8
+ 154:HallEffect.c  ****                         matrix[row][col]->pressed = FALSE;
+ 112              		.loc 1 154 0
+ 113 0072 A200     		lsls	r2, r4, #2
+ 114 0074 2244     		add	r2, r2, r4
+ 115 0076 D300     		lsls	r3, r2, #3
+ 116 0078 2B44     		add	r3, r3, r5
+ 117 007a 0022     		movs	r2, #0
+ 118 007c 5A70     		strb	r2, [r3, #1]
+ 155:HallEffect.c  ****                         //Set the rapid trigger activation threshold
+ 156:HallEffect.c  ****                         matrix[row][col]->lowestVal = val - rapidTriggerDistance;
+ 157:HallEffect.c  ****                         //Reset the lowest value when switch is released
+ 158:HallEffect.c  ****                         matrix[row][col]->lowestVal = matrix[row][col]->trigger_height;
+ 119              		.loc 1 158 0
+ 120 007e 5A88     		ldrh	r2, [r3, #2]
+ 121 0080 9A80     		strh	r2, [r3, #4]	@ movhi
+ 122 0082 0CE0     		b	.L7
+ 123              	.L8:
+ 159:HallEffect.c  ****                     }else{
+ 160:HallEffect.c  ****                         //TODO: Check if necessary
+ 161:HallEffect.c  ****                         //Set switch state if pressed
+ 162:HallEffect.c  ****                         matrix[row][col]->pressed = TRUE;
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 6
+
+
+ 124              		.loc 1 162 0
+ 125 0084 04EB8402 		add	r2, r4, r4, lsl #2
+ 126 0088 D300     		lsls	r3, r2, #3
+ 127 008a 2B44     		add	r3, r3, r5
+ 128 008c 0122     		movs	r2, #1
+ 129 008e 5A70     		strb	r2, [r3, #1]
+ 130 0090 05E0     		b	.L7
+ 131              	.LVL9:
+ 132              	.L5:
+ 163:HallEffect.c  ****                     }
+ 164:HallEffect.c  ****                     #else
+ 165:HallEffect.c  ****                     //Set switch state if pressed
+ 166:HallEffect.c  ****                     matrix[row][col]->pressed = TRUE;
+ 167:HallEffect.c  ****                     #endif
+ 168:HallEffect.c  ****                 }else{
+ 169:HallEffect.c  ****                     //Reset switch state if not pressed
+ 170:HallEffect.c  ****                     matrix[row][col]->pressed = FALSE;
+ 133              		.loc 1 170 0
+ 134 0092 04EB8402 		add	r2, r4, r4, lsl #2
+ 135 0096 D300     		lsls	r3, r2, #3
+ 136 0098 2B44     		add	r3, r3, r5
+ 137 009a 0022     		movs	r2, #0
+ 138 009c 5A70     		strb	r2, [r3, #1]
+ 139              	.LVL10:
+ 140              	.L7:
+ 171:HallEffect.c  ****                 }
+ 172:HallEffect.c  ****                 //Deactivate the column pin at end of column scan to avoid ghosting issues
+ 173:HallEffect.c  ****                 (*pinWriteArr[col])(LOW);
+ 141              		.loc 1 173 0
+ 142 009e 074B     		ldr	r3, .L12
+ 143 00a0 53F82830 		ldr	r3, [r3, r8, lsl #2]
+ 144 00a4 0020     		movs	r0, #0
+ 145 00a6 9847     		blx	r3
+ 146              	.LVL11:
+ 147              	.L4:
+ 148              	.LBE2:
+ 134:HallEffect.c  ****             //Check if switch location is used, ignore if it isn't
+ 149              		.loc 1 134 0 discriminator 2
+ 150 00a8 0134     		adds	r4, r4, #1
+ 151              	.LVL12:
+ 152 00aa E4B2     		uxtb	r4, r4
+ 153              	.LVL13:
+ 154              	.L3:
+ 134:HallEffect.c  ****             //Check if switch location is used, ignore if it isn't
+ 155              		.loc 1 134 0 is_stmt 0 discriminator 1
+ 156 00ac 032C     		cmp	r4, #3
+ 157 00ae B1D9     		bls	.L9
+ 131:HallEffect.c  ****         //Set Mux pins to read the correct input
+ 158              		.loc 1 131 0 is_stmt 1 discriminator 2
+ 159 00b0 0136     		adds	r6, r6, #1
+ 160              	.LVL14:
+ 161 00b2 F6B2     		uxtb	r6, r6
+ 162              	.LVL15:
+ 163              	.L2:
+ 131:HallEffect.c  ****         //Set Mux pins to read the correct input
+ 164              		.loc 1 131 0 is_stmt 0 discriminator 1
+ 165 00b4 032E     		cmp	r6, #3
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 7
+
+
+ 166 00b6 A8D9     		bls	.L10
+ 174:HallEffect.c  ****             }
+ 175:HallEffect.c  ****         }
+ 176:HallEffect.c  ****     }
+ 177:HallEffect.c  **** }
+ 167              		.loc 1 177 0 is_stmt 1
+ 168 00b8 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 169              	.LVL16:
+ 170              	.L13:
+ 171              		.align	2
+ 172              	.L12:
+ 173 00bc 00000000 		.word	.LANCHOR0
+ 174 00c0 00000000 		.word	rapidTriggerDistance
+ 175              		.cfi_endproc
+ 176              	.LFE64:
+ 177              		.size	scanMatrix, .-scanMatrix
+ 178              		.section	.text.updateKeyEvents,"ax",%progbits
+ 179              		.align	2
+ 180              		.global	updateKeyEvents
+ 181              		.thumb
+ 182              		.thumb_func
+ 183              		.type	updateKeyEvents, %function
+ 184              	updateKeyEvents:
+ 185              	.LFB65:
+ 178:HallEffect.c  **** 
+ 179:HallEffect.c  **** /* Check if key was pressed last scan */
+ 180:HallEffect.c  **** //TODO: Check if global or local variable and array is more efficient
+ 181:HallEffect.c  **** void updateKeyEvents(Matrix *matrix){
+ 186              		.loc 1 181 0
+ 187              		.cfi_startproc
+ 188              		@ args = 0, pretend = 0, frame = 32
+ 189              		@ frame_needed = 0, uses_anonymous_args = 0
+ 190              		@ link register save eliminated.
+ 191              	.LVL17:
+ 192 0000 70B4     		push	{r4, r5, r6}
+ 193              		.cfi_def_cfa_offset 12
+ 194              		.cfi_offset 4, -12
+ 195              		.cfi_offset 5, -8
+ 196              		.cfi_offset 6, -4
+ 197 0002 89B0     		sub	sp, sp, #36
+ 198              		.cfi_def_cfa_offset 48
+ 199              	.LVL18:
+ 182:HallEffect.c  ****     uint8 prevMatrix[ROWS][COLUMNS];
+ 183:HallEffect.c  ****     //Actionbuffer equal in length to the amount of keys
+ 184:HallEffect.c  ****     uint8 actionBuffer[ROWS*COLUMNS];
+ 185:HallEffect.c  ****     uint8 row, col;
+ 186:HallEffect.c  ****     
+ 187:HallEffect.c  ****     //Check if keydown or keyup event happened and set state accordingly
+ 188:HallEffect.c  ****     for(row = 0; row < ROWS; row++){
+ 200              		.loc 1 188 0
+ 201 0004 0022     		movs	r2, #0
+ 202 0006 24E0     		b	.L15
+ 203              	.LVL19:
+ 204              	.L17:
+ 189:HallEffect.c  ****         for(col = 0; col < COLUMNS; col++){
+ 190:HallEffect.c  ****             if(matrix[row][col]->pressed != prevMatrix[row][col]){
+ 205              		.loc 1 190 0
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 8
+
+
+ 206 0008 9100     		lsls	r1, r2, #2
+ 207 000a 8D18     		adds	r5, r1, r2
+ 208 000c 6C01     		lsls	r4, r5, #5
+ 209 000e 0519     		adds	r5, r0, r4
+ 210 0010 03EB8306 		add	r6, r3, r3, lsl #2
+ 211 0014 F400     		lsls	r4, r6, #3
+ 212 0016 2C44     		add	r4, r4, r5
+ 213 0018 6478     		ldrb	r4, [r4, #1]	@ zero_extendqisi2
+ 214 001a 08AD     		add	r5, sp, #32
+ 215 001c 2944     		add	r1, r1, r5
+ 216 001e 1944     		add	r1, r1, r3
+ 217 0020 11F8101C 		ldrb	r1, [r1, #-16]	@ zero_extendqisi2
+ 218 0024 8C42     		cmp	r4, r1
+ 219 0026 0CD0     		beq	.L16
+ 191:HallEffect.c  ****                 //Add keydown event to action buffer
+ 192:HallEffect.c  ****                 actionBuffer[row*ROWS+col] = !prevMatrix[row][col];
+ 220              		.loc 1 192 0
+ 221 0028 9400     		lsls	r4, r2, #2
+ 222 002a 1D19     		adds	r5, r3, r4
+ 223 002c B1FA81F1 		clz	r1, r1
+ 224 0030 4909     		lsrs	r1, r1, #5
+ 225 0032 08AE     		add	r6, sp, #32
+ 226 0034 3544     		add	r5, r5, r6
+ 227 0036 05F8201C 		strb	r1, [r5, #-32]
+ 193:HallEffect.c  ****                 //Update the previous matrix
+ 194:HallEffect.c  ****                 prevMatrix[row][col] = !prevMatrix[row][col];
+ 228              		.loc 1 194 0
+ 229 003a 3444     		add	r4, r4, r6
+ 230 003c 1C44     		add	r4, r4, r3
+ 231 003e 04F8101C 		strb	r1, [r4, #-16]
+ 232              	.L16:
+ 189:HallEffect.c  ****             if(matrix[row][col]->pressed != prevMatrix[row][col]){
+ 233              		.loc 1 189 0 discriminator 2
+ 234 0042 0133     		adds	r3, r3, #1
+ 235              	.LVL20:
+ 236 0044 DBB2     		uxtb	r3, r3
+ 237              	.LVL21:
+ 238 0046 00E0     		b	.L18
+ 239              	.LVL22:
+ 240              	.L21:
+ 241 0048 0023     		movs	r3, #0
+ 242              	.L18:
+ 243              	.LVL23:
+ 189:HallEffect.c  ****             if(matrix[row][col]->pressed != prevMatrix[row][col]){
+ 244              		.loc 1 189 0 is_stmt 0 discriminator 1
+ 245 004a 032B     		cmp	r3, #3
+ 246 004c DCD9     		bls	.L17
+ 188:HallEffect.c  ****         for(col = 0; col < COLUMNS; col++){
+ 247              		.loc 1 188 0 is_stmt 1 discriminator 2
+ 248 004e 0132     		adds	r2, r2, #1
+ 249              	.LVL24:
+ 250 0050 D2B2     		uxtb	r2, r2
+ 251              	.LVL25:
+ 252              	.L15:
+ 188:HallEffect.c  ****         for(col = 0; col < COLUMNS; col++){
+ 253              		.loc 1 188 0 is_stmt 0 discriminator 1
+ 254 0052 032A     		cmp	r2, #3
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 9
+
+
+ 255 0054 F8D9     		bls	.L21
+ 256 0056 0F23     		movs	r3, #15
+ 257              	.LVL26:
+ 258              	.L20:
+ 259              	.LBB3:
+ 195:HallEffect.c  ****             }
+ 196:HallEffect.c  ****         }
+ 197:HallEffect.c  ****     }
+ 198:HallEffect.c  ****     
+ 199:HallEffect.c  ****     //Update the displayed page if necessary
+ 200:HallEffect.c  ****     //Iterate backwards through the array to assume that the top left button is most likely the int
+ 201:HallEffect.c  ****     for(uint8 i = (ROWS*COLUMNS-1); i >= 0; i--){
+ 202:HallEffect.c  ****         if(actionBuffer[i]){
+ 260              		.loc 1 202 0 is_stmt 1
+ 261 0058 08AA     		add	r2, sp, #32
+ 262 005a 1A44     		add	r2, r2, r3
+ 263 005c 12F8202C 		ldrb	r2, [r2, #-32]	@ zero_extendqisi2
+ 264 0060 32B1     		cbz	r2, .L19
+ 203:HallEffect.c  ****             //Set the action based on the key, action == key location
+ 204:HallEffect.c  ****             action = i;
+ 265              		.loc 1 204 0
+ 266 0062 054A     		ldr	r2, .L23
+ 267 0064 1370     		strb	r3, [r2]
+ 205:HallEffect.c  ****             //Reset the action buffer at scanned position
+ 206:HallEffect.c  ****             actionBuffer[i] = 0;
+ 268              		.loc 1 206 0
+ 269 0066 0021     		movs	r1, #0
+ 270 0068 08AA     		add	r2, sp, #32
+ 271 006a 1A44     		add	r2, r2, r3
+ 272 006c 02F8201C 		strb	r1, [r2, #-32]
+ 273              	.L19:
+ 201:HallEffect.c  ****         if(actionBuffer[i]){
+ 274              		.loc 1 201 0
+ 275 0070 013B     		subs	r3, r3, #1
+ 276              	.LVL27:
+ 277 0072 DBB2     		uxtb	r3, r3
+ 278              	.LVL28:
+ 207:HallEffect.c  ****         }
+ 208:HallEffect.c  ****     }
+ 279              		.loc 1 208 0
+ 280 0074 F0E7     		b	.L20
+ 281              	.L24:
+ 282 0076 00BF     		.align	2
+ 283              	.L23:
+ 284 0078 00000000 		.word	action
+ 285              	.LBE3:
+ 286              		.cfi_endproc
+ 287              	.LFE65:
+ 288              		.size	updateKeyEvents, .-updateKeyEvents
+ 289              		.global	__aeabi_f2d
+ 290              		.global	__aeabi_dmul
+ 291              		.global	__aeabi_dsub
+ 292              		.global	__aeabi_d2uiz
+ 293              		.section	.text.convertToVal,"ax",%progbits
+ 294              		.align	2
+ 295              		.global	convertToVal
+ 296              		.thumb
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 10
+
+
+ 297              		.thumb_func
+ 298              		.type	convertToVal, %function
+ 299              	convertToVal:
+ 300              	.LFB66:
+ 209:HallEffect.c  **** }
+ 210:HallEffect.c  **** 
+ 211:HallEffect.c  **** uint16 convertToVal(float height){
+ 301              		.loc 1 211 0
+ 302              		.cfi_startproc
+ 303              		@ args = 0, pretend = 0, frame = 0
+ 304              		@ frame_needed = 0, uses_anonymous_args = 0
+ 305              	.LVL29:
+ 306 0000 08B5     		push	{r3, lr}
+ 307              		.cfi_def_cfa_offset 8
+ 308              		.cfi_offset 3, -8
+ 309              		.cfi_offset 14, -4
+ 212:HallEffect.c  ****     #ifdef CALIBRATE_SWITCHES
+ 213:HallEffect.c  ****     //TODO: Adjust values
+ 214:HallEffect.c  ****     //TODO: Decide if offset should be applied here
+ 215:HallEffect.c  ****     return(height * CONVERSION_CONSTANT - CONVERSION_OFFSET);
+ 310              		.loc 1 215 0
+ 311 0002 FFF7FEFF 		bl	__aeabi_f2d
+ 312              	.LVL30:
+ 313 0006 06A3     		adr	r3, .L27
+ 314 0008 D3E90023 		ldrd	r2, [r3]
+ 315 000c FFF7FEFF 		bl	__aeabi_dmul
+ 316              	.LVL31:
+ 317 0010 0022     		movs	r2, #0
+ 318 0012 054B     		ldr	r3, .L27+8
+ 319 0014 FFF7FEFF 		bl	__aeabi_dsub
+ 320              	.LVL32:
+ 321 0018 FFF7FEFF 		bl	__aeabi_d2uiz
+ 322              	.LVL33:
+ 216:HallEffect.c  ****     #else
+ 217:HallEffect.c  ****     return(height * CONVERSION_CONSTANT - CONVERSION_OFFSET);
+ 218:HallEffect.c  ****     #endif
+ 219:HallEffect.c  **** }
+ 323              		.loc 1 219 0
+ 324 001c 80B2     		uxth	r0, r0
+ 325 001e 08BD     		pop	{r3, pc}
+ 326              	.L28:
+ 327              		.align	3
+ 328              	.L27:
+ 329 0020 713D0AD7 		.word	-687194767
+ 330 0024 A3504A40 		.word	1078612131
+ 331 0028 00006940 		.word	1080623104
+ 332              		.cfi_endproc
+ 333              	.LFE66:
+ 334              		.size	convertToVal, .-convertToVal
+ 335              		.section	.text.calibrateSwitches,"ax",%progbits
+ 336              		.align	2
+ 337              		.global	calibrateSwitches
+ 338              		.thumb
+ 339              		.thumb_func
+ 340              		.type	calibrateSwitches, %function
+ 341              	calibrateSwitches:
+ 342              	.LFB67:
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 11
+
+
+ 220:HallEffect.c  **** 
+ 221:HallEffect.c  **** //Not in use since only part of the switch range is detected
+ 222:HallEffect.c  **** #ifdef CALIBRATE_SWITCHES
+ 223:HallEffect.c  **** /* Get undepressed value of each switch and save it */
+ 224:HallEffect.c  **** //TODO: Make sure calibration starts after calibration key is released
+ 225:HallEffect.c  **** void calibrateSwitches(Matrix *matrix){
+ 343              		.loc 1 225 0
+ 344              		.cfi_startproc
+ 345              		@ args = 0, pretend = 0, frame = 0
+ 346              		@ frame_needed = 0, uses_anonymous_args = 0
+ 347              	.LVL34:
+ 348 0000 2DE9F843 		push	{r3, r4, r5, r6, r7, r8, r9, lr}
+ 349              		.cfi_def_cfa_offset 32
+ 350              		.cfi_offset 3, -32
+ 351              		.cfi_offset 4, -28
+ 352              		.cfi_offset 5, -24
+ 353              		.cfi_offset 6, -20
+ 354              		.cfi_offset 7, -16
+ 355              		.cfi_offset 8, -12
+ 356              		.cfi_offset 9, -8
+ 357              		.cfi_offset 14, -4
+ 358 0004 0746     		mov	r7, r0
+ 359              	.LVL35:
+ 226:HallEffect.c  ****     uint8 row, col;
+ 227:HallEffect.c  ****     for(col = 0; col < COLUMNS; col++){
+ 360              		.loc 1 227 0
+ 361 0006 0025     		movs	r5, #0
+ 362 0008 20E0     		b	.L30
+ 363              	.LVL36:
+ 364              	.L33:
+ 228:HallEffect.c  ****         //Set column pin high
+ 229:HallEffect.c  ****         (*pinWriteArr[col])(HIGH);
+ 365              		.loc 1 229 0
+ 366 000a A846     		mov	r8, r5
+ 367 000c 464B     		ldr	r3, .L50
+ 368 000e 53F82530 		ldr	r3, [r3, r5, lsl #2]
+ 369 0012 0120     		movs	r0, #1
+ 370 0014 9847     		blx	r3
+ 371              	.LVL37:
+ 230:HallEffect.c  ****         for(row = 0; row < ROWS; row++){
+ 372              		.loc 1 230 0
+ 373 0016 0024     		movs	r4, #0
+ 374 0018 0FE0     		b	.L31
+ 375              	.LVL38:
+ 376              	.L32:
+ 231:HallEffect.c  ****             //Set Mux pins to read the correct input
+ 232:HallEffect.c  ****             ADC_AMux_Select(row);
+ 377              		.loc 1 232 0 discriminator 3
+ 378 001a 2046     		mov	r0, r4
+ 379 001c FFF7FEFF 		bl	ADC_AMux_Select
+ 380              	.LVL39:
+ 233:HallEffect.c  ****             //Read row pin and save value in 2d array
+ 234:HallEffect.c  ****             //TODO: Apply offset, save as uint8?
+ 235:HallEffect.c  ****             matrix[col][row]->max = ADC_Read16();
+ 381              		.loc 1 235 0 discriminator 3
+ 382 0020 05EB8502 		add	r2, r5, r5, lsl #2
+ 383 0024 5301     		lsls	r3, r2, #5
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 12
+
+
+ 384 0026 FE18     		adds	r6, r7, r3
+ 385 0028 FFF7FEFF 		bl	ADC_Read16
+ 386              	.LVL40:
+ 387 002c 04EB8402 		add	r2, r4, r4, lsl #2
+ 388 0030 D300     		lsls	r3, r2, #3
+ 389 0032 3344     		add	r3, r3, r6
+ 390 0034 D880     		strh	r0, [r3, #6]	@ movhi
+ 230:HallEffect.c  ****             //Set Mux pins to read the correct input
+ 391              		.loc 1 230 0 discriminator 3
+ 392 0036 0134     		adds	r4, r4, #1
+ 393              	.LVL41:
+ 394 0038 E4B2     		uxtb	r4, r4
+ 395              	.LVL42:
+ 396              	.L31:
+ 230:HallEffect.c  ****             //Set Mux pins to read the correct input
+ 397              		.loc 1 230 0 is_stmt 0 discriminator 1
+ 398 003a 032C     		cmp	r4, #3
+ 399 003c EDD9     		bls	.L32
+ 236:HallEffect.c  ****         }
+ 237:HallEffect.c  ****         (*pinWriteArr[col])(LOW);
+ 400              		.loc 1 237 0 is_stmt 1 discriminator 2
+ 401 003e 3A4B     		ldr	r3, .L50
+ 402 0040 53F82830 		ldr	r3, [r3, r8, lsl #2]
+ 403 0044 0020     		movs	r0, #0
+ 404 0046 9847     		blx	r3
+ 405              	.LVL43:
+ 227:HallEffect.c  ****         //Set column pin high
+ 406              		.loc 1 227 0 discriminator 2
+ 407 0048 0135     		adds	r5, r5, #1
+ 408              	.LVL44:
+ 409 004a EDB2     		uxtb	r5, r5
+ 410              	.LVL45:
+ 411              	.L30:
+ 227:HallEffect.c  ****         //Set column pin high
+ 412              		.loc 1 227 0 is_stmt 0 discriminator 1
+ 413 004c 032D     		cmp	r5, #3
+ 414 004e DCD9     		bls	.L33
+ 415 0050 0026     		movs	r6, #0
+ 416 0052 49E0     		b	.L34
+ 417              	.LVL46:
+ 418              	.L42:
+ 238:HallEffect.c  ****     }
+ 239:HallEffect.c  ****     /* Read depressed value of each switch one by one */
+ 240:HallEffect.c  ****     //TODO: Display OLED message with instructions
+ 241:HallEffect.c  ****     uint8 val = 0;
+ 242:HallEffect.c  ****     for(row = 0; row < ROWS; row++){
+ 243:HallEffect.c  ****         ADC_AMux_Select(row);
+ 419              		.loc 1 243 0 is_stmt 1
+ 420 0054 3046     		mov	r0, r6
+ 421 0056 FFF7FEFF 		bl	ADC_AMux_Select
+ 422              	.LVL47:
+ 244:HallEffect.c  ****         for(col = 0; col < COLUMNS; col++){
+ 423              		.loc 1 244 0
+ 424 005a 4FF00009 		mov	r9, #0
+ 425 005e 3EE0     		b	.L35
+ 426              	.LVL48:
+ 427              	.L41:
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 13
+
+
+ 428              	.LBB4:
+ 245:HallEffect.c  ****             (*pinWriteArr[col])(HIGH);
+ 429              		.loc 1 245 0
+ 430 0060 4D46     		mov	r5, r9
+ 431 0062 314B     		ldr	r3, .L50
+ 432 0064 53F82930 		ldr	r3, [r3, r9, lsl #2]
+ 433 0068 0120     		movs	r0, #1
+ 434 006a 9847     		blx	r3
+ 435              	.LVL49:
+ 246:HallEffect.c  ****             //Display the key location here
+ 247:HallEffect.c  ****             //TODO: Check if this works
+ 248:HallEffect.c  ****             //Display message to press and release displayed key to continue
+ 249:HallEffect.c  ****             uint8 complete = FALSE;
+ 436              		.loc 1 249 0
+ 437 006c 4FF00008 		mov	r8, #0
+ 250:HallEffect.c  ****             while(!complete){
+ 438              		.loc 1 250 0
+ 439 0070 29E0     		b	.L39
+ 440              	.LVL50:
+ 441              	.L38:
+ 251:HallEffect.c  ****                 while(ADC_Read16() < matrix[row][col]->trigger_height){
+ 252:HallEffect.c  ****                     if(ADC_Read16() < matrix[row][col]->lowestVal){
+ 442              		.loc 1 252 0
+ 443 0072 FFF7FEFF 		bl	ADC_Read16
+ 444              	.LVL51:
+ 445 0076 05EB8502 		add	r2, r5, r5, lsl #2
+ 446 007a D300     		lsls	r3, r2, #3
+ 447 007c 2344     		add	r3, r3, r4
+ 448 007e 9B88     		ldrh	r3, [r3, #4]
+ 449 0080 9842     		cmp	r0, r3
+ 450 0082 05DA     		bge	.L37
+ 253:HallEffect.c  ****                         matrix[row][col]->lowestVal = val;
+ 451              		.loc 1 253 0
+ 452 0084 05EB8502 		add	r2, r5, r5, lsl #2
+ 453 0088 D300     		lsls	r3, r2, #3
+ 454 008a 1C44     		add	r4, r4, r3
+ 455 008c 0023     		movs	r3, #0
+ 456 008e A380     		strh	r3, [r4, #4]	@ movhi
+ 457              	.L37:
+ 251:HallEffect.c  ****                 while(ADC_Read16() < matrix[row][col]->trigger_height){
+ 458              		.loc 1 251 0
+ 459 0090 FFF7FEFF 		bl	ADC_Read16
+ 460              	.LVL52:
+ 461 0094 06EB8603 		add	r3, r6, r6, lsl #2
+ 462 0098 5C01     		lsls	r4, r3, #5
+ 463 009a 3C44     		add	r4, r4, r7
+ 464 009c 05EB8502 		add	r2, r5, r5, lsl #2
+ 465 00a0 D300     		lsls	r3, r2, #3
+ 466 00a2 1A46     		mov	r2, r3
+ 467 00a4 2344     		add	r3, r3, r4
+ 468 00a6 5B88     		ldrh	r3, [r3, #2]
+ 469 00a8 9842     		cmp	r0, r3
+ 470 00aa E2DB     		blt	.L38
+ 254:HallEffect.c  ****                     }
+ 255:HallEffect.c  ****                 }
+ 256:HallEffect.c  ****                 //Set the minimum switch height and reset the lowest value
+ 257:HallEffect.c  ****                 if(matrix[row][col]->lowestVal < matrix[row][col]->trigger_height){
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 14
+
+
+ 471              		.loc 1 257 0
+ 472 00ac 2244     		add	r2, r2, r4
+ 473 00ae 9288     		ldrh	r2, [r2, #4]
+ 474 00b0 9342     		cmp	r3, r2
+ 475 00b2 08D9     		bls	.L39
+ 258:HallEffect.c  ****                     matrix[row][col]->min = matrix[row][col]->lowestVal;
+ 476              		.loc 1 258 0
+ 477 00b4 A900     		lsls	r1, r5, #2
+ 478 00b6 2944     		add	r1, r1, r5
+ 479 00b8 CB00     		lsls	r3, r1, #3
+ 480 00ba 1C44     		add	r4, r4, r3
+ 481 00bc 2281     		strh	r2, [r4, #8]	@ movhi
+ 259:HallEffect.c  ****                     matrix[row][col]->lowestVal = matrix[row][col]->trigger_height;
+ 482              		.loc 1 259 0
+ 483 00be 6388     		ldrh	r3, [r4, #2]
+ 484 00c0 A380     		strh	r3, [r4, #4]	@ movhi
+ 485              	.LVL53:
+ 260:HallEffect.c  ****                     complete = TRUE;
+ 486              		.loc 1 260 0
+ 487 00c2 4FF00108 		mov	r8, #1
+ 488              	.LVL54:
+ 489              	.L39:
+ 250:HallEffect.c  ****                 while(ADC_Read16() < matrix[row][col]->trigger_height){
+ 490              		.loc 1 250 0
+ 491 00c6 B8F1000F 		cmp	r8, #0
+ 492 00ca E1D0     		beq	.L37
+ 261:HallEffect.c  ****                 }
+ 262:HallEffect.c  ****             }
+ 263:HallEffect.c  ****             //Deactivate the column pin
+ 264:HallEffect.c  ****             (*pinWriteArr[col])(LOW);
+ 493              		.loc 1 264 0 discriminator 2
+ 494 00cc 164B     		ldr	r3, .L50
+ 495 00ce 53F82530 		ldr	r3, [r3, r5, lsl #2]
+ 496 00d2 0020     		movs	r0, #0
+ 497 00d4 9847     		blx	r3
+ 498              	.LVL55:
+ 499              	.LBE4:
+ 244:HallEffect.c  ****             (*pinWriteArr[col])(HIGH);
+ 500              		.loc 1 244 0 discriminator 2
+ 501 00d6 09F10109 		add	r9, r9, #1
+ 502              	.LVL56:
+ 503 00da 5FFA89F9 		uxtb	r9, r9
+ 504              	.LVL57:
+ 505              	.L35:
+ 244:HallEffect.c  ****             (*pinWriteArr[col])(HIGH);
+ 506              		.loc 1 244 0 is_stmt 0 discriminator 1
+ 507 00de B9F1030F 		cmp	r9, #3
+ 508 00e2 BDD9     		bls	.L41
+ 242:HallEffect.c  ****         ADC_AMux_Select(row);
+ 509              		.loc 1 242 0 is_stmt 1 discriminator 2
+ 510 00e4 0136     		adds	r6, r6, #1
+ 511              	.LVL58:
+ 512 00e6 F6B2     		uxtb	r6, r6
+ 513              	.LVL59:
+ 514              	.L34:
+ 242:HallEffect.c  ****         ADC_AMux_Select(row);
+ 515              		.loc 1 242 0 is_stmt 0 discriminator 1
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 15
+
+
+ 516 00e8 032E     		cmp	r6, #3
+ 517 00ea B3D9     		bls	.L42
+ 518 00ec 0024     		movs	r4, #0
+ 519 00ee 17E0     		b	.L43
+ 520              	.LVL60:
+ 521              	.L47:
+ 265:HallEffect.c  ****         }
+ 266:HallEffect.c  ****     }
+ 267:HallEffect.c  ****     //Output "Calibration complete, press any key to continue"
+ 268:HallEffect.c  ****     //TODO: Check if this works
+ 269:HallEffect.c  ****     uint8 pressed = FALSE;
+ 270:HallEffect.c  ****     while(!pressed){
+ 271:HallEffect.c  ****         scanMatrix(matrix);
+ 522              		.loc 1 271 0 is_stmt 1
+ 523 00f0 3846     		mov	r0, r7
+ 524 00f2 FFF7FEFF 		bl	scanMatrix
+ 525              	.LVL61:
+ 272:HallEffect.c  ****         for(row = 0; row < ROWS; row++){
+ 526              		.loc 1 272 0
+ 527 00f6 0020     		movs	r0, #0
+ 528 00f8 10E0     		b	.L44
+ 529              	.LVL62:
+ 530              	.L45:
+ 273:HallEffect.c  ****             for(col = 0; col < COLUMNS; col++){
+ 274:HallEffect.c  ****                 pressed = matrix[row][col]->pressed;
+ 531              		.loc 1 274 0 discriminator 3
+ 532 00fa 00EB8001 		add	r1, r0, r0, lsl #2
+ 533 00fe 4A01     		lsls	r2, r1, #5
+ 534 0100 B918     		adds	r1, r7, r2
+ 535 0102 03EB8304 		add	r4, r3, r3, lsl #2
+ 536              	.LVL63:
+ 537 0106 E200     		lsls	r2, r4, #3
+ 538 0108 0A44     		add	r2, r2, r1
+ 539 010a 5478     		ldrb	r4, [r2, #1]	@ zero_extendqisi2
+ 540              	.LVL64:
+ 273:HallEffect.c  ****             for(col = 0; col < COLUMNS; col++){
+ 541              		.loc 1 273 0 discriminator 3
+ 542 010c 0133     		adds	r3, r3, #1
+ 543              	.LVL65:
+ 544 010e DBB2     		uxtb	r3, r3
+ 545              	.LVL66:
+ 546 0110 00E0     		b	.L46
+ 547              	.LVL67:
+ 548              	.L48:
+ 549 0112 0023     		movs	r3, #0
+ 550              	.L46:
+ 551              	.LVL68:
+ 273:HallEffect.c  ****             for(col = 0; col < COLUMNS; col++){
+ 552              		.loc 1 273 0 is_stmt 0 discriminator 1
+ 553 0114 032B     		cmp	r3, #3
+ 554 0116 F0D9     		bls	.L45
+ 272:HallEffect.c  ****         for(row = 0; row < ROWS; row++){
+ 555              		.loc 1 272 0 is_stmt 1 discriminator 2
+ 556 0118 0130     		adds	r0, r0, #1
+ 557              	.LVL69:
+ 558 011a C0B2     		uxtb	r0, r0
+ 559              	.LVL70:
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 16
+
+
+ 560              	.L44:
+ 272:HallEffect.c  ****         for(row = 0; row < ROWS; row++){
+ 561              		.loc 1 272 0 is_stmt 0 discriminator 1
+ 562 011c 0328     		cmp	r0, #3
+ 563 011e F8D9     		bls	.L48
+ 564              	.LVL71:
+ 565              	.L43:
+ 270:HallEffect.c  ****         scanMatrix(matrix);
+ 566              		.loc 1 270 0 is_stmt 1
+ 567 0120 002C     		cmp	r4, #0
+ 568 0122 E5D0     		beq	.L47
+ 275:HallEffect.c  ****             }
+ 276:HallEffect.c  ****         }
+ 277:HallEffect.c  ****     }
+ 278:HallEffect.c  **** }
+ 569              		.loc 1 278 0
+ 570 0124 BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 571              	.LVL72:
+ 572              	.L51:
+ 573              		.align	2
+ 574              	.L50:
+ 575 0128 00000000 		.word	.LANCHOR0
+ 576              		.cfi_endproc
+ 577              	.LFE67:
+ 578              		.size	calibrateSwitches, .-calibrateSwitches
+ 579              		.global	__aeabi_fcmpgt
+ 580              		.global	__aeabi_dcmplt
+ 581              		.section	.text.keyboardInit,"ax",%progbits
+ 582              		.align	2
+ 583              		.global	keyboardInit
+ 584              		.thumb
+ 585              		.thumb_func
+ 586              		.type	keyboardInit, %function
+ 587              	keyboardInit:
+ 588              	.LFB63:
+  22:HallEffect.c  ****     //TODO: Find out if its possible to use define directly
+ 589              		.loc 1 22 0
+ 590              		.cfi_startproc
+ 591              		@ args = 0, pretend = 0, frame = 72
+ 592              		@ frame_needed = 0, uses_anonymous_args = 0
+ 593              	.LVL73:
+ 594 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 595              		.cfi_def_cfa_offset 36
+ 596              		.cfi_offset 4, -36
+ 597              		.cfi_offset 5, -32
+ 598              		.cfi_offset 6, -28
+ 599              		.cfi_offset 7, -24
+ 600              		.cfi_offset 8, -20
+ 601              		.cfi_offset 9, -16
+ 602              		.cfi_offset 10, -12
+ 603              		.cfi_offset 11, -8
+ 604              		.cfi_offset 14, -4
+ 605 0004 93B0     		sub	sp, sp, #76
+ 606              		.cfi_def_cfa_offset 112
+ 607 0006 8246     		mov	r10, r0
+  24:HallEffect.c  ****     uint8 row, col;
+ 608              		.loc 1 24 0
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 17
+
+
+ 609 0008 02AC     		add	r4, sp, #8
+ 610 000a 574D     		ldr	r5, .L75+8
+ 611 000c 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ 612              	.LVL74:
+ 613 000e 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 614 0010 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ 615 0012 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 616 0014 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ 617 0016 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 618 0018 95E80F00 		ldmia	r5, {r0, r1, r2, r3}
+ 619 001c 84E80F00 		stmia	r4, {r0, r1, r2, r3}
+ 620              	.LVL75:
+  26:HallEffect.c  ****     for(row = 0; row < ROWS; row++){
+ 621              		.loc 1 26 0
+ 622 0020 0026     		movs	r6, #0
+  27:HallEffect.c  ****         for(col = 0; col < COLUMNS; col++){
+ 623              		.loc 1 27 0
+ 624 0022 3546     		mov	r5, r6
+ 625 0024 70E0     		b	.L53
+ 626              	.LVL76:
+ 627              	.L59:
+  30:HallEffect.c  ****                 error = 1;
+ 628              		.loc 1 30 0
+ 629 0026 04EB8503 		add	r3, r4, r5, lsl #2
+ 630 002a 12AA     		add	r2, sp, #72
+ 631 002c 02EB8303 		add	r3, r2, r3, lsl #2
+ 632 0030 53F8409C 		ldr	r9, [r3, #-64]	@ float
+ 633 0034 4FF08141 		mov	r1, #1082130432
+ 634 0038 4846     		mov	r0, r9
+ 635 003a FFF7FEFF 		bl	__aeabi_fcmpgt
+ 636              	.LVL77:
+ 637 003e 0028     		cmp	r0, #0
+ 638 0040 57D1     		bne	.L69
+  32:HallEffect.c  ****                 error = 2;
+ 639              		.loc 1 32 0
+ 640 0042 4846     		mov	r0, r9
+ 641 0044 FFF7FEFF 		bl	__aeabi_f2d
+ 642              	.LVL78:
+ 643 0048 45A3     		adr	r3, .L75
+ 644 004a D3E90023 		ldrd	r2, [r3]
+ 645 004e FFF7FEFF 		bl	__aeabi_dcmplt
+ 646              	.LVL79:
+ 647 0052 0028     		cmp	r0, #0
+ 648 0054 4FD1     		bne	.L70
+ 649              	.LBB5:
+  36:HallEffect.c  ****                 //Reset switch statuses
+ 650              		.loc 1 36 0
+ 651 0056 05EB8507 		add	r7, r5, r5, lsl #2
+ 652 005a 0AEB4717 		add	r7, r10, r7, lsl #5
+ 653 005e 4846     		mov	r0, r9
+ 654 0060 FFF7FEFF 		bl	convertToVal
+ 655              	.LVL80:
+ 656 0064 A200     		lsls	r2, r4, #2
+ 657 0066 1319     		adds	r3, r2, r4
+ 658 0068 07EBC303 		add	r3, r7, r3, lsl #3
+ 659 006c 5880     		strh	r0, [r3, #2]	@ movhi
+  38:HallEffect.c  ****                 
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 18
+
+
+ 660              		.loc 1 38 0
+ 661 006e 0021     		movs	r1, #0
+ 662 0070 5970     		strb	r1, [r3, #1]
+  42:HallEffect.c  ****                 #endif
+ 663              		.loc 1 42 0
+ 664 0072 9880     		strh	r0, [r3, #4]	@ movhi
+  49:HallEffect.c  ****                 //Read the designated calibration key, as defined in config.h
+ 665              		.loc 1 49 0
+ 666 0074 3D4F     		ldr	r7, .L75+12
+ 667 0076 3846     		mov	r0, r7
+ 668 0078 FFF7FEFF 		bl	atoi
+ 669              	.LVL81:
+ 670 007c 5FFA80F8 		uxtb	r8, r0
+ 671 0080 781C     		adds	r0, r7, #1
+ 672 0082 FFF7FEFF 		bl	atoi
+ 673              	.LVL82:
+ 674 0086 C7B2     		uxtb	r7, r0
+  51:HallEffect.c  ****                 (*pinWriteArr[calibrationKey[1]])(HIGH);
+ 675              		.loc 1 51 0
+ 676 0088 4046     		mov	r0, r8
+ 677 008a FFF7FEFF 		bl	ADC_AMux_Select
+ 678              	.LVL83:
+  52:HallEffect.c  ****                 //Call the calibration function if the key is held at startup
+ 679              		.loc 1 52 0
+ 680 008e 0197     		str	r7, [sp, #4]
+ 681 0090 374B     		ldr	r3, .L75+16
+ 682 0092 53F82730 		ldr	r3, [r3, r7, lsl #2]
+ 683 0096 0120     		movs	r0, #1
+ 684 0098 9847     		blx	r3
+ 685              	.LVL84:
+  54:HallEffect.c  ****                     uint8 completed = FALSE;
+ 686              		.loc 1 54 0
+ 687 009a FFF7FEFF 		bl	ADC_Read16
+ 688              	.LVL85:
+ 689 009e 08EB8809 		add	r9, r8, r8, lsl #2
+ 690 00a2 0AEB4919 		add	r9, r10, r9, lsl #5
+ 691 00a6 07EB8703 		add	r3, r7, r7, lsl #2
+ 692 00aa 09EBC303 		add	r3, r9, r3, lsl #3
+ 693 00ae 5B88     		ldrh	r3, [r3, #2]
+ 694 00b0 9842     		cmp	r0, r3
+ 695 00b2 0DDB     		blt	.L71
+ 696 00b4 14E0     		b	.L56
+ 697              	.LVL86:
+ 698              	.L58:
+ 699              	.LBB6:
+  60:HallEffect.c  ****                             completed = TRUE;
+ 700              		.loc 1 60 0
+ 701 00b6 FFF7FEFF 		bl	ADC_Read16
+ 702              	.LVL87:
+ 703 00ba 019B     		ldr	r3, [sp, #4]
+ 704 00bc 03EB8303 		add	r3, r3, r3, lsl #2
+ 705 00c0 09EBC303 		add	r3, r9, r3, lsl #3
+ 706 00c4 5B88     		ldrh	r3, [r3, #2]
+ 707 00c6 9842     		cmp	r0, r3
+ 708 00c8 04DD     		ble	.L55
+  61:HallEffect.c  ****                         }
+ 709              		.loc 1 61 0
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 19
+
+
+ 710 00ca 4FF0010B 		mov	fp, #1
+ 711              	.LVL88:
+ 712 00ce 01E0     		b	.L55
+ 713              	.L71:
+ 714              	.LBE6:
+ 715 00d0 4FF0000B 		mov	fp, #0
+ 716              	.L55:
+ 717              	.LVL89:
+ 718              	.LBB7:
+  58:HallEffect.c  ****                         //Wait until key is released again
+ 719              		.loc 1 58 0
+ 720 00d4 BBF1000F 		cmp	fp, #0
+ 721 00d8 EDD0     		beq	.L58
+  65:HallEffect.c  ****                 }
+ 722              		.loc 1 65 0
+ 723 00da 5046     		mov	r0, r10
+ 724 00dc FFF7FEFF 		bl	calibrateSwitches
+ 725              	.LVL90:
+ 726              	.L56:
+ 727              	.LBE7:
+  68:HallEffect.c  ****                 (*pinWriteArr[calibrationKey[1]])(LOW);
+ 728              		.loc 1 68 0
+ 729 00e0 4046     		mov	r0, r8
+ 730 00e2 FFF7FEFF 		bl	ADC_AMux_Unset
+ 731              	.LVL91:
+  69:HallEffect.c  ****                 #endif
+ 732              		.loc 1 69 0
+ 733 00e6 224B     		ldr	r3, .L75+16
+ 734 00e8 53F82730 		ldr	r3, [r3, r7, lsl #2]
+ 735 00ec 0020     		movs	r0, #0
+ 736 00ee 9847     		blx	r3
+ 737              	.LVL92:
+ 738 00f0 02E0     		b	.L54
+ 739              	.L69:
+ 740              	.LBE5:
+  31:HallEffect.c  ****             }else if(triggerHeight[row][col] < MIN_TRIGGER_HEIGHT){
+ 741              		.loc 1 31 0
+ 742 00f2 0126     		movs	r6, #1
+ 743              	.LVL93:
+ 744 00f4 00E0     		b	.L54
+ 745              	.LVL94:
+ 746              	.L70:
+  33:HallEffect.c  ****             }else{
+ 747              		.loc 1 33 0
+ 748 00f6 0226     		movs	r6, #2
+ 749              	.LVL95:
+ 750              	.L54:
+  28:HallEffect.c  ****             //Check if the trigger height set in config.h is within spec
+ 751              		.loc 1 28 0 discriminator 2
+ 752 00f8 0134     		adds	r4, r4, #1
+ 753              	.LVL96:
+ 754 00fa E4B2     		uxtb	r4, r4
+ 755              	.LVL97:
+ 756 00fc 00E0     		b	.L60
+ 757              	.LVL98:
+ 758              	.L73:
+ 759 00fe 0024     		movs	r4, #0
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 20
+
+
+ 760              	.L60:
+ 761              	.LVL99:
+  28:HallEffect.c  ****             //Check if the trigger height set in config.h is within spec
+ 762              		.loc 1 28 0 is_stmt 0 discriminator 1
+ 763 0100 032C     		cmp	r4, #3
+ 764 0102 90D9     		bls	.L59
+  27:HallEffect.c  ****         for(col = 0; col < COLUMNS; col++){
+ 765              		.loc 1 27 0 is_stmt 1 discriminator 2
+ 766 0104 0135     		adds	r5, r5, #1
+ 767              	.LVL100:
+ 768 0106 EDB2     		uxtb	r5, r5
+ 769              	.LVL101:
+ 770              	.L53:
+  27:HallEffect.c  ****         for(col = 0; col < COLUMNS; col++){
+ 771              		.loc 1 27 0 is_stmt 0 discriminator 1
+ 772 0108 032D     		cmp	r5, #3
+ 773 010a F8D9     		bls	.L73
+  82:HallEffect.c  ****     }
+ 774              		.loc 1 82 0 is_stmt 1
+ 775 010c 1948     		ldr	r0, .L75+20
+ 776 010e FFF7FEFF 		bl	convertToVal
+ 777              	.LVL102:
+ 778 0112 194B     		ldr	r3, .L75+24
+ 779 0114 1880     		strh	r0, [r3]	@ movhi
+  87:HallEffect.c  ****         //Output "Error: Please change the following setting in config.h and flash the firmware aga
+ 780              		.loc 1 87 0
+ 781 0116 EEB1     		cbz	r6, .L52
+  89:HallEffect.c  ****             case 1:
+ 782              		.loc 1 89 0
+ 783 0118 013E     		subs	r6, r6, #1
+ 784              	.LVL103:
+ 785 011a 032E     		cmp	r6, #3
+ 786 011c 12D8     		bhi	.L62
+ 787 011e DFE806F0 		tbb	[pc, r6]
+ 788              	.L64:
+ 789 0122 02       		.byte	(.L63-.L64)/2
+ 790 0123 06       		.byte	(.L65-.L64)/2
+ 791 0124 0A       		.byte	(.L66-.L64)/2
+ 792 0125 0E       		.byte	(.L67-.L64)/2
+ 793              		.p2align 1
+ 794              	.L63:
+  93:HallEffect.c  ****             #endif
+ 795              		.loc 1 93 0
+ 796 0126 1548     		ldr	r0, .L75+28
+ 797 0128 FFF7FEFF 		bl	UART_PutString
+ 798              	.LVL104:
+  95:HallEffect.c  ****             case 2:
+ 799              		.loc 1 95 0
+ 800 012c 0AE0     		b	.L62
+ 801              	.L65:
+  99:HallEffect.c  ****             #endif
+ 802              		.loc 1 99 0
+ 803 012e 1448     		ldr	r0, .L75+32
+ 804 0130 FFF7FEFF 		bl	UART_PutString
+ 805              	.LVL105:
+ 101:HallEffect.c  ****             #ifdef RAPID_TRIGGER
+ 806              		.loc 1 101 0
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 21
+
+
+ 807 0134 06E0     		b	.L62
+ 808              	.L66:
+ 106:HallEffect.c  ****             #endif
+ 809              		.loc 1 106 0
+ 810 0136 1348     		ldr	r0, .L75+36
+ 811 0138 FFF7FEFF 		bl	UART_PutString
+ 812              	.LVL106:
+ 108:HallEffect.c  ****             case 4:
+ 813              		.loc 1 108 0
+ 814 013c 02E0     		b	.L62
+ 815              	.L67:
+ 112:HallEffect.c  ****             #endif
+ 816              		.loc 1 112 0
+ 817 013e 1248     		ldr	r0, .L75+40
+ 818 0140 FFF7FEFF 		bl	UART_PutString
+ 819              	.LVL107:
+ 820              	.L62:
+ 119:HallEffect.c  ****         #endif
+ 821              		.loc 1 119 0
+ 822 0144 1148     		ldr	r0, .L75+44
+ 823 0146 FFF7FEFF 		bl	UART_PutString
+ 824              	.LVL108:
+ 825              	.L68:
+ 123:HallEffect.c  ****         }
+ 826              		.loc 1 123 0 discriminator 1
+ 827 014a 41F28830 		movw	r0, #5000
+ 828 014e FFF7FEFF 		bl	CyDelay
+ 829              	.LVL109:
+ 830 0152 FAE7     		b	.L68
+ 831              	.LVL110:
+ 832              	.L52:
+ 126:HallEffect.c  **** 
+ 833              		.loc 1 126 0
+ 834 0154 13B0     		add	sp, sp, #76
+ 835              		.cfi_def_cfa_offset 36
+ 836              		@ sp needed
+ 837 0156 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 838              	.LVL111:
+ 839              	.L76:
+ 840 015a 00BFAFF3 		.align	3
+ 840      0080
+ 841              	.L75:
+ 842 0160 9A999999 		.word	-1717986918
+ 843 0164 9999B93F 		.word	1069128089
+ 844 0168 00000000 		.word	.LANCHOR1
+ 845 016c 00000000 		.word	.LC1
+ 846 0170 00000000 		.word	.LANCHOR0
+ 847 0174 CDCCCC3D 		.word	1036831949
+ 848 0178 00000000 		.word	rapidTriggerDistance
+ 849 017c 04000000 		.word	.LC2
+ 850 0180 54000000 		.word	.LC3
+ 851 0184 A4000000 		.word	.LC4
+ 852 0188 08010000 		.word	.LC5
+ 853 018c 6C010000 		.word	.LC6
+ 854              		.cfi_endproc
+ 855              	.LFE63:
+ 856              		.size	keyboardInit, .-keyboardInit
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 22
+
+
+ 857              		.comm	rapidTriggerDistance,2,2
+ 858              		.global	pinWriteArr
+ 859              		.comm	Transmitbuffer,64,4
+ 860              		.comm	action,1,1
+ 861              		.section	.rodata
+ 862              		.align	2
+ 863              		.set	.LANCHOR1,. + 0
+ 864              	.LC0:
+ 865 0000 0000803F 		.word	1065353216
+ 866 0004 0000803F 		.word	1065353216
+ 867 0008 0000803F 		.word	1065353216
+ 868 000c 0000803F 		.word	1065353216
+ 869 0010 0000803F 		.word	1065353216
+ 870 0014 0000803F 		.word	1065353216
+ 871 0018 0000803F 		.word	1065353216
+ 872 001c 0000803F 		.word	1065353216
+ 873 0020 0000803F 		.word	1065353216
+ 874 0024 0000803F 		.word	1065353216
+ 875 0028 0000803F 		.word	1065353216
+ 876 002c 0000803F 		.word	1065353216
+ 877 0030 0000803F 		.word	1065353216
+ 878 0034 0000803F 		.word	1065353216
+ 879 0038 0000803F 		.word	1065353216
+ 880 003c 0000803F 		.word	1065353216
+ 881              		.data
+ 882              		.align	2
+ 883              		.set	.LANCHOR0,. + 0
+ 884              		.type	pinWriteArr, %object
+ 885              		.size	pinWriteArr, 16
+ 886              	pinWriteArr:
+ 887 0000 00000000 		.word	Col1_Write
+ 888 0004 00000000 		.word	Col2_Write
+ 889 0008 00000000 		.word	Col3_Write
+ 890 000c 00000000 		.word	Col4_Write
+ 891              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 892              		.align	2
+ 893              	.LC1:
+ 894 0000 333300   		.ascii	"33\000"
+ 895 0003 00       		.space	1
+ 896              	.LC2:
+ 897 0004 54726967 		.ascii	"Trigger height is too high! The maximum height allo"
+ 897      67657220 
+ 897      68656967 
+ 897      68742069 
+ 897      7320746F 
+ 898 0037 77656420 		.ascii	"wed is MAX_TRIGGER_HEIGHT.\015\012\000"
+ 898      6973204D 
+ 898      41585F54 
+ 898      52494747 
+ 898      45525F48 
+ 899              	.LC3:
+ 900 0054 54726967 		.ascii	"Trigger height is too low! The minimum height allow"
+ 900      67657220 
+ 900      68656967 
+ 900      68742069 
+ 900      7320746F 
+ 901 0087 65642069 		.ascii	"ed is MIN_TRIGGER_HEIGHT.\015\012\000"
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 23
+
+
+ 901      73204D49 
+ 901      4E5F5452 
+ 901      49474745 
+ 901      525F4845 
+ 902 00a3 00       		.space	1
+ 903              	.LC4:
+ 904 00a4 52617069 		.ascii	"Rapid trigger distance is too high! The maximum dis"
+ 904      64207472 
+ 904      69676765 
+ 904      72206469 
+ 904      7374616E 
+ 905 00d7 74616E63 		.ascii	"tance allowed is MAX_RAPID_TRIGGER_DISTANCE.\015\012"
+ 905      6520616C 
+ 905      6C6F7765 
+ 905      64206973 
+ 905      204D4158 
+ 906 0105 00       		.ascii	"\000"
+ 907 0106 0000     		.space	2
+ 908              	.LC5:
+ 909 0108 52617069 		.ascii	"Rapid trigger distance is too low! The minimum dist"
+ 909      64207472 
+ 909      69676765 
+ 909      72206469 
+ 909      7374616E 
+ 910 013b 616E6365 		.ascii	"ance allowed is MIN_RAPID_TRIGGER_DISTANCE.\015\012"
+ 910      20616C6C 
+ 910      6F776564 
+ 910      20697320 
+ 910      4D494E5F 
+ 911 0168 00       		.ascii	"\000"
+ 912 0169 000000   		.space	3
+ 913              	.LC6:
+ 914 016c 4572726F 		.ascii	"Error: Please change the following setting in confi"
+ 914      723A2050 
+ 914      6C656173 
+ 914      65206368 
+ 914      616E6765 
+ 915 019f 672E6820 		.ascii	"g.h and flash the firmware again:\015\012\000"
+ 915      616E6420 
+ 915      666C6173 
+ 915      68207468 
+ 915      65206669 
+ 916              		.text
+ 917              	.Letext0:
+ 918              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
+ 919              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
+ 920              		.file 4 "Generated_Source\\PSoC5/cytypes.h"
+ 921              		.file 5 "HallEffect.h"
+ 922              		.file 6 "Generated_Source\\PSoC5/core_cm3.h"
+ 923              		.file 7 "Generated_Source\\PSoC5/ADC.h"
+ 924              		.file 8 "Generated_Source\\PSoC5/ADC_AMux.h"
+ 925              		.file 9 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
+ 926              		.file 10 "Generated_Source\\PSoC5/cyfitter_cfg.h"
+ 927              		.file 11 "Generated_Source\\PSoC5/UART.h"
+ 928              		.file 12 "Generated_Source\\PSoC5/CyLib.h"
+ 929              		.section	.debug_info,"",%progbits
+ 930              	.Ldebug_info0:
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 24
+
+
+ 931 0000 45060000 		.4byte	0x645
+ 932 0004 0400     		.2byte	0x4
+ 933 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 934 000a 04       		.byte	0x4
+ 935 000b 01       		.uleb128 0x1
+ 936 000c 9B000000 		.4byte	.LASF47
+ 937 0010 0C       		.byte	0xc
+ 938 0011 6E000000 		.4byte	.LASF48
+ 939 0015 4D010000 		.4byte	.LASF49
+ 940 0019 18000000 		.4byte	.Ldebug_ranges0+0x18
+ 941 001d 00000000 		.4byte	0
+ 942 0021 00000000 		.4byte	.Ldebug_line0
+ 943 0025 02       		.uleb128 0x2
+ 944 0026 04       		.byte	0x4
+ 945 0027 04       		.byte	0x4
+ 946 0028 7B000000 		.4byte	.LASF0
+ 947 002c 02       		.uleb128 0x2
+ 948 002d 04       		.byte	0x4
+ 949 002e 07       		.byte	0x7
+ 950 002f E8010000 		.4byte	.LASF1
+ 951 0033 03       		.uleb128 0x3
+ 952 0034 04       		.byte	0x4
+ 953 0035 05       		.byte	0x5
+ 954 0036 696E7400 		.ascii	"int\000"
+ 955 003a 02       		.uleb128 0x2
+ 956 003b 08       		.byte	0x8
+ 957 003c 05       		.byte	0x5
+ 958 003d 54020000 		.4byte	.LASF2
+ 959 0041 02       		.uleb128 0x2
+ 960 0042 08       		.byte	0x8
+ 961 0043 04       		.byte	0x4
+ 962 0044 D7020000 		.4byte	.LASF3
+ 963 0048 02       		.uleb128 0x2
+ 964 0049 01       		.byte	0x1
+ 965 004a 06       		.byte	0x6
+ 966 004b 81000000 		.4byte	.LASF4
+ 967 004f 02       		.uleb128 0x2
+ 968 0050 01       		.byte	0x1
+ 969 0051 08       		.byte	0x8
+ 970 0052 8D000000 		.4byte	.LASF5
+ 971 0056 02       		.uleb128 0x2
+ 972 0057 02       		.byte	0x2
+ 973 0058 05       		.byte	0x5
+ 974 0059 A1020000 		.4byte	.LASF6
+ 975 005d 02       		.uleb128 0x2
+ 976 005e 02       		.byte	0x2
+ 977 005f 07       		.byte	0x7
+ 978 0060 2D000000 		.4byte	.LASF7
+ 979 0064 04       		.uleb128 0x4
+ 980 0065 23000000 		.4byte	.LASF13
+ 981 0069 02       		.byte	0x2
+ 982 006a 3F       		.byte	0x3f
+ 983 006b 6F000000 		.4byte	0x6f
+ 984 006f 02       		.uleb128 0x2
+ 985 0070 04       		.byte	0x4
+ 986 0071 05       		.byte	0x5
+ 987 0072 BE020000 		.4byte	.LASF8
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 25
+
+
+ 988 0076 02       		.uleb128 0x2
+ 989 0077 04       		.byte	0x4
+ 990 0078 07       		.byte	0x7
+ 991 0079 D6010000 		.4byte	.LASF9
+ 992 007d 02       		.uleb128 0x2
+ 993 007e 08       		.byte	0x8
+ 994 007f 07       		.byte	0x7
+ 995 0080 02020000 		.4byte	.LASF10
+ 996 0084 02       		.uleb128 0x2
+ 997 0085 04       		.byte	0x4
+ 998 0086 07       		.byte	0x7
+ 999 0087 45020000 		.4byte	.LASF11
+ 1000 008b 02       		.uleb128 0x2
+ 1001 008c 01       		.byte	0x1
+ 1002 008d 08       		.byte	0x8
+ 1003 008e 62020000 		.4byte	.LASF12
+ 1004 0092 04       		.uleb128 0x4
+ 1005 0093 3D020000 		.4byte	.LASF14
+ 1006 0097 03       		.byte	0x3
+ 1007 0098 2C       		.byte	0x2c
+ 1008 0099 64000000 		.4byte	0x64
+ 1009 009d 05       		.uleb128 0x5
+ 1010 009e AB020000 		.4byte	.LASF15
+ 1011 00a2 04       		.byte	0x4
+ 1012 00a3 E801     		.2byte	0x1e8
+ 1013 00a5 4F000000 		.4byte	0x4f
+ 1014 00a9 05       		.uleb128 0x5
+ 1015 00aa B6010000 		.4byte	.LASF16
+ 1016 00ae 04       		.byte	0x4
+ 1017 00af E901     		.2byte	0x1e9
+ 1018 00b1 5D000000 		.4byte	0x5d
+ 1019 00b5 02       		.uleb128 0x2
+ 1020 00b6 08       		.byte	0x8
+ 1021 00b7 04       		.byte	0x4
+ 1022 00b8 4A000000 		.4byte	.LASF17
+ 1023 00bc 06       		.uleb128 0x6
+ 1024 00bd 9D000000 		.4byte	0x9d
+ 1025 00c1 07       		.uleb128 0x7
+ 1026 00c2 10030000 		.4byte	.LASF50
+ 1027 00c6 0A       		.byte	0xa
+ 1028 00c7 05       		.byte	0x5
+ 1029 00c8 29       		.byte	0x29
+ 1030 00c9 16010000 		.4byte	0x116
+ 1031 00cd 08       		.uleb128 0x8
+ 1032 00ce 706F7300 		.ascii	"pos\000"
+ 1033 00d2 05       		.byte	0x5
+ 1034 00d3 2A       		.byte	0x2a
+ 1035 00d4 9D000000 		.4byte	0x9d
+ 1036 00d8 00       		.byte	0
+ 1037 00d9 09       		.uleb128 0x9
+ 1038 00da 00000000 		.4byte	.LASF18
+ 1039 00de 05       		.byte	0x5
+ 1040 00df 2B       		.byte	0x2b
+ 1041 00e0 9D000000 		.4byte	0x9d
+ 1042 00e4 01       		.byte	0x1
+ 1043 00e5 09       		.uleb128 0x9
+ 1044 00e6 51000000 		.4byte	.LASF19
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 26
+
+
+ 1045 00ea 05       		.byte	0x5
+ 1046 00eb 2C       		.byte	0x2c
+ 1047 00ec A9000000 		.4byte	0xa9
+ 1048 00f0 02       		.byte	0x2
+ 1049 00f1 09       		.uleb128 0x9
+ 1050 00f2 BD010000 		.4byte	.LASF20
+ 1051 00f6 05       		.byte	0x5
+ 1052 00f7 2E       		.byte	0x2e
+ 1053 00f8 A9000000 		.4byte	0xa9
+ 1054 00fc 04       		.byte	0x4
+ 1055 00fd 08       		.uleb128 0x8
+ 1056 00fe 6D617800 		.ascii	"max\000"
+ 1057 0102 05       		.byte	0x5
+ 1058 0103 34       		.byte	0x34
+ 1059 0104 A9000000 		.4byte	0xa9
+ 1060 0108 06       		.byte	0x6
+ 1061 0109 08       		.uleb128 0x8
+ 1062 010a 6D696E00 		.ascii	"min\000"
+ 1063 010e 05       		.byte	0x5
+ 1064 010f 35       		.byte	0x35
+ 1065 0110 A9000000 		.4byte	0xa9
+ 1066 0114 08       		.byte	0x8
+ 1067 0115 00       		.byte	0
+ 1068 0116 04       		.uleb128 0x4
+ 1069 0117 2B020000 		.4byte	.LASF21
+ 1070 011b 05       		.byte	0x5
+ 1071 011c 37       		.byte	0x37
+ 1072 011d 21010000 		.4byte	0x121
+ 1073 0121 0A       		.uleb128 0xa
+ 1074 0122 C1000000 		.4byte	0xc1
+ 1075 0126 37010000 		.4byte	0x137
+ 1076 012a 0B       		.uleb128 0xb
+ 1077 012b 84000000 		.4byte	0x84
+ 1078 012f 03       		.byte	0x3
+ 1079 0130 0B       		.uleb128 0xb
+ 1080 0131 84000000 		.4byte	0x84
+ 1081 0135 03       		.byte	0x3
+ 1082 0136 00       		.byte	0
+ 1083 0137 0C       		.uleb128 0xc
+ 1084 0138 AB010000 		.4byte	.LASF28
+ 1085 013c 01       		.byte	0x1
+ 1086 013d 81       		.byte	0x81
+ 1087 013e 00000000 		.4byte	.LFB64
+ 1088 0142 C4000000 		.4byte	.LFE64-.LFB64
+ 1089 0146 01       		.uleb128 0x1
+ 1090 0147 9C       		.byte	0x9c
+ 1091 0148 CA010000 		.4byte	0x1ca
+ 1092 014c 0D       		.uleb128 0xd
+ 1093 014d 67020000 		.4byte	.LASF22
+ 1094 0151 01       		.byte	0x1
+ 1095 0152 81       		.byte	0x81
+ 1096 0153 CA010000 		.4byte	0x1ca
+ 1097 0157 00000000 		.4byte	.LLST0
+ 1098 015b 0E       		.uleb128 0xe
+ 1099 015c 726F7700 		.ascii	"row\000"
+ 1100 0160 01       		.byte	0x1
+ 1101 0161 82       		.byte	0x82
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 27
+
+
+ 1102 0162 9D000000 		.4byte	0x9d
+ 1103 0166 2C000000 		.4byte	.LLST1
+ 1104 016a 0E       		.uleb128 0xe
+ 1105 016b 636F6C00 		.ascii	"col\000"
+ 1106 016f 01       		.byte	0x1
+ 1107 0170 82       		.byte	0x82
+ 1108 0171 9D000000 		.4byte	0x9d
+ 1109 0175 56000000 		.4byte	.LLST2
+ 1110 0179 0F       		.uleb128 0xf
+ 1111 017a 2C000000 		.4byte	.LBB2
+ 1112 017e 7C000000 		.4byte	.LBE2-.LBB2
+ 1113 0182 B9010000 		.4byte	0x1b9
+ 1114 0186 0E       		.uleb128 0xe
+ 1115 0187 76616C00 		.ascii	"val\000"
+ 1116 018b 01       		.byte	0x1
+ 1117 018c 8E       		.byte	0x8e
+ 1118 018d A9000000 		.4byte	0xa9
+ 1119 0191 80000000 		.4byte	.LLST3
+ 1120 0195 10       		.uleb128 0x10
+ 1121 0196 36000000 		.4byte	.LVL5
+ 1122 019a A4010000 		.4byte	0x1a4
+ 1123 019e 11       		.uleb128 0x11
+ 1124 019f 01       		.uleb128 0x1
+ 1125 01a0 50       		.byte	0x50
+ 1126 01a1 01       		.uleb128 0x1
+ 1127 01a2 31       		.byte	0x31
+ 1128 01a3 00       		.byte	0
+ 1129 01a4 12       		.uleb128 0x12
+ 1130 01a5 3A000000 		.4byte	.LVL6
+ 1131 01a9 06060000 		.4byte	0x606
+ 1132 01ad 13       		.uleb128 0x13
+ 1133 01ae A8000000 		.4byte	.LVL11
+ 1134 01b2 11       		.uleb128 0x11
+ 1135 01b3 01       		.uleb128 0x1
+ 1136 01b4 50       		.byte	0x50
+ 1137 01b5 01       		.uleb128 0x1
+ 1138 01b6 30       		.byte	0x30
+ 1139 01b7 00       		.byte	0
+ 1140 01b8 00       		.byte	0
+ 1141 01b9 14       		.uleb128 0x14
+ 1142 01ba 10000000 		.4byte	.LVL3
+ 1143 01be 11060000 		.4byte	0x611
+ 1144 01c2 11       		.uleb128 0x11
+ 1145 01c3 01       		.uleb128 0x1
+ 1146 01c4 50       		.byte	0x50
+ 1147 01c5 02       		.uleb128 0x2
+ 1148 01c6 76       		.byte	0x76
+ 1149 01c7 00       		.sleb128 0
+ 1150 01c8 00       		.byte	0
+ 1151 01c9 00       		.byte	0
+ 1152 01ca 15       		.uleb128 0x15
+ 1153 01cb 04       		.byte	0x4
+ 1154 01cc 16010000 		.4byte	0x116
+ 1155 01d0 16       		.uleb128 0x16
+ 1156 01d1 13000000 		.4byte	.LASF25
+ 1157 01d5 01       		.byte	0x1
+ 1158 01d6 B5       		.byte	0xb5
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 28
+
+
+ 1159 01d7 00000000 		.4byte	.LFB65
+ 1160 01db 7C000000 		.4byte	.LFE65-.LFB65
+ 1161 01df 01       		.uleb128 0x1
+ 1162 01e0 9C       		.byte	0x9c
+ 1163 01e1 44020000 		.4byte	0x244
+ 1164 01e5 17       		.uleb128 0x17
+ 1165 01e6 67020000 		.4byte	.LASF22
+ 1166 01ea 01       		.byte	0x1
+ 1167 01eb B5       		.byte	0xb5
+ 1168 01ec CA010000 		.4byte	0x1ca
+ 1169 01f0 01       		.uleb128 0x1
+ 1170 01f1 50       		.byte	0x50
+ 1171 01f2 18       		.uleb128 0x18
+ 1172 01f3 08000000 		.4byte	.LASF23
+ 1173 01f7 01       		.byte	0x1
+ 1174 01f8 B6       		.byte	0xb6
+ 1175 01f9 44020000 		.4byte	0x244
+ 1176 01fd 02       		.uleb128 0x2
+ 1177 01fe 91       		.byte	0x91
+ 1178 01ff 60       		.sleb128 -32
+ 1179 0200 18       		.uleb128 0x18
+ 1180 0201 F5010000 		.4byte	.LASF24
+ 1181 0205 01       		.byte	0x1
+ 1182 0206 B8       		.byte	0xb8
+ 1183 0207 5A020000 		.4byte	0x25a
+ 1184 020b 02       		.uleb128 0x2
+ 1185 020c 91       		.byte	0x91
+ 1186 020d 50       		.sleb128 -48
+ 1187 020e 0E       		.uleb128 0xe
+ 1188 020f 726F7700 		.ascii	"row\000"
+ 1189 0213 01       		.byte	0x1
+ 1190 0214 B9       		.byte	0xb9
+ 1191 0215 9D000000 		.4byte	0x9d
+ 1192 0219 9E000000 		.4byte	.LLST4
+ 1193 021d 0E       		.uleb128 0xe
+ 1194 021e 636F6C00 		.ascii	"col\000"
+ 1195 0222 01       		.byte	0x1
+ 1196 0223 B9       		.byte	0xb9
+ 1197 0224 9D000000 		.4byte	0x9d
+ 1198 0228 C8000000 		.4byte	.LLST5
+ 1199 022c 19       		.uleb128 0x19
+ 1200 022d 58000000 		.4byte	.LBB3
+ 1201 0231 24000000 		.4byte	.LBE3-.LBB3
+ 1202 0235 0E       		.uleb128 0xe
+ 1203 0236 6900     		.ascii	"i\000"
+ 1204 0238 01       		.byte	0x1
+ 1205 0239 C9       		.byte	0xc9
+ 1206 023a 9D000000 		.4byte	0x9d
+ 1207 023e F1000000 		.4byte	.LLST6
+ 1208 0242 00       		.byte	0
+ 1209 0243 00       		.byte	0
+ 1210 0244 0A       		.uleb128 0xa
+ 1211 0245 9D000000 		.4byte	0x9d
+ 1212 0249 5A020000 		.4byte	0x25a
+ 1213 024d 0B       		.uleb128 0xb
+ 1214 024e 84000000 		.4byte	0x84
+ 1215 0252 03       		.byte	0x3
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 29
+
+
+ 1216 0253 0B       		.uleb128 0xb
+ 1217 0254 84000000 		.4byte	0x84
+ 1218 0258 03       		.byte	0x3
+ 1219 0259 00       		.byte	0
+ 1220 025a 0A       		.uleb128 0xa
+ 1221 025b 9D000000 		.4byte	0x9d
+ 1222 025f 6A020000 		.4byte	0x26a
+ 1223 0263 0B       		.uleb128 0xb
+ 1224 0264 84000000 		.4byte	0x84
+ 1225 0268 0F       		.byte	0xf
+ 1226 0269 00       		.byte	0
+ 1227 026a 1A       		.uleb128 0x1a
+ 1228 026b B1020000 		.4byte	.LASF26
+ 1229 026f 01       		.byte	0x1
+ 1230 0270 D3       		.byte	0xd3
+ 1231 0271 A9000000 		.4byte	0xa9
+ 1232 0275 00000000 		.4byte	.LFB66
+ 1233 0279 2C000000 		.4byte	.LFE66-.LFB66
+ 1234 027d 01       		.uleb128 0x1
+ 1235 027e 9C       		.byte	0x9c
+ 1236 027f 93020000 		.4byte	0x293
+ 1237 0283 0D       		.uleb128 0xd
+ 1238 0284 39010000 		.4byte	.LASF27
+ 1239 0288 01       		.byte	0x1
+ 1240 0289 D3       		.byte	0xd3
+ 1241 028a 25000000 		.4byte	0x25
+ 1242 028e 0F010000 		.4byte	.LLST7
+ 1243 0292 00       		.byte	0
+ 1244 0293 0C       		.uleb128 0xc
+ 1245 0294 FE020000 		.4byte	.LASF29
+ 1246 0298 01       		.byte	0x1
+ 1247 0299 E1       		.byte	0xe1
+ 1248 029a 00000000 		.4byte	.LFB67
+ 1249 029e 2C010000 		.4byte	.LFE67-.LFB67
+ 1250 02a2 01       		.uleb128 0x1
+ 1251 02a3 9C       		.byte	0x9c
+ 1252 02a4 99030000 		.4byte	0x399
+ 1253 02a8 0D       		.uleb128 0xd
+ 1254 02a9 67020000 		.4byte	.LASF22
+ 1255 02ad 01       		.byte	0x1
+ 1256 02ae E1       		.byte	0xe1
+ 1257 02af CA010000 		.4byte	0x1ca
+ 1258 02b3 32010000 		.4byte	.LLST8
+ 1259 02b7 0E       		.uleb128 0xe
+ 1260 02b8 726F7700 		.ascii	"row\000"
+ 1261 02bc 01       		.byte	0x1
+ 1262 02bd E2       		.byte	0xe2
+ 1263 02be 9D000000 		.4byte	0x9d
+ 1264 02c2 5E010000 		.4byte	.LLST9
+ 1265 02c6 0E       		.uleb128 0xe
+ 1266 02c7 636F6C00 		.ascii	"col\000"
+ 1267 02cb 01       		.byte	0x1
+ 1268 02cc E2       		.byte	0xe2
+ 1269 02cd 9D000000 		.4byte	0x9d
+ 1270 02d1 C0010000 		.4byte	.LLST10
+ 1271 02d5 1B       		.uleb128 0x1b
+ 1272 02d6 76616C00 		.ascii	"val\000"
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 30
+
+
+ 1273 02da 01       		.byte	0x1
+ 1274 02db F1       		.byte	0xf1
+ 1275 02dc 9D000000 		.4byte	0x9d
+ 1276 02e0 1C       		.uleb128 0x1c
+ 1277 02e1 00000000 		.4byte	.LASF18
+ 1278 02e5 01       		.byte	0x1
+ 1279 02e6 0D01     		.2byte	0x10d
+ 1280 02e8 9D000000 		.4byte	0x9d
+ 1281 02ec 2D020000 		.4byte	.LLST11
+ 1282 02f0 0F       		.uleb128 0xf
+ 1283 02f1 60000000 		.4byte	.LBB4
+ 1284 02f5 76000000 		.4byte	.LBE4-.LBB4
+ 1285 02f9 39030000 		.4byte	0x339
+ 1286 02fd 1D       		.uleb128 0x1d
+ 1287 02fe 30010000 		.4byte	.LASF30
+ 1288 0302 01       		.byte	0x1
+ 1289 0303 F9       		.byte	0xf9
+ 1290 0304 9D000000 		.4byte	0x9d
+ 1291 0308 4B020000 		.4byte	.LLST12
+ 1292 030c 10       		.uleb128 0x10
+ 1293 030d 6C000000 		.4byte	.LVL49
+ 1294 0311 1B030000 		.4byte	0x31b
+ 1295 0315 11       		.uleb128 0x11
+ 1296 0316 01       		.uleb128 0x1
+ 1297 0317 50       		.byte	0x50
+ 1298 0318 01       		.uleb128 0x1
+ 1299 0319 31       		.byte	0x31
+ 1300 031a 00       		.byte	0
+ 1301 031b 12       		.uleb128 0x12
+ 1302 031c 76000000 		.4byte	.LVL51
+ 1303 0320 06060000 		.4byte	0x606
+ 1304 0324 12       		.uleb128 0x12
+ 1305 0325 94000000 		.4byte	.LVL52
+ 1306 0329 06060000 		.4byte	0x606
+ 1307 032d 13       		.uleb128 0x13
+ 1308 032e D6000000 		.4byte	.LVL55
+ 1309 0332 11       		.uleb128 0x11
+ 1310 0333 01       		.uleb128 0x1
+ 1311 0334 50       		.byte	0x50
+ 1312 0335 01       		.uleb128 0x1
+ 1313 0336 30       		.byte	0x30
+ 1314 0337 00       		.byte	0
+ 1315 0338 00       		.byte	0
+ 1316 0339 10       		.uleb128 0x10
+ 1317 033a 16000000 		.4byte	.LVL37
+ 1318 033e 48030000 		.4byte	0x348
+ 1319 0342 11       		.uleb128 0x11
+ 1320 0343 01       		.uleb128 0x1
+ 1321 0344 50       		.byte	0x50
+ 1322 0345 01       		.uleb128 0x1
+ 1323 0346 31       		.byte	0x31
+ 1324 0347 00       		.byte	0
+ 1325 0348 1E       		.uleb128 0x1e
+ 1326 0349 20000000 		.4byte	.LVL39
+ 1327 034d 11060000 		.4byte	0x611
+ 1328 0351 5C030000 		.4byte	0x35c
+ 1329 0355 11       		.uleb128 0x11
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 31
+
+
+ 1330 0356 01       		.uleb128 0x1
+ 1331 0357 50       		.byte	0x50
+ 1332 0358 02       		.uleb128 0x2
+ 1333 0359 74       		.byte	0x74
+ 1334 035a 00       		.sleb128 0
+ 1335 035b 00       		.byte	0
+ 1336 035c 12       		.uleb128 0x12
+ 1337 035d 2C000000 		.4byte	.LVL40
+ 1338 0361 06060000 		.4byte	0x606
+ 1339 0365 10       		.uleb128 0x10
+ 1340 0366 48000000 		.4byte	.LVL43
+ 1341 036a 74030000 		.4byte	0x374
+ 1342 036e 11       		.uleb128 0x11
+ 1343 036f 01       		.uleb128 0x1
+ 1344 0370 50       		.byte	0x50
+ 1345 0371 01       		.uleb128 0x1
+ 1346 0372 30       		.byte	0x30
+ 1347 0373 00       		.byte	0
+ 1348 0374 1E       		.uleb128 0x1e
+ 1349 0375 5A000000 		.4byte	.LVL47
+ 1350 0379 11060000 		.4byte	0x611
+ 1351 037d 88030000 		.4byte	0x388
+ 1352 0381 11       		.uleb128 0x11
+ 1353 0382 01       		.uleb128 0x1
+ 1354 0383 50       		.byte	0x50
+ 1355 0384 02       		.uleb128 0x2
+ 1356 0385 76       		.byte	0x76
+ 1357 0386 00       		.sleb128 0
+ 1358 0387 00       		.byte	0
+ 1359 0388 14       		.uleb128 0x14
+ 1360 0389 F6000000 		.4byte	.LVL61
+ 1361 038d 37010000 		.4byte	0x137
+ 1362 0391 11       		.uleb128 0x11
+ 1363 0392 01       		.uleb128 0x1
+ 1364 0393 50       		.byte	0x50
+ 1365 0394 02       		.uleb128 0x2
+ 1366 0395 77       		.byte	0x77
+ 1367 0396 00       		.sleb128 0
+ 1368 0397 00       		.byte	0
+ 1369 0398 00       		.byte	0
+ 1370 0399 1F       		.uleb128 0x1f
+ 1371 039a 19020000 		.4byte	.LASF31
+ 1372 039e 01       		.byte	0x1
+ 1373 039f 16       		.byte	0x16
+ 1374 03a0 00000000 		.4byte	.LFB63
+ 1375 03a4 90010000 		.4byte	.LFE63-.LFB63
+ 1376 03a8 01       		.uleb128 0x1
+ 1377 03a9 9C       		.byte	0x9c
+ 1378 03aa 5A050000 		.4byte	0x55a
+ 1379 03ae 0D       		.uleb128 0xd
+ 1380 03af 67020000 		.4byte	.LASF22
+ 1381 03b3 01       		.byte	0x1
+ 1382 03b4 16       		.byte	0x16
+ 1383 03b5 CA010000 		.4byte	0x1ca
+ 1384 03b9 81020000 		.4byte	.LLST13
+ 1385 03bd 18       		.uleb128 0x18
+ 1386 03be 60000000 		.4byte	.LASF32
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 32
+
+
+ 1387 03c2 01       		.byte	0x1
+ 1388 03c3 18       		.byte	0x18
+ 1389 03c4 5A050000 		.4byte	0x55a
+ 1390 03c8 03       		.uleb128 0x3
+ 1391 03c9 91       		.byte	0x91
+ 1392 03ca 987F     		.sleb128 -104
+ 1393 03cc 0E       		.uleb128 0xe
+ 1394 03cd 726F7700 		.ascii	"row\000"
+ 1395 03d1 01       		.byte	0x1
+ 1396 03d2 19       		.byte	0x19
+ 1397 03d3 9D000000 		.4byte	0x9d
+ 1398 03d7 AD020000 		.4byte	.LLST14
+ 1399 03db 0E       		.uleb128 0xe
+ 1400 03dc 636F6C00 		.ascii	"col\000"
+ 1401 03e0 01       		.byte	0x1
+ 1402 03e1 19       		.byte	0x19
+ 1403 03e2 9D000000 		.4byte	0x9d
+ 1404 03e6 D7020000 		.4byte	.LLST15
+ 1405 03ea 1D       		.uleb128 0x1d
+ 1406 03eb 4E020000 		.4byte	.LASF33
+ 1407 03ef 01       		.byte	0x1
+ 1408 03f0 1A       		.byte	0x1a
+ 1409 03f1 9D000000 		.4byte	0x9d
+ 1410 03f5 00030000 		.4byte	.LLST16
+ 1411 03f9 0F       		.uleb128 0xf
+ 1412 03fa 56000000 		.4byte	.LBB5
+ 1413 03fe 9C000000 		.4byte	.LBE5-.LBB5
+ 1414 0402 CC040000 		.4byte	0x4cc
+ 1415 0406 20       		.uleb128 0x20
+ 1416 0407 C7010000 		.4byte	.LASF34
+ 1417 040b 01       		.byte	0x1
+ 1418 040c 31       		.byte	0x31
+ 1419 040d 70050000 		.4byte	0x570
+ 1420 0411 21       		.uleb128 0x21
+ 1421 0412 00000000 		.4byte	.Ldebug_ranges0+0
+ 1422 0416 43040000 		.4byte	0x443
+ 1423 041a 1D       		.uleb128 0x1d
+ 1424 041b 40000000 		.4byte	.LASF35
+ 1425 041f 01       		.byte	0x1
+ 1426 0420 37       		.byte	0x37
+ 1427 0421 9D000000 		.4byte	0x9d
+ 1428 0425 35030000 		.4byte	.LLST17
+ 1429 0429 12       		.uleb128 0x12
+ 1430 042a BA000000 		.4byte	.LVL87
+ 1431 042e 06060000 		.4byte	0x606
+ 1432 0432 14       		.uleb128 0x14
+ 1433 0433 E0000000 		.4byte	.LVL90
+ 1434 0437 93020000 		.4byte	0x293
+ 1435 043b 11       		.uleb128 0x11
+ 1436 043c 01       		.uleb128 0x1
+ 1437 043d 50       		.byte	0x50
+ 1438 043e 02       		.uleb128 0x2
+ 1439 043f 7A       		.byte	0x7a
+ 1440 0440 00       		.sleb128 0
+ 1441 0441 00       		.byte	0
+ 1442 0442 00       		.byte	0
+ 1443 0443 1E       		.uleb128 0x1e
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 33
+
+
+ 1444 0444 64000000 		.4byte	.LVL80
+ 1445 0448 6A020000 		.4byte	0x26a
+ 1446 044c 58040000 		.4byte	0x458
+ 1447 0450 11       		.uleb128 0x11
+ 1448 0451 01       		.uleb128 0x1
+ 1449 0452 50       		.byte	0x50
+ 1450 0453 03       		.uleb128 0x3
+ 1451 0454 F5       		.byte	0xf5
+ 1452 0455 09       		.uleb128 0x9
+ 1453 0456 25       		.uleb128 0x25
+ 1454 0457 00       		.byte	0
+ 1455 0458 1E       		.uleb128 0x1e
+ 1456 0459 7C000000 		.4byte	.LVL81
+ 1457 045d 1C060000 		.4byte	0x61c
+ 1458 0461 6C040000 		.4byte	0x46c
+ 1459 0465 11       		.uleb128 0x11
+ 1460 0466 01       		.uleb128 0x1
+ 1461 0467 50       		.byte	0x50
+ 1462 0468 02       		.uleb128 0x2
+ 1463 0469 77       		.byte	0x77
+ 1464 046a 00       		.sleb128 0
+ 1465 046b 00       		.byte	0
+ 1466 046c 1E       		.uleb128 0x1e
+ 1467 046d 86000000 		.4byte	.LVL82
+ 1468 0471 1C060000 		.4byte	0x61c
+ 1469 0475 80040000 		.4byte	0x480
+ 1470 0479 11       		.uleb128 0x11
+ 1471 047a 01       		.uleb128 0x1
+ 1472 047b 50       		.byte	0x50
+ 1473 047c 02       		.uleb128 0x2
+ 1474 047d 77       		.byte	0x77
+ 1475 047e 01       		.sleb128 1
+ 1476 047f 00       		.byte	0
+ 1477 0480 1E       		.uleb128 0x1e
+ 1478 0481 8E000000 		.4byte	.LVL83
+ 1479 0485 11060000 		.4byte	0x611
+ 1480 0489 94040000 		.4byte	0x494
+ 1481 048d 11       		.uleb128 0x11
+ 1482 048e 01       		.uleb128 0x1
+ 1483 048f 50       		.byte	0x50
+ 1484 0490 02       		.uleb128 0x2
+ 1485 0491 78       		.byte	0x78
+ 1486 0492 00       		.sleb128 0
+ 1487 0493 00       		.byte	0
+ 1488 0494 10       		.uleb128 0x10
+ 1489 0495 9A000000 		.4byte	.LVL84
+ 1490 0499 A3040000 		.4byte	0x4a3
+ 1491 049d 11       		.uleb128 0x11
+ 1492 049e 01       		.uleb128 0x1
+ 1493 049f 50       		.byte	0x50
+ 1494 04a0 01       		.uleb128 0x1
+ 1495 04a1 31       		.byte	0x31
+ 1496 04a2 00       		.byte	0
+ 1497 04a3 12       		.uleb128 0x12
+ 1498 04a4 9E000000 		.4byte	.LVL85
+ 1499 04a8 06060000 		.4byte	0x606
+ 1500 04ac 1E       		.uleb128 0x1e
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 34
+
+
+ 1501 04ad E6000000 		.4byte	.LVL91
+ 1502 04b1 27060000 		.4byte	0x627
+ 1503 04b5 C0040000 		.4byte	0x4c0
+ 1504 04b9 11       		.uleb128 0x11
+ 1505 04ba 01       		.uleb128 0x1
+ 1506 04bb 50       		.byte	0x50
+ 1507 04bc 02       		.uleb128 0x2
+ 1508 04bd 78       		.byte	0x78
+ 1509 04be 00       		.sleb128 0
+ 1510 04bf 00       		.byte	0
+ 1511 04c0 13       		.uleb128 0x13
+ 1512 04c1 F0000000 		.4byte	.LVL92
+ 1513 04c5 11       		.uleb128 0x11
+ 1514 04c6 01       		.uleb128 0x1
+ 1515 04c7 50       		.byte	0x50
+ 1516 04c8 01       		.uleb128 0x1
+ 1517 04c9 30       		.byte	0x30
+ 1518 04ca 00       		.byte	0
+ 1519 04cb 00       		.byte	0
+ 1520 04cc 12       		.uleb128 0x12
+ 1521 04cd 12010000 		.4byte	.LVL102
+ 1522 04d1 6A020000 		.4byte	0x26a
+ 1523 04d5 1E       		.uleb128 0x1e
+ 1524 04d6 2C010000 		.4byte	.LVL104
+ 1525 04da 32060000 		.4byte	0x632
+ 1526 04de EC040000 		.4byte	0x4ec
+ 1527 04e2 11       		.uleb128 0x11
+ 1528 04e3 01       		.uleb128 0x1
+ 1529 04e4 50       		.byte	0x50
+ 1530 04e5 05       		.uleb128 0x5
+ 1531 04e6 03       		.byte	0x3
+ 1532 04e7 04000000 		.4byte	.LC2
+ 1533 04eb 00       		.byte	0
+ 1534 04ec 1E       		.uleb128 0x1e
+ 1535 04ed 34010000 		.4byte	.LVL105
+ 1536 04f1 32060000 		.4byte	0x632
+ 1537 04f5 03050000 		.4byte	0x503
+ 1538 04f9 11       		.uleb128 0x11
+ 1539 04fa 01       		.uleb128 0x1
+ 1540 04fb 50       		.byte	0x50
+ 1541 04fc 05       		.uleb128 0x5
+ 1542 04fd 03       		.byte	0x3
+ 1543 04fe 54000000 		.4byte	.LC3
+ 1544 0502 00       		.byte	0
+ 1545 0503 1E       		.uleb128 0x1e
+ 1546 0504 3C010000 		.4byte	.LVL106
+ 1547 0508 32060000 		.4byte	0x632
+ 1548 050c 1A050000 		.4byte	0x51a
+ 1549 0510 11       		.uleb128 0x11
+ 1550 0511 01       		.uleb128 0x1
+ 1551 0512 50       		.byte	0x50
+ 1552 0513 05       		.uleb128 0x5
+ 1553 0514 03       		.byte	0x3
+ 1554 0515 A4000000 		.4byte	.LC4
+ 1555 0519 00       		.byte	0
+ 1556 051a 1E       		.uleb128 0x1e
+ 1557 051b 44010000 		.4byte	.LVL107
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 35
+
+
+ 1558 051f 32060000 		.4byte	0x632
+ 1559 0523 31050000 		.4byte	0x531
+ 1560 0527 11       		.uleb128 0x11
+ 1561 0528 01       		.uleb128 0x1
+ 1562 0529 50       		.byte	0x50
+ 1563 052a 05       		.uleb128 0x5
+ 1564 052b 03       		.byte	0x3
+ 1565 052c 08010000 		.4byte	.LC5
+ 1566 0530 00       		.byte	0
+ 1567 0531 1E       		.uleb128 0x1e
+ 1568 0532 4A010000 		.4byte	.LVL108
+ 1569 0536 32060000 		.4byte	0x632
+ 1570 053a 48050000 		.4byte	0x548
+ 1571 053e 11       		.uleb128 0x11
+ 1572 053f 01       		.uleb128 0x1
+ 1573 0540 50       		.byte	0x50
+ 1574 0541 05       		.uleb128 0x5
+ 1575 0542 03       		.byte	0x3
+ 1576 0543 6C010000 		.4byte	.LC6
+ 1577 0547 00       		.byte	0
+ 1578 0548 14       		.uleb128 0x14
+ 1579 0549 52010000 		.4byte	.LVL109
+ 1580 054d 3D060000 		.4byte	0x63d
+ 1581 0551 11       		.uleb128 0x11
+ 1582 0552 01       		.uleb128 0x1
+ 1583 0553 50       		.byte	0x50
+ 1584 0554 03       		.uleb128 0x3
+ 1585 0555 0A       		.byte	0xa
+ 1586 0556 8813     		.2byte	0x1388
+ 1587 0558 00       		.byte	0
+ 1588 0559 00       		.byte	0
+ 1589 055a 0A       		.uleb128 0xa
+ 1590 055b 25000000 		.4byte	0x25
+ 1591 055f 70050000 		.4byte	0x570
+ 1592 0563 0B       		.uleb128 0xb
+ 1593 0564 84000000 		.4byte	0x84
+ 1594 0568 03       		.byte	0x3
+ 1595 0569 0B       		.uleb128 0xb
+ 1596 056a 84000000 		.4byte	0x84
+ 1597 056e 03       		.byte	0x3
+ 1598 056f 00       		.byte	0
+ 1599 0570 0A       		.uleb128 0xa
+ 1600 0571 9D000000 		.4byte	0x9d
+ 1601 0575 80050000 		.4byte	0x580
+ 1602 0579 0B       		.uleb128 0xb
+ 1603 057a 84000000 		.4byte	0x84
+ 1604 057e 01       		.byte	0x1
+ 1605 057f 00       		.byte	0
+ 1606 0580 22       		.uleb128 0x22
+ 1607 0581 40010000 		.4byte	.LASF36
+ 1608 0585 06       		.byte	0x6
+ 1609 0586 1207     		.2byte	0x712
+ 1610 0588 8C050000 		.4byte	0x58c
+ 1611 058c 06       		.uleb128 0x6
+ 1612 058d 92000000 		.4byte	0x92
+ 1613 0591 23       		.uleb128 0x23
+ 1614 0592 29010000 		.4byte	.LASF37
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 36
+
+
+ 1615 0596 05       		.byte	0x5
+ 1616 0597 3A       		.byte	0x3a
+ 1617 0598 BC000000 		.4byte	0xbc
+ 1618 059c 05       		.uleb128 0x5
+ 1619 059d 03       		.byte	0x3
+ 1620 059e 00000000 		.4byte	action
+ 1621 05a2 0A       		.uleb128 0xa
+ 1622 05a3 8B000000 		.4byte	0x8b
+ 1623 05a7 B2050000 		.4byte	0x5b2
+ 1624 05ab 0B       		.uleb128 0xb
+ 1625 05ac 84000000 		.4byte	0x84
+ 1626 05b0 3F       		.byte	0x3f
+ 1627 05b1 00       		.byte	0
+ 1628 05b2 23       		.uleb128 0x23
+ 1629 05b3 7D020000 		.4byte	.LASF38
+ 1630 05b7 05       		.byte	0x5
+ 1631 05b8 3D       		.byte	0x3d
+ 1632 05b9 A2050000 		.4byte	0x5a2
+ 1633 05bd 05       		.uleb128 0x5
+ 1634 05be 03       		.byte	0x3
+ 1635 05bf 00000000 		.4byte	Transmitbuffer
+ 1636 05c3 0A       		.uleb128 0xa
+ 1637 05c4 D3050000 		.4byte	0x5d3
+ 1638 05c8 D3050000 		.4byte	0x5d3
+ 1639 05cc 0B       		.uleb128 0xb
+ 1640 05cd 84000000 		.4byte	0x84
+ 1641 05d1 03       		.byte	0x3
+ 1642 05d2 00       		.byte	0
+ 1643 05d3 15       		.uleb128 0x15
+ 1644 05d4 04       		.byte	0x4
+ 1645 05d5 D9050000 		.4byte	0x5d9
+ 1646 05d9 24       		.uleb128 0x24
+ 1647 05da E4050000 		.4byte	0x5e4
+ 1648 05de 25       		.uleb128 0x25
+ 1649 05df 9D000000 		.4byte	0x9d
+ 1650 05e3 00       		.byte	0
+ 1651 05e4 23       		.uleb128 0x23
+ 1652 05e5 E3020000 		.4byte	.LASF39
+ 1653 05e9 01       		.byte	0x1
+ 1654 05ea 12       		.byte	0x12
+ 1655 05eb C3050000 		.4byte	0x5c3
+ 1656 05ef 05       		.uleb128 0x5
+ 1657 05f0 03       		.byte	0x3
+ 1658 05f1 00000000 		.4byte	pinWriteArr
+ 1659 05f5 23       		.uleb128 0x23
+ 1660 05f6 8C020000 		.4byte	.LASF40
+ 1661 05fa 05       		.byte	0x5
+ 1662 05fb 44       		.byte	0x44
+ 1663 05fc A9000000 		.4byte	0xa9
+ 1664 0600 05       		.uleb128 0x5
+ 1665 0601 03       		.byte	0x3
+ 1666 0602 00000000 		.4byte	rapidTriggerDistance
+ 1667 0606 26       		.uleb128 0x26
+ 1668 0607 32020000 		.4byte	.LASF41
+ 1669 060b 32020000 		.4byte	.LASF41
+ 1670 060f 07       		.byte	0x7
+ 1671 0610 55       		.byte	0x55
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 37
+
+
+ 1672 0611 26       		.uleb128 0x26
+ 1673 0612 C7020000 		.4byte	.LASF42
+ 1674 0616 C7020000 		.4byte	.LASF42
+ 1675 061a 08       		.byte	0x8
+ 1676 061b 57       		.byte	0x57
+ 1677 061c 26       		.uleb128 0x26
+ 1678 061d 26020000 		.4byte	.LASF43
+ 1679 0621 26020000 		.4byte	.LASF43
+ 1680 0625 09       		.byte	0x9
+ 1681 0626 4D       		.byte	0x4d
+ 1682 0627 26       		.uleb128 0x26
+ 1683 0628 6E020000 		.4byte	.LASF44
+ 1684 062c 6E020000 		.4byte	.LASF44
+ 1685 0630 0A       		.byte	0xa
+ 1686 0631 25       		.byte	0x25
+ 1687 0632 26       		.uleb128 0x26
+ 1688 0633 EF020000 		.4byte	.LASF45
+ 1689 0637 EF020000 		.4byte	.LASF45
+ 1690 063b 0B       		.byte	0xb
+ 1691 063c 8B       		.byte	0x8b
+ 1692 063d 26       		.uleb128 0x26
+ 1693 063e 19030000 		.4byte	.LASF46
+ 1694 0642 19030000 		.4byte	.LASF46
+ 1695 0646 0C       		.byte	0xc
+ 1696 0647 76       		.byte	0x76
+ 1697 0648 00       		.byte	0
+ 1698              		.section	.debug_abbrev,"",%progbits
+ 1699              	.Ldebug_abbrev0:
+ 1700 0000 01       		.uleb128 0x1
+ 1701 0001 11       		.uleb128 0x11
+ 1702 0002 01       		.byte	0x1
+ 1703 0003 25       		.uleb128 0x25
+ 1704 0004 0E       		.uleb128 0xe
+ 1705 0005 13       		.uleb128 0x13
+ 1706 0006 0B       		.uleb128 0xb
+ 1707 0007 03       		.uleb128 0x3
+ 1708 0008 0E       		.uleb128 0xe
+ 1709 0009 1B       		.uleb128 0x1b
+ 1710 000a 0E       		.uleb128 0xe
+ 1711 000b 55       		.uleb128 0x55
+ 1712 000c 17       		.uleb128 0x17
+ 1713 000d 11       		.uleb128 0x11
+ 1714 000e 01       		.uleb128 0x1
+ 1715 000f 10       		.uleb128 0x10
+ 1716 0010 17       		.uleb128 0x17
+ 1717 0011 00       		.byte	0
+ 1718 0012 00       		.byte	0
+ 1719 0013 02       		.uleb128 0x2
+ 1720 0014 24       		.uleb128 0x24
+ 1721 0015 00       		.byte	0
+ 1722 0016 0B       		.uleb128 0xb
+ 1723 0017 0B       		.uleb128 0xb
+ 1724 0018 3E       		.uleb128 0x3e
+ 1725 0019 0B       		.uleb128 0xb
+ 1726 001a 03       		.uleb128 0x3
+ 1727 001b 0E       		.uleb128 0xe
+ 1728 001c 00       		.byte	0
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 38
+
+
+ 1729 001d 00       		.byte	0
+ 1730 001e 03       		.uleb128 0x3
+ 1731 001f 24       		.uleb128 0x24
+ 1732 0020 00       		.byte	0
+ 1733 0021 0B       		.uleb128 0xb
+ 1734 0022 0B       		.uleb128 0xb
+ 1735 0023 3E       		.uleb128 0x3e
+ 1736 0024 0B       		.uleb128 0xb
+ 1737 0025 03       		.uleb128 0x3
+ 1738 0026 08       		.uleb128 0x8
+ 1739 0027 00       		.byte	0
+ 1740 0028 00       		.byte	0
+ 1741 0029 04       		.uleb128 0x4
+ 1742 002a 16       		.uleb128 0x16
+ 1743 002b 00       		.byte	0
+ 1744 002c 03       		.uleb128 0x3
+ 1745 002d 0E       		.uleb128 0xe
+ 1746 002e 3A       		.uleb128 0x3a
+ 1747 002f 0B       		.uleb128 0xb
+ 1748 0030 3B       		.uleb128 0x3b
+ 1749 0031 0B       		.uleb128 0xb
+ 1750 0032 49       		.uleb128 0x49
+ 1751 0033 13       		.uleb128 0x13
+ 1752 0034 00       		.byte	0
+ 1753 0035 00       		.byte	0
+ 1754 0036 05       		.uleb128 0x5
+ 1755 0037 16       		.uleb128 0x16
+ 1756 0038 00       		.byte	0
+ 1757 0039 03       		.uleb128 0x3
+ 1758 003a 0E       		.uleb128 0xe
+ 1759 003b 3A       		.uleb128 0x3a
+ 1760 003c 0B       		.uleb128 0xb
+ 1761 003d 3B       		.uleb128 0x3b
+ 1762 003e 05       		.uleb128 0x5
+ 1763 003f 49       		.uleb128 0x49
+ 1764 0040 13       		.uleb128 0x13
+ 1765 0041 00       		.byte	0
+ 1766 0042 00       		.byte	0
+ 1767 0043 06       		.uleb128 0x6
+ 1768 0044 35       		.uleb128 0x35
+ 1769 0045 00       		.byte	0
+ 1770 0046 49       		.uleb128 0x49
+ 1771 0047 13       		.uleb128 0x13
+ 1772 0048 00       		.byte	0
+ 1773 0049 00       		.byte	0
+ 1774 004a 07       		.uleb128 0x7
+ 1775 004b 13       		.uleb128 0x13
+ 1776 004c 01       		.byte	0x1
+ 1777 004d 03       		.uleb128 0x3
+ 1778 004e 0E       		.uleb128 0xe
+ 1779 004f 0B       		.uleb128 0xb
+ 1780 0050 0B       		.uleb128 0xb
+ 1781 0051 3A       		.uleb128 0x3a
+ 1782 0052 0B       		.uleb128 0xb
+ 1783 0053 3B       		.uleb128 0x3b
+ 1784 0054 0B       		.uleb128 0xb
+ 1785 0055 01       		.uleb128 0x1
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 39
+
+
+ 1786 0056 13       		.uleb128 0x13
+ 1787 0057 00       		.byte	0
+ 1788 0058 00       		.byte	0
+ 1789 0059 08       		.uleb128 0x8
+ 1790 005a 0D       		.uleb128 0xd
+ 1791 005b 00       		.byte	0
+ 1792 005c 03       		.uleb128 0x3
+ 1793 005d 08       		.uleb128 0x8
+ 1794 005e 3A       		.uleb128 0x3a
+ 1795 005f 0B       		.uleb128 0xb
+ 1796 0060 3B       		.uleb128 0x3b
+ 1797 0061 0B       		.uleb128 0xb
+ 1798 0062 49       		.uleb128 0x49
+ 1799 0063 13       		.uleb128 0x13
+ 1800 0064 38       		.uleb128 0x38
+ 1801 0065 0B       		.uleb128 0xb
+ 1802 0066 00       		.byte	0
+ 1803 0067 00       		.byte	0
+ 1804 0068 09       		.uleb128 0x9
+ 1805 0069 0D       		.uleb128 0xd
+ 1806 006a 00       		.byte	0
+ 1807 006b 03       		.uleb128 0x3
+ 1808 006c 0E       		.uleb128 0xe
+ 1809 006d 3A       		.uleb128 0x3a
+ 1810 006e 0B       		.uleb128 0xb
+ 1811 006f 3B       		.uleb128 0x3b
+ 1812 0070 0B       		.uleb128 0xb
+ 1813 0071 49       		.uleb128 0x49
+ 1814 0072 13       		.uleb128 0x13
+ 1815 0073 38       		.uleb128 0x38
+ 1816 0074 0B       		.uleb128 0xb
+ 1817 0075 00       		.byte	0
+ 1818 0076 00       		.byte	0
+ 1819 0077 0A       		.uleb128 0xa
+ 1820 0078 01       		.uleb128 0x1
+ 1821 0079 01       		.byte	0x1
+ 1822 007a 49       		.uleb128 0x49
+ 1823 007b 13       		.uleb128 0x13
+ 1824 007c 01       		.uleb128 0x1
+ 1825 007d 13       		.uleb128 0x13
+ 1826 007e 00       		.byte	0
+ 1827 007f 00       		.byte	0
+ 1828 0080 0B       		.uleb128 0xb
+ 1829 0081 21       		.uleb128 0x21
+ 1830 0082 00       		.byte	0
+ 1831 0083 49       		.uleb128 0x49
+ 1832 0084 13       		.uleb128 0x13
+ 1833 0085 2F       		.uleb128 0x2f
+ 1834 0086 0B       		.uleb128 0xb
+ 1835 0087 00       		.byte	0
+ 1836 0088 00       		.byte	0
+ 1837 0089 0C       		.uleb128 0xc
+ 1838 008a 2E       		.uleb128 0x2e
+ 1839 008b 01       		.byte	0x1
+ 1840 008c 3F       		.uleb128 0x3f
+ 1841 008d 19       		.uleb128 0x19
+ 1842 008e 03       		.uleb128 0x3
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 40
+
+
+ 1843 008f 0E       		.uleb128 0xe
+ 1844 0090 3A       		.uleb128 0x3a
+ 1845 0091 0B       		.uleb128 0xb
+ 1846 0092 3B       		.uleb128 0x3b
+ 1847 0093 0B       		.uleb128 0xb
+ 1848 0094 27       		.uleb128 0x27
+ 1849 0095 19       		.uleb128 0x19
+ 1850 0096 11       		.uleb128 0x11
+ 1851 0097 01       		.uleb128 0x1
+ 1852 0098 12       		.uleb128 0x12
+ 1853 0099 06       		.uleb128 0x6
+ 1854 009a 40       		.uleb128 0x40
+ 1855 009b 18       		.uleb128 0x18
+ 1856 009c 9742     		.uleb128 0x2117
+ 1857 009e 19       		.uleb128 0x19
+ 1858 009f 01       		.uleb128 0x1
+ 1859 00a0 13       		.uleb128 0x13
+ 1860 00a1 00       		.byte	0
+ 1861 00a2 00       		.byte	0
+ 1862 00a3 0D       		.uleb128 0xd
+ 1863 00a4 05       		.uleb128 0x5
+ 1864 00a5 00       		.byte	0
+ 1865 00a6 03       		.uleb128 0x3
+ 1866 00a7 0E       		.uleb128 0xe
+ 1867 00a8 3A       		.uleb128 0x3a
+ 1868 00a9 0B       		.uleb128 0xb
+ 1869 00aa 3B       		.uleb128 0x3b
+ 1870 00ab 0B       		.uleb128 0xb
+ 1871 00ac 49       		.uleb128 0x49
+ 1872 00ad 13       		.uleb128 0x13
+ 1873 00ae 02       		.uleb128 0x2
+ 1874 00af 17       		.uleb128 0x17
+ 1875 00b0 00       		.byte	0
+ 1876 00b1 00       		.byte	0
+ 1877 00b2 0E       		.uleb128 0xe
+ 1878 00b3 34       		.uleb128 0x34
+ 1879 00b4 00       		.byte	0
+ 1880 00b5 03       		.uleb128 0x3
+ 1881 00b6 08       		.uleb128 0x8
+ 1882 00b7 3A       		.uleb128 0x3a
+ 1883 00b8 0B       		.uleb128 0xb
+ 1884 00b9 3B       		.uleb128 0x3b
+ 1885 00ba 0B       		.uleb128 0xb
+ 1886 00bb 49       		.uleb128 0x49
+ 1887 00bc 13       		.uleb128 0x13
+ 1888 00bd 02       		.uleb128 0x2
+ 1889 00be 17       		.uleb128 0x17
+ 1890 00bf 00       		.byte	0
+ 1891 00c0 00       		.byte	0
+ 1892 00c1 0F       		.uleb128 0xf
+ 1893 00c2 0B       		.uleb128 0xb
+ 1894 00c3 01       		.byte	0x1
+ 1895 00c4 11       		.uleb128 0x11
+ 1896 00c5 01       		.uleb128 0x1
+ 1897 00c6 12       		.uleb128 0x12
+ 1898 00c7 06       		.uleb128 0x6
+ 1899 00c8 01       		.uleb128 0x1
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 41
+
+
+ 1900 00c9 13       		.uleb128 0x13
+ 1901 00ca 00       		.byte	0
+ 1902 00cb 00       		.byte	0
+ 1903 00cc 10       		.uleb128 0x10
+ 1904 00cd 898201   		.uleb128 0x4109
+ 1905 00d0 01       		.byte	0x1
+ 1906 00d1 11       		.uleb128 0x11
+ 1907 00d2 01       		.uleb128 0x1
+ 1908 00d3 01       		.uleb128 0x1
+ 1909 00d4 13       		.uleb128 0x13
+ 1910 00d5 00       		.byte	0
+ 1911 00d6 00       		.byte	0
+ 1912 00d7 11       		.uleb128 0x11
+ 1913 00d8 8A8201   		.uleb128 0x410a
+ 1914 00db 00       		.byte	0
+ 1915 00dc 02       		.uleb128 0x2
+ 1916 00dd 18       		.uleb128 0x18
+ 1917 00de 9142     		.uleb128 0x2111
+ 1918 00e0 18       		.uleb128 0x18
+ 1919 00e1 00       		.byte	0
+ 1920 00e2 00       		.byte	0
+ 1921 00e3 12       		.uleb128 0x12
+ 1922 00e4 898201   		.uleb128 0x4109
+ 1923 00e7 00       		.byte	0
+ 1924 00e8 11       		.uleb128 0x11
+ 1925 00e9 01       		.uleb128 0x1
+ 1926 00ea 31       		.uleb128 0x31
+ 1927 00eb 13       		.uleb128 0x13
+ 1928 00ec 00       		.byte	0
+ 1929 00ed 00       		.byte	0
+ 1930 00ee 13       		.uleb128 0x13
+ 1931 00ef 898201   		.uleb128 0x4109
+ 1932 00f2 01       		.byte	0x1
+ 1933 00f3 11       		.uleb128 0x11
+ 1934 00f4 01       		.uleb128 0x1
+ 1935 00f5 00       		.byte	0
+ 1936 00f6 00       		.byte	0
+ 1937 00f7 14       		.uleb128 0x14
+ 1938 00f8 898201   		.uleb128 0x4109
+ 1939 00fb 01       		.byte	0x1
+ 1940 00fc 11       		.uleb128 0x11
+ 1941 00fd 01       		.uleb128 0x1
+ 1942 00fe 31       		.uleb128 0x31
+ 1943 00ff 13       		.uleb128 0x13
+ 1944 0100 00       		.byte	0
+ 1945 0101 00       		.byte	0
+ 1946 0102 15       		.uleb128 0x15
+ 1947 0103 0F       		.uleb128 0xf
+ 1948 0104 00       		.byte	0
+ 1949 0105 0B       		.uleb128 0xb
+ 1950 0106 0B       		.uleb128 0xb
+ 1951 0107 49       		.uleb128 0x49
+ 1952 0108 13       		.uleb128 0x13
+ 1953 0109 00       		.byte	0
+ 1954 010a 00       		.byte	0
+ 1955 010b 16       		.uleb128 0x16
+ 1956 010c 2E       		.uleb128 0x2e
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 42
+
+
+ 1957 010d 01       		.byte	0x1
+ 1958 010e 3F       		.uleb128 0x3f
+ 1959 010f 19       		.uleb128 0x19
+ 1960 0110 03       		.uleb128 0x3
+ 1961 0111 0E       		.uleb128 0xe
+ 1962 0112 3A       		.uleb128 0x3a
+ 1963 0113 0B       		.uleb128 0xb
+ 1964 0114 3B       		.uleb128 0x3b
+ 1965 0115 0B       		.uleb128 0xb
+ 1966 0116 27       		.uleb128 0x27
+ 1967 0117 19       		.uleb128 0x19
+ 1968 0118 8701     		.uleb128 0x87
+ 1969 011a 19       		.uleb128 0x19
+ 1970 011b 11       		.uleb128 0x11
+ 1971 011c 01       		.uleb128 0x1
+ 1972 011d 12       		.uleb128 0x12
+ 1973 011e 06       		.uleb128 0x6
+ 1974 011f 40       		.uleb128 0x40
+ 1975 0120 18       		.uleb128 0x18
+ 1976 0121 9742     		.uleb128 0x2117
+ 1977 0123 19       		.uleb128 0x19
+ 1978 0124 01       		.uleb128 0x1
+ 1979 0125 13       		.uleb128 0x13
+ 1980 0126 00       		.byte	0
+ 1981 0127 00       		.byte	0
+ 1982 0128 17       		.uleb128 0x17
+ 1983 0129 05       		.uleb128 0x5
+ 1984 012a 00       		.byte	0
+ 1985 012b 03       		.uleb128 0x3
+ 1986 012c 0E       		.uleb128 0xe
+ 1987 012d 3A       		.uleb128 0x3a
+ 1988 012e 0B       		.uleb128 0xb
+ 1989 012f 3B       		.uleb128 0x3b
+ 1990 0130 0B       		.uleb128 0xb
+ 1991 0131 49       		.uleb128 0x49
+ 1992 0132 13       		.uleb128 0x13
+ 1993 0133 02       		.uleb128 0x2
+ 1994 0134 18       		.uleb128 0x18
+ 1995 0135 00       		.byte	0
+ 1996 0136 00       		.byte	0
+ 1997 0137 18       		.uleb128 0x18
+ 1998 0138 34       		.uleb128 0x34
+ 1999 0139 00       		.byte	0
+ 2000 013a 03       		.uleb128 0x3
+ 2001 013b 0E       		.uleb128 0xe
+ 2002 013c 3A       		.uleb128 0x3a
+ 2003 013d 0B       		.uleb128 0xb
+ 2004 013e 3B       		.uleb128 0x3b
+ 2005 013f 0B       		.uleb128 0xb
+ 2006 0140 49       		.uleb128 0x49
+ 2007 0141 13       		.uleb128 0x13
+ 2008 0142 02       		.uleb128 0x2
+ 2009 0143 18       		.uleb128 0x18
+ 2010 0144 00       		.byte	0
+ 2011 0145 00       		.byte	0
+ 2012 0146 19       		.uleb128 0x19
+ 2013 0147 0B       		.uleb128 0xb
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 43
+
+
+ 2014 0148 01       		.byte	0x1
+ 2015 0149 11       		.uleb128 0x11
+ 2016 014a 01       		.uleb128 0x1
+ 2017 014b 12       		.uleb128 0x12
+ 2018 014c 06       		.uleb128 0x6
+ 2019 014d 00       		.byte	0
+ 2020 014e 00       		.byte	0
+ 2021 014f 1A       		.uleb128 0x1a
+ 2022 0150 2E       		.uleb128 0x2e
+ 2023 0151 01       		.byte	0x1
+ 2024 0152 3F       		.uleb128 0x3f
+ 2025 0153 19       		.uleb128 0x19
+ 2026 0154 03       		.uleb128 0x3
+ 2027 0155 0E       		.uleb128 0xe
+ 2028 0156 3A       		.uleb128 0x3a
+ 2029 0157 0B       		.uleb128 0xb
+ 2030 0158 3B       		.uleb128 0x3b
+ 2031 0159 0B       		.uleb128 0xb
+ 2032 015a 27       		.uleb128 0x27
+ 2033 015b 19       		.uleb128 0x19
+ 2034 015c 49       		.uleb128 0x49
+ 2035 015d 13       		.uleb128 0x13
+ 2036 015e 11       		.uleb128 0x11
+ 2037 015f 01       		.uleb128 0x1
+ 2038 0160 12       		.uleb128 0x12
+ 2039 0161 06       		.uleb128 0x6
+ 2040 0162 40       		.uleb128 0x40
+ 2041 0163 18       		.uleb128 0x18
+ 2042 0164 9642     		.uleb128 0x2116
+ 2043 0166 19       		.uleb128 0x19
+ 2044 0167 01       		.uleb128 0x1
+ 2045 0168 13       		.uleb128 0x13
+ 2046 0169 00       		.byte	0
+ 2047 016a 00       		.byte	0
+ 2048 016b 1B       		.uleb128 0x1b
+ 2049 016c 34       		.uleb128 0x34
+ 2050 016d 00       		.byte	0
+ 2051 016e 03       		.uleb128 0x3
+ 2052 016f 08       		.uleb128 0x8
+ 2053 0170 3A       		.uleb128 0x3a
+ 2054 0171 0B       		.uleb128 0xb
+ 2055 0172 3B       		.uleb128 0x3b
+ 2056 0173 0B       		.uleb128 0xb
+ 2057 0174 49       		.uleb128 0x49
+ 2058 0175 13       		.uleb128 0x13
+ 2059 0176 00       		.byte	0
+ 2060 0177 00       		.byte	0
+ 2061 0178 1C       		.uleb128 0x1c
+ 2062 0179 34       		.uleb128 0x34
+ 2063 017a 00       		.byte	0
+ 2064 017b 03       		.uleb128 0x3
+ 2065 017c 0E       		.uleb128 0xe
+ 2066 017d 3A       		.uleb128 0x3a
+ 2067 017e 0B       		.uleb128 0xb
+ 2068 017f 3B       		.uleb128 0x3b
+ 2069 0180 05       		.uleb128 0x5
+ 2070 0181 49       		.uleb128 0x49
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 44
+
+
+ 2071 0182 13       		.uleb128 0x13
+ 2072 0183 02       		.uleb128 0x2
+ 2073 0184 17       		.uleb128 0x17
+ 2074 0185 00       		.byte	0
+ 2075 0186 00       		.byte	0
+ 2076 0187 1D       		.uleb128 0x1d
+ 2077 0188 34       		.uleb128 0x34
+ 2078 0189 00       		.byte	0
+ 2079 018a 03       		.uleb128 0x3
+ 2080 018b 0E       		.uleb128 0xe
+ 2081 018c 3A       		.uleb128 0x3a
+ 2082 018d 0B       		.uleb128 0xb
+ 2083 018e 3B       		.uleb128 0x3b
+ 2084 018f 0B       		.uleb128 0xb
+ 2085 0190 49       		.uleb128 0x49
+ 2086 0191 13       		.uleb128 0x13
+ 2087 0192 02       		.uleb128 0x2
+ 2088 0193 17       		.uleb128 0x17
+ 2089 0194 00       		.byte	0
+ 2090 0195 00       		.byte	0
+ 2091 0196 1E       		.uleb128 0x1e
+ 2092 0197 898201   		.uleb128 0x4109
+ 2093 019a 01       		.byte	0x1
+ 2094 019b 11       		.uleb128 0x11
+ 2095 019c 01       		.uleb128 0x1
+ 2096 019d 31       		.uleb128 0x31
+ 2097 019e 13       		.uleb128 0x13
+ 2098 019f 01       		.uleb128 0x1
+ 2099 01a0 13       		.uleb128 0x13
+ 2100 01a1 00       		.byte	0
+ 2101 01a2 00       		.byte	0
+ 2102 01a3 1F       		.uleb128 0x1f
+ 2103 01a4 2E       		.uleb128 0x2e
+ 2104 01a5 01       		.byte	0x1
+ 2105 01a6 3F       		.uleb128 0x3f
+ 2106 01a7 19       		.uleb128 0x19
+ 2107 01a8 03       		.uleb128 0x3
+ 2108 01a9 0E       		.uleb128 0xe
+ 2109 01aa 3A       		.uleb128 0x3a
+ 2110 01ab 0B       		.uleb128 0xb
+ 2111 01ac 3B       		.uleb128 0x3b
+ 2112 01ad 0B       		.uleb128 0xb
+ 2113 01ae 27       		.uleb128 0x27
+ 2114 01af 19       		.uleb128 0x19
+ 2115 01b0 11       		.uleb128 0x11
+ 2116 01b1 01       		.uleb128 0x1
+ 2117 01b2 12       		.uleb128 0x12
+ 2118 01b3 06       		.uleb128 0x6
+ 2119 01b4 40       		.uleb128 0x40
+ 2120 01b5 18       		.uleb128 0x18
+ 2121 01b6 9642     		.uleb128 0x2116
+ 2122 01b8 19       		.uleb128 0x19
+ 2123 01b9 01       		.uleb128 0x1
+ 2124 01ba 13       		.uleb128 0x13
+ 2125 01bb 00       		.byte	0
+ 2126 01bc 00       		.byte	0
+ 2127 01bd 20       		.uleb128 0x20
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 45
+
+
+ 2128 01be 34       		.uleb128 0x34
+ 2129 01bf 00       		.byte	0
+ 2130 01c0 03       		.uleb128 0x3
+ 2131 01c1 0E       		.uleb128 0xe
+ 2132 01c2 3A       		.uleb128 0x3a
+ 2133 01c3 0B       		.uleb128 0xb
+ 2134 01c4 3B       		.uleb128 0x3b
+ 2135 01c5 0B       		.uleb128 0xb
+ 2136 01c6 49       		.uleb128 0x49
+ 2137 01c7 13       		.uleb128 0x13
+ 2138 01c8 00       		.byte	0
+ 2139 01c9 00       		.byte	0
+ 2140 01ca 21       		.uleb128 0x21
+ 2141 01cb 0B       		.uleb128 0xb
+ 2142 01cc 01       		.byte	0x1
+ 2143 01cd 55       		.uleb128 0x55
+ 2144 01ce 17       		.uleb128 0x17
+ 2145 01cf 01       		.uleb128 0x1
+ 2146 01d0 13       		.uleb128 0x13
+ 2147 01d1 00       		.byte	0
+ 2148 01d2 00       		.byte	0
+ 2149 01d3 22       		.uleb128 0x22
+ 2150 01d4 34       		.uleb128 0x34
+ 2151 01d5 00       		.byte	0
+ 2152 01d6 03       		.uleb128 0x3
+ 2153 01d7 0E       		.uleb128 0xe
+ 2154 01d8 3A       		.uleb128 0x3a
+ 2155 01d9 0B       		.uleb128 0xb
+ 2156 01da 3B       		.uleb128 0x3b
+ 2157 01db 05       		.uleb128 0x5
+ 2158 01dc 49       		.uleb128 0x49
+ 2159 01dd 13       		.uleb128 0x13
+ 2160 01de 3F       		.uleb128 0x3f
+ 2161 01df 19       		.uleb128 0x19
+ 2162 01e0 3C       		.uleb128 0x3c
+ 2163 01e1 19       		.uleb128 0x19
+ 2164 01e2 00       		.byte	0
+ 2165 01e3 00       		.byte	0
+ 2166 01e4 23       		.uleb128 0x23
+ 2167 01e5 34       		.uleb128 0x34
+ 2168 01e6 00       		.byte	0
+ 2169 01e7 03       		.uleb128 0x3
+ 2170 01e8 0E       		.uleb128 0xe
+ 2171 01e9 3A       		.uleb128 0x3a
+ 2172 01ea 0B       		.uleb128 0xb
+ 2173 01eb 3B       		.uleb128 0x3b
+ 2174 01ec 0B       		.uleb128 0xb
+ 2175 01ed 49       		.uleb128 0x49
+ 2176 01ee 13       		.uleb128 0x13
+ 2177 01ef 3F       		.uleb128 0x3f
+ 2178 01f0 19       		.uleb128 0x19
+ 2179 01f1 02       		.uleb128 0x2
+ 2180 01f2 18       		.uleb128 0x18
+ 2181 01f3 00       		.byte	0
+ 2182 01f4 00       		.byte	0
+ 2183 01f5 24       		.uleb128 0x24
+ 2184 01f6 15       		.uleb128 0x15
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 46
+
+
+ 2185 01f7 01       		.byte	0x1
+ 2186 01f8 27       		.uleb128 0x27
+ 2187 01f9 19       		.uleb128 0x19
+ 2188 01fa 01       		.uleb128 0x1
+ 2189 01fb 13       		.uleb128 0x13
+ 2190 01fc 00       		.byte	0
+ 2191 01fd 00       		.byte	0
+ 2192 01fe 25       		.uleb128 0x25
+ 2193 01ff 05       		.uleb128 0x5
+ 2194 0200 00       		.byte	0
+ 2195 0201 49       		.uleb128 0x49
+ 2196 0202 13       		.uleb128 0x13
+ 2197 0203 00       		.byte	0
+ 2198 0204 00       		.byte	0
+ 2199 0205 26       		.uleb128 0x26
+ 2200 0206 2E       		.uleb128 0x2e
+ 2201 0207 00       		.byte	0
+ 2202 0208 3F       		.uleb128 0x3f
+ 2203 0209 19       		.uleb128 0x19
+ 2204 020a 3C       		.uleb128 0x3c
+ 2205 020b 19       		.uleb128 0x19
+ 2206 020c 6E       		.uleb128 0x6e
+ 2207 020d 0E       		.uleb128 0xe
+ 2208 020e 03       		.uleb128 0x3
+ 2209 020f 0E       		.uleb128 0xe
+ 2210 0210 3A       		.uleb128 0x3a
+ 2211 0211 0B       		.uleb128 0xb
+ 2212 0212 3B       		.uleb128 0x3b
+ 2213 0213 0B       		.uleb128 0xb
+ 2214 0214 00       		.byte	0
+ 2215 0215 00       		.byte	0
+ 2216 0216 00       		.byte	0
+ 2217              		.section	.debug_loc,"",%progbits
+ 2218              	.Ldebug_loc0:
+ 2219              	.LLST0:
+ 2220 0000 00000000 		.4byte	.LVL0
+ 2221 0004 0A000000 		.4byte	.LVL2
+ 2222 0008 0100     		.2byte	0x1
+ 2223 000a 50       		.byte	0x50
+ 2224 000b 0A000000 		.4byte	.LVL2
+ 2225 000f BC000000 		.4byte	.LVL16
+ 2226 0013 0100     		.2byte	0x1
+ 2227 0015 57       		.byte	0x57
+ 2228 0016 BC000000 		.4byte	.LVL16
+ 2229 001a C4000000 		.4byte	.LFE64
+ 2230 001e 0400     		.2byte	0x4
+ 2231 0020 F3       		.byte	0xf3
+ 2232 0021 01       		.uleb128 0x1
+ 2233 0022 50       		.byte	0x50
+ 2234 0023 9F       		.byte	0x9f
+ 2235 0024 00000000 		.4byte	0
+ 2236 0028 00000000 		.4byte	0
+ 2237              	.LLST1:
+ 2238 002c 06000000 		.4byte	.LVL1
+ 2239 0030 0A000000 		.4byte	.LVL2
+ 2240 0034 0200     		.2byte	0x2
+ 2241 0036 30       		.byte	0x30
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 47
+
+
+ 2242 0037 9F       		.byte	0x9f
+ 2243 0038 0A000000 		.4byte	.LVL2
+ 2244 003c B2000000 		.4byte	.LVL14
+ 2245 0040 0100     		.2byte	0x1
+ 2246 0042 56       		.byte	0x56
+ 2247 0043 B4000000 		.4byte	.LVL15
+ 2248 0047 BC000000 		.4byte	.LVL16
+ 2249 004b 0100     		.2byte	0x1
+ 2250 004d 56       		.byte	0x56
+ 2251 004e 00000000 		.4byte	0
+ 2252 0052 00000000 		.4byte	0
+ 2253              	.LLST2:
+ 2254 0056 10000000 		.4byte	.LVL3
+ 2255 005a 14000000 		.4byte	.LVL4
+ 2256 005e 0200     		.2byte	0x2
+ 2257 0060 30       		.byte	0x30
+ 2258 0061 9F       		.byte	0x9f
+ 2259 0062 14000000 		.4byte	.LVL4
+ 2260 0066 AA000000 		.4byte	.LVL12
+ 2261 006a 0100     		.2byte	0x1
+ 2262 006c 54       		.byte	0x54
+ 2263 006d AC000000 		.4byte	.LVL13
+ 2264 0071 B4000000 		.4byte	.LVL15
+ 2265 0075 0100     		.2byte	0x1
+ 2266 0077 54       		.byte	0x54
+ 2267 0078 00000000 		.4byte	0
+ 2268 007c 00000000 		.4byte	0
+ 2269              	.LLST3:
+ 2270 0080 3C000000 		.4byte	.LVL7
+ 2271 0084 6A000000 		.4byte	.LVL8
+ 2272 0088 0100     		.2byte	0x1
+ 2273 008a 50       		.byte	0x50
+ 2274 008b 92000000 		.4byte	.LVL9
+ 2275 008f 9E000000 		.4byte	.LVL10
+ 2276 0093 0100     		.2byte	0x1
+ 2277 0095 50       		.byte	0x50
+ 2278 0096 00000000 		.4byte	0
+ 2279 009a 00000000 		.4byte	0
+ 2280              	.LLST4:
+ 2281 009e 04000000 		.4byte	.LVL18
+ 2282 00a2 08000000 		.4byte	.LVL19
+ 2283 00a6 0200     		.2byte	0x2
+ 2284 00a8 30       		.byte	0x30
+ 2285 00a9 9F       		.byte	0x9f
+ 2286 00aa 08000000 		.4byte	.LVL19
+ 2287 00ae 50000000 		.4byte	.LVL24
+ 2288 00b2 0100     		.2byte	0x1
+ 2289 00b4 52       		.byte	0x52
+ 2290 00b5 52000000 		.4byte	.LVL25
+ 2291 00b9 58000000 		.4byte	.LVL26
+ 2292 00bd 0100     		.2byte	0x1
+ 2293 00bf 52       		.byte	0x52
+ 2294 00c0 00000000 		.4byte	0
+ 2295 00c4 00000000 		.4byte	0
+ 2296              	.LLST5:
+ 2297 00c8 08000000 		.4byte	.LVL19
+ 2298 00cc 44000000 		.4byte	.LVL20
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 48
+
+
+ 2299 00d0 0100     		.2byte	0x1
+ 2300 00d2 53       		.byte	0x53
+ 2301 00d3 46000000 		.4byte	.LVL21
+ 2302 00d7 48000000 		.4byte	.LVL22
+ 2303 00db 0100     		.2byte	0x1
+ 2304 00dd 53       		.byte	0x53
+ 2305 00de 4A000000 		.4byte	.LVL23
+ 2306 00e2 52000000 		.4byte	.LVL25
+ 2307 00e6 0100     		.2byte	0x1
+ 2308 00e8 53       		.byte	0x53
+ 2309 00e9 00000000 		.4byte	0
+ 2310 00ed 00000000 		.4byte	0
+ 2311              	.LLST6:
+ 2312 00f1 58000000 		.4byte	.LVL26
+ 2313 00f5 72000000 		.4byte	.LVL27
+ 2314 00f9 0100     		.2byte	0x1
+ 2315 00fb 53       		.byte	0x53
+ 2316 00fc 74000000 		.4byte	.LVL28
+ 2317 0100 7C000000 		.4byte	.LFE65
+ 2318 0104 0100     		.2byte	0x1
+ 2319 0106 53       		.byte	0x53
+ 2320 0107 00000000 		.4byte	0
+ 2321 010b 00000000 		.4byte	0
+ 2322              	.LLST7:
+ 2323 010f 00000000 		.4byte	.LVL29
+ 2324 0113 05000000 		.4byte	.LVL30-1
+ 2325 0117 0100     		.2byte	0x1
+ 2326 0119 50       		.byte	0x50
+ 2327 011a 05000000 		.4byte	.LVL30-1
+ 2328 011e 2C000000 		.4byte	.LFE66
+ 2329 0122 0600     		.2byte	0x6
+ 2330 0124 F3       		.byte	0xf3
+ 2331 0125 03       		.uleb128 0x3
+ 2332 0126 F5       		.byte	0xf5
+ 2333 0127 00       		.uleb128 0
+ 2334 0128 25       		.uleb128 0x25
+ 2335 0129 9F       		.byte	0x9f
+ 2336 012a 00000000 		.4byte	0
+ 2337 012e 00000000 		.4byte	0
+ 2338              	.LLST8:
+ 2339 0132 00000000 		.4byte	.LVL34
+ 2340 0136 0A000000 		.4byte	.LVL36
+ 2341 013a 0100     		.2byte	0x1
+ 2342 013c 50       		.byte	0x50
+ 2343 013d 0A000000 		.4byte	.LVL36
+ 2344 0141 28010000 		.4byte	.LVL72
+ 2345 0145 0100     		.2byte	0x1
+ 2346 0147 57       		.byte	0x57
+ 2347 0148 28010000 		.4byte	.LVL72
+ 2348 014c 2C010000 		.4byte	.LFE67
+ 2349 0150 0400     		.2byte	0x4
+ 2350 0152 F3       		.byte	0xf3
+ 2351 0153 01       		.uleb128 0x1
+ 2352 0154 50       		.byte	0x50
+ 2353 0155 9F       		.byte	0x9f
+ 2354 0156 00000000 		.4byte	0
+ 2355 015a 00000000 		.4byte	0
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 49
+
+
+ 2356              	.LLST9:
+ 2357 015e 16000000 		.4byte	.LVL37
+ 2358 0162 1A000000 		.4byte	.LVL38
+ 2359 0166 0200     		.2byte	0x2
+ 2360 0168 30       		.byte	0x30
+ 2361 0169 9F       		.byte	0x9f
+ 2362 016a 1A000000 		.4byte	.LVL38
+ 2363 016e 38000000 		.4byte	.LVL41
+ 2364 0172 0100     		.2byte	0x1
+ 2365 0174 54       		.byte	0x54
+ 2366 0175 3A000000 		.4byte	.LVL42
+ 2367 0179 4C000000 		.4byte	.LVL45
+ 2368 017d 0100     		.2byte	0x1
+ 2369 017f 54       		.byte	0x54
+ 2370 0180 54000000 		.4byte	.LVL46
+ 2371 0184 E6000000 		.4byte	.LVL58
+ 2372 0188 0100     		.2byte	0x1
+ 2373 018a 56       		.byte	0x56
+ 2374 018b E8000000 		.4byte	.LVL59
+ 2375 018f F0000000 		.4byte	.LVL60
+ 2376 0193 0100     		.2byte	0x1
+ 2377 0195 56       		.byte	0x56
+ 2378 0196 F6000000 		.4byte	.LVL61
+ 2379 019a FA000000 		.4byte	.LVL62
+ 2380 019e 0200     		.2byte	0x2
+ 2381 01a0 30       		.byte	0x30
+ 2382 01a1 9F       		.byte	0x9f
+ 2383 01a2 FA000000 		.4byte	.LVL62
+ 2384 01a6 1A010000 		.4byte	.LVL69
+ 2385 01aa 0100     		.2byte	0x1
+ 2386 01ac 50       		.byte	0x50
+ 2387 01ad 1C010000 		.4byte	.LVL70
+ 2388 01b1 20010000 		.4byte	.LVL71
+ 2389 01b5 0100     		.2byte	0x1
+ 2390 01b7 50       		.byte	0x50
+ 2391 01b8 00000000 		.4byte	0
+ 2392 01bc 00000000 		.4byte	0
+ 2393              	.LLST10:
+ 2394 01c0 06000000 		.4byte	.LVL35
+ 2395 01c4 0A000000 		.4byte	.LVL36
+ 2396 01c8 0200     		.2byte	0x2
+ 2397 01ca 30       		.byte	0x30
+ 2398 01cb 9F       		.byte	0x9f
+ 2399 01cc 0A000000 		.4byte	.LVL36
+ 2400 01d0 4A000000 		.4byte	.LVL44
+ 2401 01d4 0100     		.2byte	0x1
+ 2402 01d6 55       		.byte	0x55
+ 2403 01d7 4C000000 		.4byte	.LVL45
+ 2404 01db 54000000 		.4byte	.LVL46
+ 2405 01df 0100     		.2byte	0x1
+ 2406 01e1 55       		.byte	0x55
+ 2407 01e2 5A000000 		.4byte	.LVL47
+ 2408 01e6 60000000 		.4byte	.LVL48
+ 2409 01ea 0200     		.2byte	0x2
+ 2410 01ec 30       		.byte	0x30
+ 2411 01ed 9F       		.byte	0x9f
+ 2412 01ee 60000000 		.4byte	.LVL48
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 50
+
+
+ 2413 01f2 DA000000 		.4byte	.LVL56
+ 2414 01f6 0100     		.2byte	0x1
+ 2415 01f8 59       		.byte	0x59
+ 2416 01f9 DE000000 		.4byte	.LVL57
+ 2417 01fd E8000000 		.4byte	.LVL59
+ 2418 0201 0100     		.2byte	0x1
+ 2419 0203 59       		.byte	0x59
+ 2420 0204 FA000000 		.4byte	.LVL62
+ 2421 0208 0E010000 		.4byte	.LVL65
+ 2422 020c 0100     		.2byte	0x1
+ 2423 020e 53       		.byte	0x53
+ 2424 020f 10010000 		.4byte	.LVL66
+ 2425 0213 12010000 		.4byte	.LVL67
+ 2426 0217 0100     		.2byte	0x1
+ 2427 0219 53       		.byte	0x53
+ 2428 021a 14010000 		.4byte	.LVL68
+ 2429 021e 1C010000 		.4byte	.LVL70
+ 2430 0222 0100     		.2byte	0x1
+ 2431 0224 53       		.byte	0x53
+ 2432 0225 00000000 		.4byte	0
+ 2433 0229 00000000 		.4byte	0
+ 2434              	.LLST11:
+ 2435 022d F0000000 		.4byte	.LVL60
+ 2436 0231 06010000 		.4byte	.LVL63
+ 2437 0235 0100     		.2byte	0x1
+ 2438 0237 54       		.byte	0x54
+ 2439 0238 0C010000 		.4byte	.LVL64
+ 2440 023c 28010000 		.4byte	.LVL72
+ 2441 0240 0100     		.2byte	0x1
+ 2442 0242 54       		.byte	0x54
+ 2443 0243 00000000 		.4byte	0
+ 2444 0247 00000000 		.4byte	0
+ 2445              	.LLST12:
+ 2446 024b 6C000000 		.4byte	.LVL49
+ 2447 024f 72000000 		.4byte	.LVL50
+ 2448 0253 0200     		.2byte	0x2
+ 2449 0255 30       		.byte	0x30
+ 2450 0256 9F       		.byte	0x9f
+ 2451 0257 72000000 		.4byte	.LVL50
+ 2452 025b C2000000 		.4byte	.LVL53
+ 2453 025f 0100     		.2byte	0x1
+ 2454 0261 58       		.byte	0x58
+ 2455 0262 C2000000 		.4byte	.LVL53
+ 2456 0266 C6000000 		.4byte	.LVL54
+ 2457 026a 0200     		.2byte	0x2
+ 2458 026c 31       		.byte	0x31
+ 2459 026d 9F       		.byte	0x9f
+ 2460 026e C6000000 		.4byte	.LVL54
+ 2461 0272 DE000000 		.4byte	.LVL57
+ 2462 0276 0100     		.2byte	0x1
+ 2463 0278 58       		.byte	0x58
+ 2464 0279 00000000 		.4byte	0
+ 2465 027d 00000000 		.4byte	0
+ 2466              	.LLST13:
+ 2467 0281 00000000 		.4byte	.LVL73
+ 2468 0285 0E000000 		.4byte	.LVL74
+ 2469 0289 0100     		.2byte	0x1
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 51
+
+
+ 2470 028b 50       		.byte	0x50
+ 2471 028c 0E000000 		.4byte	.LVL74
+ 2472 0290 5A010000 		.4byte	.LVL111
+ 2473 0294 0100     		.2byte	0x1
+ 2474 0296 5A       		.byte	0x5a
+ 2475 0297 5A010000 		.4byte	.LVL111
+ 2476 029b 90010000 		.4byte	.LFE63
+ 2477 029f 0400     		.2byte	0x4
+ 2478 02a1 F3       		.byte	0xf3
+ 2479 02a2 01       		.uleb128 0x1
+ 2480 02a3 50       		.byte	0x50
+ 2481 02a4 9F       		.byte	0x9f
+ 2482 02a5 00000000 		.4byte	0
+ 2483 02a9 00000000 		.4byte	0
+ 2484              	.LLST14:
+ 2485 02ad 20000000 		.4byte	.LVL75
+ 2486 02b1 26000000 		.4byte	.LVL76
+ 2487 02b5 0200     		.2byte	0x2
+ 2488 02b7 30       		.byte	0x30
+ 2489 02b8 9F       		.byte	0x9f
+ 2490 02b9 26000000 		.4byte	.LVL76
+ 2491 02bd 06010000 		.4byte	.LVL100
+ 2492 02c1 0100     		.2byte	0x1
+ 2493 02c3 55       		.byte	0x55
+ 2494 02c4 08010000 		.4byte	.LVL101
+ 2495 02c8 5A010000 		.4byte	.LVL111
+ 2496 02cc 0100     		.2byte	0x1
+ 2497 02ce 55       		.byte	0x55
+ 2498 02cf 00000000 		.4byte	0
+ 2499 02d3 00000000 		.4byte	0
+ 2500              	.LLST15:
+ 2501 02d7 26000000 		.4byte	.LVL76
+ 2502 02db FA000000 		.4byte	.LVL96
+ 2503 02df 0100     		.2byte	0x1
+ 2504 02e1 54       		.byte	0x54
+ 2505 02e2 FC000000 		.4byte	.LVL97
+ 2506 02e6 FE000000 		.4byte	.LVL98
+ 2507 02ea 0100     		.2byte	0x1
+ 2508 02ec 54       		.byte	0x54
+ 2509 02ed 00010000 		.4byte	.LVL99
+ 2510 02f1 08010000 		.4byte	.LVL101
+ 2511 02f5 0100     		.2byte	0x1
+ 2512 02f7 54       		.byte	0x54
+ 2513 02f8 00000000 		.4byte	0
+ 2514 02fc 00000000 		.4byte	0
+ 2515              	.LLST16:
+ 2516 0300 20000000 		.4byte	.LVL75
+ 2517 0304 26000000 		.4byte	.LVL76
+ 2518 0308 0200     		.2byte	0x2
+ 2519 030a 30       		.byte	0x30
+ 2520 030b 9F       		.byte	0x9f
+ 2521 030c 26000000 		.4byte	.LVL76
+ 2522 0310 F4000000 		.4byte	.LVL93
+ 2523 0314 0100     		.2byte	0x1
+ 2524 0316 56       		.byte	0x56
+ 2525 0317 F6000000 		.4byte	.LVL94
+ 2526 031b 1A010000 		.4byte	.LVL103
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 52
+
+
+ 2527 031f 0100     		.2byte	0x1
+ 2528 0321 56       		.byte	0x56
+ 2529 0322 54010000 		.4byte	.LVL110
+ 2530 0326 5A010000 		.4byte	.LVL111
+ 2531 032a 0100     		.2byte	0x1
+ 2532 032c 56       		.byte	0x56
+ 2533 032d 00000000 		.4byte	0
+ 2534 0331 00000000 		.4byte	0
+ 2535              	.LLST17:
+ 2536 0335 B6000000 		.4byte	.LVL86
+ 2537 0339 CE000000 		.4byte	.LVL88
+ 2538 033d 0100     		.2byte	0x1
+ 2539 033f 5B       		.byte	0x5b
+ 2540 0340 D4000000 		.4byte	.LVL89
+ 2541 0344 E0000000 		.4byte	.LVL90
+ 2542 0348 0100     		.2byte	0x1
+ 2543 034a 5B       		.byte	0x5b
+ 2544 034b 00000000 		.4byte	0
+ 2545 034f 00000000 		.4byte	0
+ 2546              		.section	.debug_aranges,"",%progbits
+ 2547 0000 3C000000 		.4byte	0x3c
+ 2548 0004 0200     		.2byte	0x2
+ 2549 0006 00000000 		.4byte	.Ldebug_info0
+ 2550 000a 04       		.byte	0x4
+ 2551 000b 00       		.byte	0
+ 2552 000c 0000     		.2byte	0
+ 2553 000e 0000     		.2byte	0
+ 2554 0010 00000000 		.4byte	.LFB64
+ 2555 0014 C4000000 		.4byte	.LFE64-.LFB64
+ 2556 0018 00000000 		.4byte	.LFB65
+ 2557 001c 7C000000 		.4byte	.LFE65-.LFB65
+ 2558 0020 00000000 		.4byte	.LFB66
+ 2559 0024 2C000000 		.4byte	.LFE66-.LFB66
+ 2560 0028 00000000 		.4byte	.LFB67
+ 2561 002c 2C010000 		.4byte	.LFE67-.LFB67
+ 2562 0030 00000000 		.4byte	.LFB63
+ 2563 0034 90010000 		.4byte	.LFE63-.LFB63
+ 2564 0038 00000000 		.4byte	0
+ 2565 003c 00000000 		.4byte	0
+ 2566              		.section	.debug_ranges,"",%progbits
+ 2567              	.Ldebug_ranges0:
+ 2568 0000 B6000000 		.4byte	.LBB6
+ 2569 0004 D0000000 		.4byte	.LBE6
+ 2570 0008 D4000000 		.4byte	.LBB7
+ 2571 000c E0000000 		.4byte	.LBE7
+ 2572 0010 00000000 		.4byte	0
+ 2573 0014 00000000 		.4byte	0
+ 2574 0018 00000000 		.4byte	.LFB64
+ 2575 001c C4000000 		.4byte	.LFE64
+ 2576 0020 00000000 		.4byte	.LFB65
+ 2577 0024 7C000000 		.4byte	.LFE65
+ 2578 0028 00000000 		.4byte	.LFB66
+ 2579 002c 2C000000 		.4byte	.LFE66
+ 2580 0030 00000000 		.4byte	.LFB67
+ 2581 0034 2C010000 		.4byte	.LFE67
+ 2582 0038 00000000 		.4byte	.LFB63
+ 2583 003c 90010000 		.4byte	.LFE63
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 53
+
+
+ 2584 0040 00000000 		.4byte	0
+ 2585 0044 00000000 		.4byte	0
+ 2586              		.section	.debug_line,"",%progbits
+ 2587              	.Ldebug_line0:
+ 2588 0000 7D030000 		.section	.debug_str,"MS",%progbits,1
+ 2588      02001402 
+ 2588      00000201 
+ 2588      FB0E0D00 
+ 2588      01010101 
+ 2589              	.LASF18:
+ 2590 0000 70726573 		.ascii	"pressed\000"
+ 2590      73656400 
+ 2591              	.LASF23:
+ 2592 0008 70726576 		.ascii	"prevMatrix\000"
+ 2592      4D617472 
+ 2592      697800
+ 2593              	.LASF25:
+ 2594 0013 75706461 		.ascii	"updateKeyEvents\000"
+ 2594      74654B65 
+ 2594      79457665 
+ 2594      6E747300 
+ 2595              	.LASF13:
+ 2596 0023 5F5F696E 		.ascii	"__int32_t\000"
+ 2596      7433325F 
+ 2596      7400
+ 2597              	.LASF7:
+ 2598 002d 73686F72 		.ascii	"short unsigned int\000"
+ 2598      7420756E 
+ 2598      7369676E 
+ 2598      65642069 
+ 2598      6E7400
+ 2599              	.LASF35:
+ 2600 0040 636F6D70 		.ascii	"completed\000"
+ 2600      6C657465 
+ 2600      6400
+ 2601              	.LASF17:
+ 2602 004a 646F7562 		.ascii	"double\000"
+ 2602      6C6500
+ 2603              	.LASF19:
+ 2604 0051 74726967 		.ascii	"trigger_height\000"
+ 2604      6765725F 
+ 2604      68656967 
+ 2604      687400
+ 2605              	.LASF32:
+ 2606 0060 74726967 		.ascii	"triggerHeight\000"
+ 2606      67657248 
+ 2606      65696768 
+ 2606      7400
+ 2607              	.LASF48:
+ 2608 006e 48616C6C 		.ascii	"HallEffect.c\000"
+ 2608      45666665 
+ 2608      63742E63 
+ 2608      00
+ 2609              	.LASF0:
+ 2610 007b 666C6F61 		.ascii	"float\000"
+ 2610      7400
+ 2611              	.LASF4:
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 54
+
+
+ 2612 0081 7369676E 		.ascii	"signed char\000"
+ 2612      65642063 
+ 2612      68617200 
+ 2613              	.LASF5:
+ 2614 008d 756E7369 		.ascii	"unsigned char\000"
+ 2614      676E6564 
+ 2614      20636861 
+ 2614      7200
+ 2615              	.LASF47:
+ 2616 009b 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 2616      43313120 
+ 2616      352E342E 
+ 2616      31203230 
+ 2616      31363036 
+ 2617 00ce 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 2617      20726576 
+ 2617      6973696F 
+ 2617      6E203233 
+ 2617      37373135 
+ 2618 0101 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 2618      66756E63 
+ 2618      74696F6E 
+ 2618      2D736563 
+ 2618      74696F6E 
+ 2619              	.LASF37:
+ 2620 0129 61637469 		.ascii	"action\000"
+ 2620      6F6E00
+ 2621              	.LASF30:
+ 2622 0130 636F6D70 		.ascii	"complete\000"
+ 2622      6C657465 
+ 2622      00
+ 2623              	.LASF27:
+ 2624 0139 68656967 		.ascii	"height\000"
+ 2624      687400
+ 2625              	.LASF36:
+ 2626 0140 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 2626      52784275 
+ 2626      66666572 
+ 2626      00
+ 2627              	.LASF49:
+ 2628 014d 433A5C55 		.ascii	"C:\\UserData\\z004e6he\\OneDrive - Siemens AG\\Docu"
+ 2628      73657244 
+ 2628      6174615C 
+ 2628      7A303034 
+ 2628      65366865 
+ 2629 017c 6D656E74 		.ascii	"ments\\PSoC Creator\\PSoC\\Project\\Design01.cydsn\000"
+ 2629      735C5053 
+ 2629      6F432043 
+ 2629      72656174 
+ 2629      6F725C50 
+ 2630              	.LASF28:
+ 2631 01ab 7363616E 		.ascii	"scanMatrix\000"
+ 2631      4D617472 
+ 2631      697800
+ 2632              	.LASF16:
+ 2633 01b6 75696E74 		.ascii	"uint16\000"
+ 2633      313600
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 55
+
+
+ 2634              	.LASF20:
+ 2635 01bd 6C6F7765 		.ascii	"lowestVal\000"
+ 2635      73745661 
+ 2635      6C00
+ 2636              	.LASF34:
+ 2637 01c7 63616C69 		.ascii	"calibrationKey\000"
+ 2637      62726174 
+ 2637      696F6E4B 
+ 2637      657900
+ 2638              	.LASF9:
+ 2639 01d6 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2639      20756E73 
+ 2639      69676E65 
+ 2639      6420696E 
+ 2639      7400
+ 2640              	.LASF1:
+ 2641 01e8 756E7369 		.ascii	"unsigned int\000"
+ 2641      676E6564 
+ 2641      20696E74 
+ 2641      00
+ 2642              	.LASF24:
+ 2643 01f5 61637469 		.ascii	"actionBuffer\000"
+ 2643      6F6E4275 
+ 2643      66666572 
+ 2643      00
+ 2644              	.LASF10:
+ 2645 0202 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2645      206C6F6E 
+ 2645      6720756E 
+ 2645      7369676E 
+ 2645      65642069 
+ 2646              	.LASF31:
+ 2647 0219 6B657962 		.ascii	"keyboardInit\000"
+ 2647      6F617264 
+ 2647      496E6974 
+ 2647      00
+ 2648              	.LASF43:
+ 2649 0226 61746F69 		.ascii	"atoi\000"
+ 2649      00
+ 2650              	.LASF21:
+ 2651 022b 4D617472 		.ascii	"Matrix\000"
+ 2651      697800
+ 2652              	.LASF41:
+ 2653 0232 4144435F 		.ascii	"ADC_Read16\000"
+ 2653      52656164 
+ 2653      313600
+ 2654              	.LASF14:
+ 2655 023d 696E7433 		.ascii	"int32_t\000"
+ 2655      325F7400 
+ 2656              	.LASF11:
+ 2657 0245 73697A65 		.ascii	"sizetype\000"
+ 2657      74797065 
+ 2657      00
+ 2658              	.LASF33:
+ 2659 024e 6572726F 		.ascii	"error\000"
+ 2659      7200
+ 2660              	.LASF2:
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 56
+
+
+ 2661 0254 6C6F6E67 		.ascii	"long long int\000"
+ 2661      206C6F6E 
+ 2661      6720696E 
+ 2661      7400
+ 2662              	.LASF12:
+ 2663 0262 63686172 		.ascii	"char\000"
+ 2663      00
+ 2664              	.LASF22:
+ 2665 0267 6D617472 		.ascii	"matrix\000"
+ 2665      697800
+ 2666              	.LASF44:
+ 2667 026e 4144435F 		.ascii	"ADC_AMux_Unset\000"
+ 2667      414D7578 
+ 2667      5F556E73 
+ 2667      657400
+ 2668              	.LASF38:
+ 2669 027d 5472616E 		.ascii	"Transmitbuffer\000"
+ 2669      736D6974 
+ 2669      62756666 
+ 2669      657200
+ 2670              	.LASF40:
+ 2671 028c 72617069 		.ascii	"rapidTriggerDistance\000"
+ 2671      64547269 
+ 2671      67676572 
+ 2671      44697374 
+ 2671      616E6365 
+ 2672              	.LASF6:
+ 2673 02a1 73686F72 		.ascii	"short int\000"
+ 2673      7420696E 
+ 2673      7400
+ 2674              	.LASF15:
+ 2675 02ab 75696E74 		.ascii	"uint8\000"
+ 2675      3800
+ 2676              	.LASF26:
+ 2677 02b1 636F6E76 		.ascii	"convertToVal\000"
+ 2677      65727454 
+ 2677      6F56616C 
+ 2677      00
+ 2678              	.LASF8:
+ 2679 02be 6C6F6E67 		.ascii	"long int\000"
+ 2679      20696E74 
+ 2679      00
+ 2680              	.LASF42:
+ 2681 02c7 4144435F 		.ascii	"ADC_AMux_Select\000"
+ 2681      414D7578 
+ 2681      5F53656C 
+ 2681      65637400 
+ 2682              	.LASF3:
+ 2683 02d7 6C6F6E67 		.ascii	"long double\000"
+ 2683      20646F75 
+ 2683      626C6500 
+ 2684              	.LASF39:
+ 2685 02e3 70696E57 		.ascii	"pinWriteArr\000"
+ 2685      72697465 
+ 2685      41727200 
+ 2686              	.LASF45:
+ 2687 02ef 55415254 		.ascii	"UART_PutString\000"
+ARM GAS  C:\Users\z004e6he\AppData\Local\Temp\cc1w3dXo.s 			page 57
+
+
+ 2687      5F507574 
+ 2687      53747269 
+ 2687      6E6700
+ 2688              	.LASF29:
+ 2689 02fe 63616C69 		.ascii	"calibrateSwitches\000"
+ 2689      62726174 
+ 2689      65537769 
+ 2689      74636865 
+ 2689      7300
+ 2690              	.LASF50:
+ 2691 0310 73776974 		.ascii	"switches\000"
+ 2691      63686573 
+ 2691      00
+ 2692              	.LASF46:
+ 2693 0319 43794465 		.ascii	"CyDelay\000"
+ 2693      6C617900 
+ 2694              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
