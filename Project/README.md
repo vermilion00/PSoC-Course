@@ -5,14 +5,23 @@ I wanted to do this project due to the fact that hall effect switches have sever
 However, the keyboard portion by itself was deemed to be too simple, hence the added sensors, display and servo.
 
 The project works by using the keys to switch between several output modes that display the information provided by the sensors in various ways.
+
 Page 0 shows the outputs of all sensors as a value,
+
 Page 1 shows the adc value of switch 1,
+
 Page 2 shows the adc value of switch 2 as a bar,
+
 Page 3 shows the adc value of switch 3 by moving the servo accordingly,
+
 Pages 4 and 5 show the temperature in °C,
+
 Pages 6 and 7 show the measured voltage of the temperature sensor,
+
 Page 8 shows the echo time of the ultrasound sensor,
+
 Page 9 shows the measured distance using the textbook speed of sound,
+
 Pages 10 and 11 shows the measured distance using the measured temperature to calculate the actual speed of sound.
 
 ## Link to zip file
