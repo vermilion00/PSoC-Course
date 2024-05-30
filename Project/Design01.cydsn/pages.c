@@ -87,13 +87,11 @@ void updatePage(uint8 page){
         break;
         
         case 6: //Temperature as value
-        sprintf(Transmitbuffer, "Temperature: %i.%i C\r\n", sensor.Temperature / TEMP_FACTOR, 
-                sensor. Temperature % TEMP_FACTOR);
+        sprintf(Transmitbuffer, "Temp Voltage: %i mV\r\n", sensor.Temperature);
         break;
         
         case 7: //Temperature as value
-        sprintf(Transmitbuffer, "Temperature: %i.%i C\r\n", sensor.Temperature / TEMP_FACTOR, 
-                sensor. Temperature % TEMP_FACTOR);
+        sprintf(Transmitbuffer, "Temp Voltage: %i mV\r\n", sensor.Temperature);
         break;
         
         case 8: //Ultrasound as time value
