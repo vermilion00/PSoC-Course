@@ -1,8 +1,10 @@
 -- ======================================================================
 -- Design01.ctl generated from Design01
--- 04/28/2024 at 14:06
+-- 05/30/2024 at 20:44
 -- This file is auto generated. ANY EDITS YOU MAKE MAY BE LOST WHEN THIS FILE IS REGENERATED!!!
 -- ======================================================================
+
+-- I2C
 
 -- PSoC Clock Editor
 -- Directives Editor

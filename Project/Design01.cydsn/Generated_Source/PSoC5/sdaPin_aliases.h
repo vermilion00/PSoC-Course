@@ -1,5 +1,5 @@
 /*******************************************************************************
-* File Name: Col4.h  
+* File Name: sdaPin.h  
 * Version 2.20
 *
 * Description:
@@ -15,8 +15,8 @@
 * the software package with which this file was provided.
 *******************************************************************************/
 
-#if !defined(CY_PINS_Col4_ALIASES_H) /* Pins Col4_ALIASES_H */
-#define CY_PINS_Col4_ALIASES_H
+#if !defined(CY_PINS_sdaPin_ALIASES_H) /* Pins sdaPin_ALIASES_H */
+#define CY_PINS_sdaPin_ALIASES_H
 
 #include "cytypes.h"
 #include "cyfitter.h"
@@ -25,12 +25,12 @@
 /***************************************
 *              Constants        
 ***************************************/
-#define Col4_0			(Col4__0__PC)
-#define Col4_0_INTR	((uint16)((uint16)0x0001u << Col4__0__SHIFT))
+#define sdaPin_0			(sdaPin__0__PC)
+#define sdaPin_0_INTR	((uint16)((uint16)0x0001u << sdaPin__0__SHIFT))
 
-#define Col4_INTR_ALL	 ((uint16)(Col4_0_INTR))
+#define sdaPin_INTR_ALL	 ((uint16)(sdaPin_0_INTR))
 
-#endif /* End Pins Col4_ALIASES_H */
+#endif /* End Pins sdaPin_ALIASES_H */
 
 
 /* [] END OF FILE */

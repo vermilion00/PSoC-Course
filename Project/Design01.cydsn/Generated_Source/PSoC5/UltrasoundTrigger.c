@@ -1,5 +1,5 @@
 /*******************************************************************************
-* File Name: Ultrasound.c  
+* File Name: UltrasoundTrigger.c  
 * Version 2.20
 *
 * Description:
@@ -15,15 +15,15 @@
 *******************************************************************************/
 
 #include "cytypes.h"
-#include "Ultrasound.h"
+#include "UltrasoundTrigger.h"
 
 /* APIs are not generated for P15[7:6] on PSoC 5 */
 #if !(CY_PSOC5A &&\
-	 Ultrasound__PORT == 15 && ((Ultrasound__MASK & 0xC0) != 0))
+	 UltrasoundTrigger__PORT == 15 && ((UltrasoundTrigger__MASK & 0xC0) != 0))
 
 
 /*******************************************************************************
-* Function Name: Ultrasound_Write
+* Function Name: UltrasoundTrigger_Write
 ****************************************************************************//**
 *
 * \brief Writes the value to the physical port (data output register), masking
@@ -52,17 +52,17 @@
 *  this function.
 *
 * \funcusage
-*  \snippet Ultrasound_SUT.c usage_Ultrasound_Write
+*  \snippet UltrasoundTrigger_SUT.c usage_UltrasoundTrigger_Write
 *******************************************************************************/
-void Ultrasound_Write(uint8 value)
+void UltrasoundTrigger_Write(uint8 value)
 {
-    uint8 staticBits = (Ultrasound_DR & (uint8)(~Ultrasound_MASK));
-    Ultrasound_DR = staticBits | ((uint8)(value << Ultrasound_SHIFT) & Ultrasound_MASK);
+    uint8 staticBits = (UltrasoundTrigger_DR & (uint8)(~UltrasoundTrigger_MASK));
+    UltrasoundTrigger_DR = staticBits | ((uint8)(value << UltrasoundTrigger_SHIFT) & UltrasoundTrigger_MASK);
 }
 
 
 /*******************************************************************************
-* Function Name: Ultrasound_SetDriveMode
+* Function Name: UltrasoundTrigger_SetDriveMode
 ****************************************************************************//**
 *
 * \brief Sets the drive mode for each of the Pins component's pins.
@@ -85,16 +85,16 @@ void Ultrasound_Write(uint8 value)
 *  APIs (primary method) or disable interrupts around this function.
 *
 * \funcusage
-*  \snippet Ultrasound_SUT.c usage_Ultrasound_SetDriveMode
+*  \snippet UltrasoundTrigger_SUT.c usage_UltrasoundTrigger_SetDriveMode
 *******************************************************************************/
-void Ultrasound_SetDriveMode(uint8 mode)
+void UltrasoundTrigger_SetDriveMode(uint8 mode)
 {
-	CyPins_SetPinDriveMode(Ultrasound_0, mode);
+	CyPins_SetPinDriveMode(UltrasoundTrigger_0, mode);
 }
 
 
 /*******************************************************************************
-* Function Name: Ultrasound_Read
+* Function Name: UltrasoundTrigger_Read
 ****************************************************************************//**
 *
 * \brief Reads the associated physical port (pin status register) and masks 
@@ -108,16 +108,16 @@ void Ultrasound_SetDriveMode(uint8 mode)
 *  The current value for the pins in the component as a right justified number.
 *
 * \funcusage
-*  \snippet Ultrasound_SUT.c usage_Ultrasound_Read  
+*  \snippet UltrasoundTrigger_SUT.c usage_UltrasoundTrigger_Read  
 *******************************************************************************/
-uint8 Ultrasound_Read(void)
+uint8 UltrasoundTrigger_Read(void)
 {
-    return (Ultrasound_PS & Ultrasound_MASK) >> Ultrasound_SHIFT;
+    return (UltrasoundTrigger_PS & UltrasoundTrigger_MASK) >> UltrasoundTrigger_SHIFT;
 }
 
 
 /*******************************************************************************
-* Function Name: Ultrasound_ReadDataReg
+* Function Name: UltrasoundTrigger_ReadDataReg
 ****************************************************************************//**
 *
 * \brief Reads the associated physical port's data output register and masks 
@@ -126,8 +126,8 @@ uint8 Ultrasound_Read(void)
 *
 * The data output register controls the signal applied to the physical pin in 
 * conjunction with the drive mode parameter. This is not the same as the 
-* preferred Ultrasound_Read() API because the 
-* Ultrasound_ReadDataReg() reads the data register instead of the status 
+* preferred UltrasoundTrigger_Read() API because the 
+* UltrasoundTrigger_ReadDataReg() reads the data register instead of the status 
 * register. For output pins this is a useful function to determine the value 
 * just written to the pin.
 *
@@ -136,19 +136,19 @@ uint8 Ultrasound_Read(void)
 *  justified number for the component instance.
 *
 * \funcusage
-*  \snippet Ultrasound_SUT.c usage_Ultrasound_ReadDataReg 
+*  \snippet UltrasoundTrigger_SUT.c usage_UltrasoundTrigger_ReadDataReg 
 *******************************************************************************/
-uint8 Ultrasound_ReadDataReg(void)
+uint8 UltrasoundTrigger_ReadDataReg(void)
 {
-    return (Ultrasound_DR & Ultrasound_MASK) >> Ultrasound_SHIFT;
+    return (UltrasoundTrigger_DR & UltrasoundTrigger_MASK) >> UltrasoundTrigger_SHIFT;
 }
 
 
 /* If interrupt is connected for this Pins component */ 
-#if defined(Ultrasound_INTSTAT) 
+#if defined(UltrasoundTrigger_INTSTAT) 
 
     /*******************************************************************************
-    * Function Name: Ultrasound_SetInterruptMode
+    * Function Name: UltrasoundTrigger_SetInterruptMode
     ****************************************************************************//**
     *
     * \brief Configures the interrupt mode for each of the Pins component's
@@ -161,12 +161,12 @@ uint8 Ultrasound_ReadDataReg(void)
     * \param position
     *  The pin position as listed in the Pins component. You may OR these to be 
     *  able to configure the interrupt mode of multiple pins within a Pins 
-    *  component. Or you may use Ultrasound_INTR_ALL to configure the
+    *  component. Or you may use UltrasoundTrigger_INTR_ALL to configure the
     *  interrupt mode of all the pins in the Pins component.       
-    *  - Ultrasound_0_INTR       (First pin in the list)
-    *  - Ultrasound_1_INTR       (Second pin in the list)
+    *  - UltrasoundTrigger_0_INTR       (First pin in the list)
+    *  - UltrasoundTrigger_1_INTR       (Second pin in the list)
     *  - ...
-    *  - Ultrasound_INTR_ALL     (All pins in Pins component)
+    *  - UltrasoundTrigger_INTR_ALL     (All pins in Pins component)
     *
     * \param mode
     *  Interrupt mode for the selected pins. Valid options are documented in
@@ -182,19 +182,19 @@ uint8 Ultrasound_ReadDataReg(void)
     *  port.
     *
     * \funcusage
-    *  \snippet Ultrasound_SUT.c usage_Ultrasound_SetInterruptMode
+    *  \snippet UltrasoundTrigger_SUT.c usage_UltrasoundTrigger_SetInterruptMode
     *******************************************************************************/
-    void Ultrasound_SetInterruptMode(uint16 position, uint16 mode)
+    void UltrasoundTrigger_SetInterruptMode(uint16 position, uint16 mode)
     {
-		if((position & Ultrasound_0_INTR) != 0u) 
+		if((position & UltrasoundTrigger_0_INTR) != 0u) 
 		{ 
-			 Ultrasound_0_INTTYPE_REG = (uint8)mode; 
+			 UltrasoundTrigger_0_INTTYPE_REG = (uint8)mode; 
 		}
     }
     
     
     /*******************************************************************************
-    * Function Name: Ultrasound_ClearInterrupt
+    * Function Name: UltrasoundTrigger_ClearInterrupt
     ****************************************************************************//**
     *
     * \brief Clears any active interrupts attached with the component and returns 
@@ -211,11 +211,11 @@ uint8 Ultrasound_ReadDataReg(void)
     *  those associated with the Pins component.
     *
     * \funcusage
-    *  \snippet Ultrasound_SUT.c usage_Ultrasound_ClearInterrupt
+    *  \snippet UltrasoundTrigger_SUT.c usage_UltrasoundTrigger_ClearInterrupt
     *******************************************************************************/
-    uint8 Ultrasound_ClearInterrupt(void)
+    uint8 UltrasoundTrigger_ClearInterrupt(void)
     {
-        return (Ultrasound_INTSTAT & Ultrasound_MASK) >> Ultrasound_SHIFT;
+        return (UltrasoundTrigger_INTSTAT & UltrasoundTrigger_MASK) >> UltrasoundTrigger_SHIFT;
     }
 
 #endif /* If Interrupts Are Enabled for this Pins component */ 

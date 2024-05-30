@@ -1,5 +1,5 @@
 /*******************************************************************************
-* File Name: Ultrasound.h  
+* File Name: sdaPin.h  
 * Version 2.20
 *
 * Description:
@@ -15,8 +15,8 @@
 * the software package with which this file was provided.
 *******************************************************************************/
 
-#if !defined(CY_PINS_Ultrasound_ALIASES_H) /* Pins Ultrasound_ALIASES_H */
-#define CY_PINS_Ultrasound_ALIASES_H
+#if !defined(CY_PINS_sdaPin_ALIASES_H) /* Pins sdaPin_ALIASES_H */
+#define CY_PINS_sdaPin_ALIASES_H
 
 #include "cytypes.h"
 #include "cyfitter.h"
@@ -25,12 +25,12 @@
 /***************************************
 *              Constants        
 ***************************************/
-#define Ultrasound_0			(Ultrasound__0__PC)
-#define Ultrasound_0_INTR	((uint16)((uint16)0x0001u << Ultrasound__0__SHIFT))
+#define sdaPin_0			(sdaPin__0__PC)
+#define sdaPin_0_INTR	((uint16)((uint16)0x0001u << sdaPin__0__SHIFT))
 
-#define Ultrasound_INTR_ALL	 ((uint16)(Ultrasound_0_INTR))
+#define sdaPin_INTR_ALL	 ((uint16)(sdaPin_0_INTR))
 
-#endif /* End Pins Ultrasound_ALIASES_H */
+#endif /* End Pins sdaPin_ALIASES_H */
 
 
 /* [] END OF FILE */
