@@ -16,17 +16,16 @@ Page 9 shows the measured distance in cm using the textbook speed of sound,
 Pages 10 and 11 show the measured distance in cm and in respectively using the measured temperature to calculate the actual speed of sound.
 
 Basically everything about the keyboard is designed to be configurable using the options in config.h.
-The amount of keys can be defined using the ROWS and COLUMNS options. The trigger height can be set individually for each switch, in a range from 0.05 to 4 mm.
-Each switch can also be disabled by setting its trigger height to 0. If the readings vary too much between the switches, a calibration function
-can be configured. It saves the values to EEPROM and therefore only needs to be ran when a variance is detected.
-Checks to make sure that the parameters are within spec are also in place, telling you exactly what the problem is and how to fix it.
+The amount of keys can be defined using the ROWS and COLUMNS options.  The trigger height can be set individually for each switch, in a range from 0.05 to 4 mm.
+Each switch can also be disabled by setting its trigger height to 0.  If the readings vary too much between the switches, a calibration function
+can be configured. It saves the values to EEPROM and therefore only needs to be ran when a variance is detected.  
+Checks to make sure that the parameters are within spec are also in place, telling you exactly what the problem is and how to fix it.  
 A rapid trigger function is also thrown in just for fun, but it works perfectly well.
 
 ## Link to zip file
 https://drive.google.com/file/d/1n6c50Sl8Roaz2_w2AhfxIroRF0-IB2Su/view?usp=drive_link
 
 ## Link to demonstration video
-https://youtu.be/dFBEIjEhHFQ  
 [![Demonstration Video](https://img.youtube.com/vi/dFBEIjEhHFQ/hqdefault.jpg)](https://www.youtube.com/watch?v=dFBEIjEhHFQ "Demonstration Video")
 
 ## Wiring Diagram
