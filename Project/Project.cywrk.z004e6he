@@ -209,20 +209,6 @@
 <v>Project\Design01\PSoC 5LP Architecture TRM</v>
 <v>Project\Design01\CY8C58LP Family Datasheet</v>
 <v>Project\Design01\System Reference Guides</v>
-<v>Project\Design01\System Reference Guides\cy_boot_v6_0</v>
-<v>Project\Design01\ADC_DelSig_v3_30.pdf</v>
-<v>Project\Design01\AMux_v1_80.pdf</v>
-<v>Project\Design01\cy_clock_v2_20</v>
-<v>Project\Design01\cy_clock_v2_20\cy_clock_v2_20.pdf</v>
-<v>Project\Design01\cy_isr_v1_70.pdf</v>
-<v>Project\Design01\cy_pins_v2_20</v>
-<v>Project\Design01\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
-<v>Project\Design01\CyControlReg_v1_80.pdf</v>
-<v>Project\Design01\EEPROM_v3_0.pdf</v>
-<v>Project\Design01\I2C_v3_50.pdf</v>
-<v>Project\Design01\PWM_v3_30.pdf</v>
-<v>Project\Design01\Timer_v2_80.pdf</v>
-<v>Project\Design01\UART_v2_50.pdf</v>
 </ExpandedNodeIds>
 <VisibleNodeIds>
 <v>Project</v>
@@ -230,20 +216,6 @@
 <v>Project\Design01\PSoC 5LP Architecture TRM</v>
 <v>Project\Design01\CY8C58LP Family Datasheet</v>
 <v>Project\Design01\System Reference Guides</v>
-<v>Project\Design01\System Reference Guides\cy_boot_v6_0</v>
-<v>Project\Design01\ADC_DelSig_v3_30.pdf</v>
-<v>Project\Design01\AMux_v1_80.pdf</v>
-<v>Project\Design01\cy_clock_v2_20</v>
-<v>Project\Design01\cy_clock_v2_20\cy_clock_v2_20.pdf</v>
-<v>Project\Design01\cy_isr_v1_70.pdf</v>
-<v>Project\Design01\cy_pins_v2_20</v>
-<v>Project\Design01\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
-<v>Project\Design01\CyControlReg_v1_80.pdf</v>
-<v>Project\Design01\EEPROM_v3_0.pdf</v>
-<v>Project\Design01\I2C_v3_50.pdf</v>
-<v>Project\Design01\PWM_v3_30.pdf</v>
-<v>Project\Design01\Timer_v2_80.pdf</v>
-<v>Project\Design01\UART_v2_50.pdf</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 </TreeStatesV2>
@@ -268,6 +240,7 @@
 <name v=".\Design01.cydsn\sensors.c" />
 <name v=".\Design01.cydsn\sensors.h" />
 <name v=".\Design01.cydsn\config.h" />
+<name v=".\Design01.cydsn\Generated_Source\PSoC5\TimerISR.c" />
 <name v=".\Design01.cydsn\Generated_Source\PSoC5\ADC_INT.c" />
 </OpenDocs>
 <OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
@@ -276,7 +249,7 @@
   Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
   http://www.actiprosoftware.com
 
---><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1071, 555" SelectedTabbedMdiWindow="4d38bf5f-b1b4-4cde-80d7-f63e19ea4f52"><ToolWindow Key="Output Window Plugin:7305390e-eabe-4963-b21f-3a0f11b4b1d5:Output Window" Guid="6ba38faf-6fa6-468f-8a35-4183038ef374" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\TopDesign\TopDesign.cysch" Guid="a01690ab-7de5-45e0-9114-7995c7a6d2b5" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\Design01.cydwr" Guid="528a092d-7386-4b59-b264-f4600c9fe705" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\main.c" Guid="dc9dcce0-1230-491e-b485-448bc960966b" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\HallEffect.c" Guid="a73810db-0fd0-4e49-8c84-c6b74b6d3fa0" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\HallEffect.h" Guid="16b2cca2-8dbd-4074-a6a9-680bb1440707" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\pages.c" Guid="b2fc0c1f-512e-41fd-b54b-d8d27d7c02a6" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\pages.h" Guid="5e877fe0-3ee1-446a-9422-e89892276185" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\sensors.c" Guid="c80a6e78-159b-4e44-a004-affe6bde4ac3" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\sensors.h" Guid="fcbfa3a4-59a1-4232-a894-8be47625437b" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\config.h" Guid="4d38bf5f-b1b4-4cde-80d7-f63e19ea4f52" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\Generated_Source\PSoC5\ADC_INT.c" Guid="c3eb7cce-0f20-4961-a66a-afc3e34f4011" /><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="8151a403-66dc-4421-9837-51b976458c0b" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1071, 555" SelectedTabbedMdiWindow="b2fc0c1f-512e-41fd-b54b-d8d27d7c02a6"><ToolWindow Key="Output Window Plugin:7305390e-eabe-4963-b21f-3a0f11b4b1d5:Output Window" Guid="6ba38faf-6fa6-468f-8a35-4183038ef374" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\TopDesign\TopDesign.cysch" Guid="a01690ab-7de5-45e0-9114-7995c7a6d2b5" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\Design01.cydwr" Guid="528a092d-7386-4b59-b264-f4600c9fe705" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\main.c" Guid="dc9dcce0-1230-491e-b485-448bc960966b" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\HallEffect.c" Guid="a73810db-0fd0-4e49-8c84-c6b74b6d3fa0" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\HallEffect.h" Guid="16b2cca2-8dbd-4074-a6a9-680bb1440707" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\pages.c" Guid="b2fc0c1f-512e-41fd-b54b-d8d27d7c02a6" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\pages.h" Guid="5e877fe0-3ee1-446a-9422-e89892276185" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\sensors.c" Guid="c80a6e78-159b-4e44-a004-affe6bde4ac3" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\sensors.h" Guid="fcbfa3a4-59a1-4232-a894-8be47625437b" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\config.h" Guid="4d38bf5f-b1b4-4cde-80d7-f63e19ea4f52" /><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="8151a403-66dc-4421-9837-51b976458c0b" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\Generated_Source\PSoC5\TimerISR.c" Guid="a6c01590-83bd-4fc3-86e4-6af356d838d4" /><DocumentWindow Key="C:\UserData\z004e6he\OneDrive - Siemens AG\Documents\PSoC Creator\PSoC\Project\Design01.cydsn\Generated_Source\PSoC5\ADC_INT.c" Guid="fc39bbe1-a00b-4f54-b0b0-780ead77c138" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
 <config v="" />
 <AutoUpdate v="true" />
 </CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>

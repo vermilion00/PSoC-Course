@@ -5,30 +5,28 @@ I wanted to do this project due to the fact that hall effect switches have sever
 However, the keyboard portion by itself was deemed to be too simple, hence the added sensors, display and servo.
 
 The project works by using the keys to switch between several output modes that display the information provided by the sensors in various ways.
-
 Page 0 shows the outputs of all sensors as a value,
-
 Page 1 shows the adc value of switch 1,
-
 Page 2 shows the adc value of switch 2 as a bar,
-
 Page 3 shows the adc value of switch 3 by moving the servo accordingly,
-
 Pages 4 and 5 show the temperature in °C,
-
 Pages 6 and 7 show the measured voltage of the temperature sensor,
-
 Page 8 shows the echo time of the ultrasound sensor,
-
 Page 9 shows the measured distance using the textbook speed of sound,
+Pages 10 and 11 show the measured distance using the measured temperature to calculate the actual speed of sound.
 
-Pages 10 and 11 shows the measured distance using the measured temperature to calculate the actual speed of sound.
+Basically everything about the keyboard is designed to be configurable using the options in config.h.
+The amount of keys can be defined using the ROWS and COLUMNS options. The trigger height can be set individually for each switch, in a range from 0.05 to 4 mm.
+Each switch can also be disabled by setting its trigger height to 0. If the readings vary too much between the switches, a calibration function
+can be configured. It saves the values to EEPROM and therefore only needs to be ran when a variance is detected.
+Checks to make sure that the parameters are within spec are also in place, telling you exactly what the problem is and how to fix it.
+A rapid trigger function is also thrown in just for fun, but it works perfectly well.
 
 ## Link to zip file
 https://drive.google.com/file/d/1n6c50Sl8Roaz2_w2AhfxIroRF0-IB2Su/view?usp=drive_link
 
 ## Link to demonstration video
-
+Unfortunately my upload speed sucks, link will be added here when it's done
 
 ## Wiring Diagram
 ![Wiring Diagram](https://github.com/vermilion00/PSoC-Course/blob/master/Project/images/circuit.png "Wiring Diagram")
