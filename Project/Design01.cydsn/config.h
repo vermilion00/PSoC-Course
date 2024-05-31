@@ -42,7 +42,7 @@
 /* Set the trigger height of each individual switch in 0.05 mm steps.
    Set the height to 0 to disable that switch. */
 #define TRIGGER_HEIGHT {{ 1.0, 0.3, 0.5, 1.0 }, \
-                        { 0.5, 1.0, 0.5, 1.0 }, \
+                        { 2.5, 1.0, 0.5, 3.5 }, \
                         { 1.0, 1.0, 0.5, 1.0 }, \
                         { 1.0, 1.0, 0.5, 1.0 }};
                         

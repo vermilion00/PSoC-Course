@@ -45,6 +45,13 @@
 #define DISPLAY_WIDTH 128
 #define DISPLAY_HEIGHT 64
 
+/* Constant for converting C to F */
+#define FAHRENHEIT_CONVERSION 320
+/* Constant for converting C to K */
+#define KELVIN_CONVERSION 2731.5
+/* Constant for converting cm to inches */
+#define INCH_CONVERSION 2.54
+
 /* Sets the page based on the pressed key */
 void setPage(uint8 action);
 /* Updates the previously set page based on new sensor information */

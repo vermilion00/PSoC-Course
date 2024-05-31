@@ -235,6 +235,7 @@ void scanMatrix(void){
     }
 }
 
+//Not useful for this application, but an extended version including a buffer would be used in an actual keyboard
 /* Check if key was pressed last scan */
 void updateKeyEvents(void){
     uint8 row, col;

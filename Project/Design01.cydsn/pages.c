@@ -34,8 +34,10 @@ volatile uint8 gPage = 0;
 uint16 currentServoVal = SERVO_MAX_VALUE;
 uint16 servoPosition = SERVO_MAX_VALUE;
 
+/* Fairly useless here but an extended version including a buffer would be used in actual keyboards 
+   to track keyup and keydown events */
 void setPage(uint8 action){
-    //Use keys to switch display modes, e.g. boxcar averages or different sensors
+    //Use keys to switch display modes, e.g. different sensors or different ways of displaying the result
     if(gPage != action){
         gPage = action;
     }
@@ -44,7 +46,7 @@ void setPage(uint8 action){
 void updatePage(uint8 page){
     uint8 row = sensor.position[ROW_INDEX];
     uint8 col = sensor.position[COLUMN_INDEX];
-    uint8 barWidth;
+    int16 barWidth;
     switch(page){
         case 0: //Dashboard
         //Compute output information
@@ -62,35 +64,46 @@ void updatePage(uint8 page){
         
         display_clear();
         #ifdef CALIBRATE_SWITCHES
-        barWidth = ((matrix[row][col].max - matrix[row][col].min) / DISPLAY_WIDTH) * sensor.HallEffect;
+        //Calculate the width of the bar, multiply by 100 to avoid floats
+        barWidth = ((DISPLAY_WIDTH * 100) / (matrix[row][col].max - matrix[row][col].min)) * (sensor.HallEffect - matrix[row][col].min);
         #else
         barWidth = SWITCH_RANGE / DISPLAY_WIDTH * sensor.HallEffect;
         #endif
-        gfx_fillRect(0, DISPLAY_OFFSET, barWidth, DISPLAY_HEIGHT - DISPLAY_OFFSET, WHITE);
+        //Clamp the width value
+        if(barWidth > DISPLAY_WIDTH * 100){
+            barWidth = DISPLAY_WIDTH * 100;
+        }else if(barWidth < 0){
+            barWidth = 0;
+        }
+        //Draw the bar as a filled rectangle, divide by 100 since value was multiplied by that amount earlier
+        gfx_fillRect(0, DISPLAY_OFFSET, barWidth / 100, DISPLAY_HEIGHT - DISPLAY_OFFSET, WHITE);
         display_update();
         break;
         
-        case 3: //Hall sensor as bar and servo output
+        case 3: //Hall sensor with servo output
         //Write the new servo position value
         updateServo();
         sprintf(Transmitbuffer, "Hall Effect: %i\r\nServo value: %i\r\n", sensor.HallEffect, servoPosition);
         break;
         
-        case 4: //Temperature as value
+        case 4: //Temperature as value in C
         sprintf(Transmitbuffer, "Temperature: %i.%i C\r\n", sensor.Temperature / TEMP_FACTOR, 
-                sensor. Temperature % TEMP_FACTOR);
+                sensor.Temperature % TEMP_FACTOR);
         break;
         
-        case 5: //Temperature as value
-        sprintf(Transmitbuffer, "Temperature: %i.%i C\r\n", sensor.Temperature / TEMP_FACTOR, 
-                sensor. Temperature % TEMP_FACTOR);
+        case 5: //Temperature as value in F
+        sensor.Temperature = (sensor.Temperature * 9 / 5) + FAHRENHEIT_CONVERSION;
+        sprintf(Transmitbuffer, "Temperature: %i.%i F\r\n", sensor.Temperature / TEMP_FACTOR, 
+                sensor.Temperature % TEMP_FACTOR);
         break;
         
-        case 6: //Temperature as value
-        sprintf(Transmitbuffer, "Temp Voltage: %i mV\r\n", sensor.Temperature);
+        case 6: //Temperature as value in K
+        sensor.Temperature = sensor.Temperature + KELVIN_CONVERSION;
+        sprintf(Transmitbuffer, "Temp Voltage: %i.%i K\r\n", sensor.Temperature / TEMP_FACTOR,
+                sensor.Temperature % TEMP_FACTOR);
         break;
         
-        case 7: //Temperature as value
+        case 7: //Temperature as voltage
         sprintf(Transmitbuffer, "Temp Voltage: %i mV\r\n", sensor.Temperature);
         break;
         
@@ -108,8 +121,10 @@ void updatePage(uint8 page){
                 sensor.ActualDistance % US_CONVERSION);
         break;
         
-        case 11: //Ultrasound as actual distance
-        sprintf(Transmitbuffer, "Actual distance: %lu.%lu cm\r\n", sensor.ActualDistance / US_CONVERSION,
+        case 11: //Ultrasound as actual distance in inches
+        //Since the distance is saved as 10000 times the actual distance, floats are not an issue here
+        sensor.ActualDistance = sensor.ActualDistance / INCH_CONVERSION;
+        sprintf(Transmitbuffer, "Actual distance: %lu.%lu in\r\n", sensor.ActualDistance / US_CONVERSION,
                 sensor.ActualDistance % US_CONVERSION);
         break;
     }
