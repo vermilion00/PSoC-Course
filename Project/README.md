@@ -27,9 +27,7 @@ https://drive.google.com/file/d/1n6c50Sl8Roaz2_w2AhfxIroRF0-IB2Su/view?usp=drive
 
 ## Link to demonstration video
 https://youtu.be/dFBEIjEhHFQ  
-[![Demonstration Video]          // Title
-(https://img.youtube.com/vi/dFBEIjEhHFQ/hqdefault.jpg)] // Thumbnail
-(https://www.youtube.com/watch?v=dFBEIjEhHFQ "Demonstration Video")
+[![Demonstration Video](https://img.youtube.com/vi/dFBEIjEhHFQ/hqdefault.jpg)](https://www.youtube.com/watch?v=dFBEIjEhHFQ "Demonstration Video")
 
 ## Wiring Diagram
 ![Wiring Diagram](https://github.com/vermilion00/PSoC-Course/blob/master/Project/images/circuit.png "Wiring Diagram")
