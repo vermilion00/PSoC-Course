@@ -32,6 +32,19 @@ https://drive.google.com/file/d/1OdtYtWquoChK7SlHAKnEi0cJveqwgXof/view?usp=shari
 ## Wiring Diagram
 ![Wiring Diagram](https://github.com/vermilion00/PSoC-Course/blob/master/Project/images/circuit.png "Wiring Diagram")
 
+The hall effect sensors are hot glued to a small holder that I designed and 3D-Printed, so that the north side (the beveled face) points upwards.
+From this orientation, the left leg is Vcc, the middle leg is GND, and the right leg is Vout.
+![Sensor and Holder](https://github.com/vermilion00/PSoC-Course/blob/master/Project/images/sensor.jpg "Sensor and Holder")
+
+This holder slides onto the switch legs and holds itself in place very securely using only friction. 
+The north side of the sensor needs to point towards the switch, or else the adc values will get larger the further you press the switch.
+If you want, you can glue the holder to the switch, just avoid getting glue between the sensor and the stem.
+![Sensor mounted to the switch (bottom view)](https://github.com/vermilion00/PSoC-Course/blob/master/Project/images/sensor_mounted_bottom.jpg "Sensor mounted to the switch (bottom view")
+
+Side view of the mounted sensor and switch. Make sure that the gap between the sensor and the switch is the same across all switches.
+The calibration function is good but a more consistent input is better.
+![Sensor mounted to the switch (side view)](https://github.com/vermilion00/PSoC-Course/blob/master/Project/images/sensor_mounted_side.jpg "Sensor mounted to the switch (side view)")
+
 ## Parts List
 ### PSoC 5LP CY8C5888LTI-LP097 x1  
 https://www.infineon.com/dgdl/Infineon-PSoC_5LP_CY8C58LP_Family_Datasheet_Programmable_System-on-Chip_(PSoC_)-DataSheet-v15_00-EN.pdf?fileId=8ac78c8c7d0d8da4017d0ec547013ab9  
