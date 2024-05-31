@@ -99,7 +99,7 @@ void updatePage(uint8 page){
         
         case 6: //Temperature as value in K
         sensor.Temperature = sensor.Temperature + KELVIN_CONVERSION;
-        sprintf(Transmitbuffer, "Temp Voltage: %i.%i K\r\n", sensor.Temperature / TEMP_FACTOR,
+        sprintf(Transmitbuffer, "Temperature: %i.%i K\r\n", sensor.Temperature / TEMP_FACTOR,
                 sensor.Temperature % TEMP_FACTOR);
         break;
         
@@ -126,6 +126,11 @@ void updatePage(uint8 page){
         sensor.ActualDistance = sensor.ActualDistance / INCH_CONVERSION;
         sprintf(Transmitbuffer, "Actual distance: %lu.%lu in\r\n", sensor.ActualDistance / US_CONVERSION,
                 sensor.ActualDistance % US_CONVERSION);
+        break;
+        
+        default:
+        //Default message if a key has no assigned action
+        sprintf(Transmitbuffer, "Not implemented\r\n");
         break;
     }
     //Output over UART

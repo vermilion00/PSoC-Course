@@ -36,24 +36,24 @@
    Make sure that the Resolution is set accordingly */
 #define HYSTERESIS 7
 
-/* Sets the minimum distance the sensor can reliably detect */
+/* Sets the minimum distance the hall sensor can reliably detect */
 #define RESOLUTION 0.05
 
 /* Set the trigger height of each individual switch in 0.05 mm steps.
    Set the height to 0 to disable that switch. */
-#define TRIGGER_HEIGHT {{ 1.0, 0.3, 0.5, 1.0 }, \
-                        { 2.5, 1.0, 0.5, 3.5 }, \
+#define TRIGGER_HEIGHT {{ 1.0, 1.0, 1.0, 1.0 }, \
+                        { 0.1, 1.0, 2.0, 3.6 }, \
                         { 1.0, 1.0, 0.5, 1.0 }, \
-                        { 1.0, 1.0, 0.5, 1.0 }};
+                        { 0.0, 0.0, 0.5, 1.0 }};
                         
                    
 
 /* Optional keyboard features, can be disabled by commenting the relevant define */
 /* Sets the distance the switch needs to be lifted before it can activate again, in 0.05 mm steps */
-#define RAPID_TRIGGER {{ 0.05, 0.1, 0.1, 0.1 }, \
-                       { 2.5,  0.1, 0.1, 0.1 }, \
-                       { 0.1,  0.1, 0.1, 0.1 }, \
-                       { 0.1,  0.1, 0.1, 0.1 }};
+#define RAPID_TRIGGER {{ 0.1, 0.1, 0.1, 0.1 }, \
+                       { 2.5, 0.1, 0.1, 0.1 }, \
+                       { 0.1, 0.1, 0.1, 0.1 }, \
+                       { 0.1, 0.1, 0.1, 0.1 }};
                     
 /* Allows for keyboard calibration to happen */
 #define CALIBRATE_SWITCHES

@@ -50,6 +50,7 @@ void keyboardInit(void){
     uint8 rowData[EEPROM_ROW_SIZE];
 
     //Check for warnings and errors, function doesn't return in case of errors
+    //Function parameters depend on which features have been enabled
     checkErrors(triggerHeight
     #ifdef RAPID_TRIGGER
                ,rapidDistance 
@@ -57,7 +58,7 @@ void keyboardInit(void){
     #ifdef CALIBRATE_SWITCHES
                ,calibrationKey
     #endif
-    );
+    );  //End of checkErrors function call
     
     #ifdef CALIBRATE_SWITCHES
     //Call calibration function every time if EEPROM is empty
@@ -166,21 +167,28 @@ void keyboardInit(void){
     //Set the individual trigger heights per switch
     for(row = 0; row < ROWS; row++){
         for(col = 0; col < COLUMNS; col++){
-            #ifdef CALIBRATE_SWITCHES
-            //Convert mm value to adc value at initialization to avoid conversions each matrix scan
-            matrix[row][col].trigger_height = convertToVal(triggerHeight[row][col], matrix[row][col].min, 
-                                                           matrix[row][col].max, MODE_CONVERT_HEIGHT);
-            #ifdef RAPID_TRIGGER
-            matrix[row][col].rapid_distance = convertToVal(rapidDistance[row][col], matrix[row][col].min, 
-                                                           matrix[row][col].max, MODE_CONVERT_DISTANCE);
-            #endif
-                
-            #else
-            matrix[row][col].trigger_height = convertToVal(triggerHeight[row][col], MODE_CONVERT_HEIGHT);
-            #ifdef RAPID_TRIGGER
-            rapidTriggerDistance = convertToVal(RAPID_TRIGGER, MODE_CONVERT_DISTANCE);
-            #endif
-            #endif
+            //Check if key has been disabled in config.h
+            if(triggerHeight[row][col] != 0){
+                #ifdef CALIBRATE_SWITCHES
+                //Convert mm value to adc value at initialization to avoid conversions each matrix scan
+                matrix[row][col].trigger_height = convertToVal(triggerHeight[row][col], matrix[row][col].min, 
+                                                               matrix[row][col].max, MODE_CONVERT_HEIGHT);
+                #ifdef RAPID_TRIGGER
+                matrix[row][col].rapid_distance = convertToVal(rapidDistance[row][col], matrix[row][col].min, 
+                                                               matrix[row][col].max, MODE_CONVERT_DISTANCE);
+                #endif
+                    
+                #else
+                //Convert mm value to adc value at initialization to avoid conversions each matrix scan
+                matrix[row][col].trigger_height = convertToVal(triggerHeight[row][col], MODE_CONVERT_HEIGHT);
+                #ifdef RAPID_TRIGGER
+                rapidTriggerDistance = convertToVal(RAPID_TRIGGER, MODE_CONVERT_DISTANCE);
+                #endif
+                #endif
+            }else{
+                //Set the trigger height to 0 if key is disabled
+                matrix[row][col].trigger_height = 0;
+            }
             //Reset switch pressed status
             matrix[row][col].pressed = FALSE;
             

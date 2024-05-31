@@ -11,7 +11,7 @@
 <CyGuid_f44455c5-3770-4452-b988-0a7a7ff46256 type_name="CyDesigner.Common.ProjMgmt.Model.CyConfigDependencies" version="1">
 <dependency_info name="c9323d49-d323-40b8-9b59-cc008d68a989@Debug@CortexM3" xml_contents_version="2">
 <CyGuid_1173175f-1b9b-4ad4-a065-754a48a27021 type_name="CyDesigner.Common.Base.CyFileDeps" version="1">
-<file name=".\CortexM3\ARM_GCC_541\Debug\pages.o">
+<file name=".\CortexM3\ARM_GCC_541\Debug\HallEffect.o">
 <dep name=".\Generated_Source\PSoC5\ADC.h" />
 <dep name=".\Generated_Source\PSoC5\ADC_AMux.h" />
 <dep name=".\Generated_Source\PSoC5\ADC_Ext_CP_Clk.h" />
@@ -76,11 +76,9 @@
 <dep name=".\Generated_Source\PSoC5\sdaPin_aliases.h" />
 <dep name=".\Generated_Source\PSoC5\servoPin.h" />
 <dep name=".\Generated_Source\PSoC5\servoPin_aliases.h" />
+<dep name=".\HallEffect.c" />
 <dep name=".\HallEffect.h" />
 <dep name=".\config.h" />
-<dep name=".\pages.c" />
-<dep name=".\pages.h" />
-<dep name=".\sensors.h" />
 <dep name=".\ssd1306.h" />
 </file>
 <file name=".\Generated_Source\PSoC5\ADC.h" />
@@ -147,11 +145,9 @@
 <file name=".\Generated_Source\PSoC5\sdaPin_aliases.h" />
 <file name=".\Generated_Source\PSoC5\servoPin.h" />
 <file name=".\Generated_Source\PSoC5\servoPin_aliases.h" />
+<file name=".\HallEffect.c" />
 <file name=".\HallEffect.h" />
 <file name=".\config.h" />
-<file name=".\pages.c" />
-<file name=".\pages.h" />
-<file name=".\sensors.h" />
 <file name=".\ssd1306.h" />
 <file name=".\CortexM3\ARM_GCC_541\Debug\main.o">
 <dep name=".\Generated_Source\PSoC5\ADC.h" />
@@ -226,7 +222,9 @@
 <dep name=".\ssd1306.h" />
 </file>
 <file name=".\main.c" />
-<file name=".\CortexM3\ARM_GCC_541\Debug\HallEffect.o">
+<file name=".\pages.h" />
+<file name=".\sensors.h" />
+<file name=".\CortexM3\ARM_GCC_541\Debug\pages.o">
 <dep name=".\Generated_Source\PSoC5\ADC.h" />
 <dep name=".\Generated_Source\PSoC5\ADC_AMux.h" />
 <dep name=".\Generated_Source\PSoC5\ADC_Ext_CP_Clk.h" />
@@ -291,12 +289,14 @@
 <dep name=".\Generated_Source\PSoC5\sdaPin_aliases.h" />
 <dep name=".\Generated_Source\PSoC5\servoPin.h" />
 <dep name=".\Generated_Source\PSoC5\servoPin_aliases.h" />
-<dep name=".\HallEffect.c" />
 <dep name=".\HallEffect.h" />
 <dep name=".\config.h" />
+<dep name=".\pages.c" />
+<dep name=".\pages.h" />
+<dep name=".\sensors.h" />
 <dep name=".\ssd1306.h" />
 </file>
-<file name=".\HallEffect.c" />
+<file name=".\pages.c" />
 <file name=".\CortexM3\ARM_GCC_541\Debug\sensors.o">
 <dep name=".\Generated_Source\PSoC5\ADC.h" />
 <dep name=".\Generated_Source\PSoC5\ADC_AMux.h" />
@@ -1479,7 +1479,7 @@
 <dataGuid v="769d31ea-68b1-4f0c-b90a-7c10a43ee563">
 <CyGuid_769d31ea-68b1-4f0c-b90a-7c10a43ee563 type_name="CyDesigner.Common.ProjMgmt.Model.CyLinkCustomData" version="1">
 <link_deps_times>
-<name_val_pair name="c9323d49-d323-40b8-9b59-cc008d68a989@Debug@CortexM3" v="133616363511701671" />
+<name_val_pair name="c9323d49-d323-40b8-9b59-cc008d68a989@Debug@CortexM3" v="133616469857358061" />
 </link_deps_times>
 </CyGuid_769d31ea-68b1-4f0c-b90a-7c10a43ee563>
 </dataGuid>

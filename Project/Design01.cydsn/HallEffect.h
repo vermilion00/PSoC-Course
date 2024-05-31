@@ -104,7 +104,6 @@ typedef struct switches {
 
 volatile Switch matrix[ROWS][COLUMNS];
 
-uint8 prevMatrix[ROWS][COLUMNS];
 uint8 actionBuffer[ROWS*COLUMNS];
 
 /*Stores the current page to display */
@@ -123,7 +122,8 @@ void scanMatrix();
 /* Updates the key events, runs every loop */
 void updateKeyEvents();
 
-/* Checks the configuration for errors and warnings, only runs once */
+/* Checks the configuration for errors and warnings, only runs once.
+   Function parameters depend on which features have been enabled */
 void checkErrors(const float triggerHeight[ROWS][COLUMNS] 
 #ifdef RAPID_TRIGGER
                 ,const float rapidDistance[ROWS][COLUMNS]
@@ -131,7 +131,7 @@ void checkErrors(const float triggerHeight[ROWS][COLUMNS]
 #ifdef CALIBRATE_SWITCHES
                 ,const uint8 calibrationKey[2]
 #endif
-);
+);  //End of checkErrors function declaration
 
 #ifdef CALIBRATE_SWITCHES
 /* Gets the min and max values of each switch for proper distance calculations, only runs once */
